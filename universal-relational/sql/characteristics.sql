@@ -32,7 +32,6 @@ INSERT INTO Merkmal VALUES (NULL, 'DistMmY', 'Mittelpunktsverschiebung des Teils
 INSERT INTO Merkmal VALUES (NULL, 'AngleGrad', 'Verdrehung des Material', 'float');
 INSERT INTO Merkmal VALUES (NULL, 'LengthMM', 'Länge der Naht', 'float');
 INSERT INTO Merkmal VALUES (NULL, 'LengthDiffMM', 'Abweichung vom Soll', 'float');
-INSERT INTO Merkmal VALUES (NULL, 'LengthDiffGrad', 'Abweichung vom Soll', 'float');
 INSERT INTO Merkmal VALUES (NULL, 'AngleDiffGrad', 'Abweichung der Referenzachse', 'float');
 INSERT INTO Merkmal VALUES (NULL, 'AxisDistMMX', 'Zentriefadenposition', 'float');
 INSERT INTO Merkmal VALUES (NULL, 'AxisDistMMY', 'Zentriefadenposition', 'float');
