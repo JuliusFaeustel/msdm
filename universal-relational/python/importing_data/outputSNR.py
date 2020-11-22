@@ -4,7 +4,7 @@ import glob
 import datetime, time
 
 # Connection zu DB
-connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_x")
+connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
 cursor = connection.cursor()
 
 # alle Files aus Ordner
@@ -18,7 +18,7 @@ pos_SNR = 0
 pos_LINIE = 1
 pos_DATE = 17
 
-merkmID_list = [24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
+merkmID_list = ['NULL','NULL',24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39]
 
 j = 0
 
@@ -43,8 +43,7 @@ for filename in files:
     val = val[3:-2]
     dat = val.split(';')
 
-    # Liste der vorhandenen Merkmale
-    notnull_list = []
+
     
     k = 0
     flag_SNR = 0
@@ -60,14 +59,8 @@ for filename in files:
                 flag_LINIE = 1
         else:
             dat[k] = "'" + dat[k] + "'"
-            notnull_list.append(k)
         k = k + 1
 
-    if flag_SNR != 1:
-        notnull_list.remove(pos_SNR)
-    if flag_LINIE != 1:
-        notnull_list.remove(pos_LINIE)
- 
     # Testen, ob Linie bereits vorhanden
     if flag_LINIE != 1:
         statement = "SELECT LINIE FROM LINIE WHERE LINIE = " + dat[pos_LINIE]
@@ -107,10 +100,28 @@ for filename in files:
                 connection.commit()
             # genau eine SNR in Tabelle SNR
             else:
-                statement = "INSERT INTO Rückmeldung VALUES (NULL, " + dat[pos_SNR] + "," + dat[pos_LINIE] + ", "+ str(result[0][0]) + ")"
-                #print("COUNT: 1 "+statement)
-                cursor.execute(statement)
-                connection.commit()
+                diff = 0
+                count = 0
+                # Umrechnung der Zeit für Zuordnung nötig
+                date_out = datetime.datetime.strptime(dat[pos_DATE][1:-1], "%Y-%m-%dT%H:%M:%S.%f")
+                second_out = time.mktime(date_out.timetuple())
+                # Ergebnismenge durchlaufen
+                date_in = datetime.datetime.strptime(result[0][1][0:-1], "%Y-%m-%dT%H:%M:%S.%f")
+                second_in = time.mktime(date_in.timetuple())
+                diff = second_out - second_in
+                # Testen, ob diff negativ
+                if diff > 0:
+                    SNR_ID = result[0][0]
+                    statement = "INSERT INTO Rückmeldung VALUES (NULL, " + dat[pos_SNR] + "," + dat[pos_LINIE] + ", " + str(SNR_ID) + ")" 
+                    #print(statement)
+                    cursor.execute(statement)
+                    connection.commit()
+                else:
+                    statement = "INSERT INTO Rückmeldung VALUES (NULL, " + dat[pos_SNR] + "," + dat[pos_LINIE] + ", NULL)" 
+                    #print(statement)
+                    cursor.execute(statement)
+                    connection.commit()
+
            
         # mehrere SNR in Tabelle SNR
         if cursor.rowcount > 1:
@@ -125,7 +136,7 @@ for filename in files:
                 second_in = time.mktime(date_in.timetuple())
                 diff = second_out - second_in
                 # erste Differenz auf min_diff setzen
-                if count == 0:
+                if (count == 0) & (diff > 0):
                     min_diff = diff
                     count = 1
                 # Testen, ob diff kleiner  
@@ -149,46 +160,51 @@ for filename in files:
     #print(SNR_ID)
     
     # alle Merkmale der Output SNR durchlaufen
-    for Merk_ID, l in zip(merkmID_list, notnull_list):
-           
-        # # Testen, ob SNR Merkmal bereits besitzt
-        # statement = "SELECT ID FROM Objekt2Merkmal WHERE ObjektTyp = " + str(Objekt_ID) + " AND MerkmalID = " + str(Merk_ID) + " AND ObjektID = " + str(SNR_ID)
-        # cursor.execute(statement)
-        # result = cursor.fetchall()
+    dat[pos_SNR] = 'NULL'
+    dat[pos_LINIE] = 'NULL'
+    #print(dat)
+    for Merk_ID, value in zip(merkmID_list, dat):
+        if value != 'NULL':
+            # # Testen, ob SNR Merkmal bereits besitzt
+            # statement = "SELECT ID FROM Objekt2Merkmal WHERE ObjektTyp = " + str(Objekt_ID) + " AND MerkmalID = " + str(Merk_ID) + " AND ObjektID = " + str(SNR_ID)
+            # cursor.execute(statement)
+            # result = cursor.fetchall() 
 
-        # Falls nein, Verbindung zwischen SNR und Merkmal herstellen
-        # if cursor.rowcount == 0:
-        statement = "INSERT INTO Objekt2Merkmal VALUES (NULL, " + str(Merk_ID) + "," + str(SNR_ID) + ", " + str(Objekt_ID_Rück) + ")"
-        cursor.execute(statement)
-        connection.commit()
-
-        # Testen, ob Merkmalsausprägung für Merkmal bereits vohanden
-        statement = "SELECT ID FROM Merkmalsausprägung WHERE MerkmalID = " + str(Merk_ID) + " AND Ausprägung = " + dat[l]
-        cursor.execute(statement)
-        result = cursor.fetchall()
-        
-        # Falls nein, Merkmalsausprägung des Merkmals einfügen
-        if cursor.rowcount == 0:
-            statement = "INSERT INTO Merkmalsausprägung VALUES (NULL, " + str(Merk_ID) + "," + dat[l] + ")"
+            # Falls nein, Verbindung zwischen SNR und Merkmal herstellen
+            # if cursor.rowcount == 0:
+            statement = "INSERT INTO Objekt2Merkmal VALUES (NULL, " + str(Merk_ID) + "," + str(SNR_ID) + ", " + str(Objekt_ID_Rück) + ")"
             cursor.execute(statement)
             connection.commit()
 
-        # Abfragen der MerkmalsauspräungsID    
-        statement = "SELECT ID FROM Merkmalsausprägung WHERE MerkmalID = " + str(Merk_ID) + " AND Ausprägung = " + dat[l]
-        cursor.execute(statement)
-        result = cursor.fetchone()
-        AusP_ID = result[0]
+            # Testen, ob Merkmalsausprägung für Merkmal bereits vohanden
+            statement = "SELECT ID FROM Merkmalsausprägung WHERE MerkmalID = " + str(Merk_ID) + " AND Ausprägung = " + value
+            #print(statement)
+            cursor.execute(statement)
+            result = cursor.fetchall()
+            
+            # Falls nein, Merkmalsausprägung des Merkmals einfügen
+            if cursor.rowcount == 0:
+                statement = "INSERT INTO Merkmalsausprägung VALUES (NULL, " + str(Merk_ID) + "," + value + ")"
+                #print(statement)
+                cursor.execute(statement)
+                connection.commit()
 
-        # # Test, ob Merkmalsauspägung bereits mit Objekt verbunden
-        # statement = "SELECT ID FROM Objekt2Merkmalsausprägung WHERE ObjektTyp = " + str(Objekt_ID) + " AND MerkmalsausprägungID = " + str(AusP_ID) + " AND ObjektID = " + str(SNR_ID)
-        # cursor.execute(statement)
-        # result = cursor.fetchall()  
+            # Abfragen der MerkmalsauspräungsID    
+            statement = "SELECT ID FROM Merkmalsausprägung WHERE MerkmalID = " + str(Merk_ID) + " AND Ausprägung = " + value
+            cursor.execute(statement)
+            result = cursor.fetchone()
+            AusP_ID = result[0]
 
-        # Falls nein, Verbindung zwischen SNR und Merkmalsausprägung herstellen
-        #if cursor.rowcount == 0:
-        statement = "INSERT INTO Objekt2Merkmalsausprägung VALUES (NULL, " + str(AusP_ID) + ", " + str(SNR_ID) + ", " + str(Objekt_ID_Rück) + ")"
-        cursor.execute(statement)
-        connection.commit()
+            # # Test, ob Merkmalsauspägung bereits mit Objekt verbunden
+            # statement = "SELECT ID FROM Objekt2Merkmalsausprägung WHERE ObjektTyp = " + str(Objekt_ID) + " AND MerkmalsausprägungID = " + str(AusP_ID) + " AND ObjektID = " + str(SNR_ID)
+            # cursor.execute(statement)
+            # result = cursor.fetchall()  
+
+            # Falls nein, Verbindung zwischen SNR und Merkmalsausprägung herstellen
+            #if cursor.rowcount == 0:
+            statement = "INSERT INTO Objekt2Merkmalsausprägung VALUES (NULL, " + str(AusP_ID) + ", " + str(SNR_ID) + ", " + str(Objekt_ID_Rück) + ")"
+            cursor.execute(statement)
+            connection.commit()
 
  
     j = j + 1
