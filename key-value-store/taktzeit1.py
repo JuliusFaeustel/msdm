@@ -28,11 +28,15 @@ for teil in allTeil:
         minDate = maxDiff
         avgCounter = 0
         avgTime = 0
+        allRejects = 0
+        minRejects = 999
+        maxRejects = 0
         defFa = r.lrange(fa,0,-1)
         connList = list(set(allData).intersection(defFa))
         
         if connList:
             for dat in connList:
+                rejects = 0
                 connData = r.lrange(dat,0,-1)
                 connOutData = r.lrange(dat,1,-1)
                 localRec = zerDiff
@@ -64,10 +68,24 @@ for teil in allTeil:
                     
                         avgCounter = avgCounter + 1
                         avgTime = avgTime + localRec.total_seconds()
+
+                        rejects = (len(connData) - 2)
+
+                        if rejects > maxRejects:
+                            maxRejects = rejects
+
+                        if rejects < minRejects:
+                            minRejects = rejects
+
+                allRejects = allRejects + rejects
             
-            print("   " + fa + " | Anzahl Gefertigt: " + str(avgCounter))
-            print("      Max: " + str(recDate) + " " + snrMax.get("SNR")
-                  + " | Min: " + str(minDate) + " " + snrMin.get("SNR"))
-            if avgCounter > 0:
-                print("      Durchschnitt: " + str((avgTime/avgCounter)/60))
-            print("-----------------------------------")
+            #print("   " + fa + " | Anzahl Gefertigt: " + str(avgCounter))
+            #print("      Max: " + str(recDate) + " " + snrMax.get("SNR")
+            #      + " | Min: " + str(minDate) + " " + snrMin.get("SNR"))
+            #if avgCounter > 0:
+            #    print("         Durchschnitt: " + str((avgTime/avgCounter)/60))
+            #print("      Ausschuss gesamt: " + str(allRejects) + " | Max Ausschuss: "
+            #      + str(maxRejects) + " | Min Ausschuss: " + str(minRejects))
+            #if allRejects > 0:
+            #    print("         Durchschnitt: " + str(allRejects/avgCounter))
+            #print("-----------------------------------")

@@ -16,9 +16,9 @@ minDateEnd = datetime(2010, 1, 9, 12, 0, 0)
 zerDiff = recDateEnd - recDateBeg
 maxDiff = minDateEnd - recDateBeg
 
-allTeil = ["TEIL:A","TEIL:B","TEIL:C","TEIL:D","TEIL:E","TEIL:F","TEIL:G",
-           "TEIL:H","TEIL:I","TEIL:J","TEIL:K"]
-#allTeil = ["TEIL:A"]
+#allTeil = ["TEIL:A","TEIL:B","TEIL:C","TEIL:D","TEIL:E","TEIL:F","TEIL:G",
+#           "TEIL:H","TEIL:I","TEIL:J","TEIL:K"]
+allTeil = ["TEIL:A"]
 
 for teil in allTeil:
     allData = r.lrange(teil,0,-1)
@@ -49,6 +49,7 @@ for teil in allTeil:
                         diffTime = endDatetime - beginDatetime
 
                         if diffTime.total_seconds() <= 3600:
+                                
                             smallerOneH = 1
                             if diffTime > recDate:
                                 recDate = diffTime
@@ -58,6 +59,8 @@ for teil in allTeil:
                                 localRec = diffTime
                                 
                     if smallerOneH:
+                        if fa == 'FA:008419':
+                                print(r.hget(outDat,"SNR"))
                         if localRec < minDate:
                             minDate = localRec
                             snrMin = r.hgetall(connData[0])
@@ -65,9 +68,5 @@ for teil in allTeil:
                         avgCounter = avgCounter + 1
                         avgTime = avgTime + localRec.total_seconds()
             
-            print("   " + fa + " | Anzahl Gefertigt: " + str(avgCounter))
-            print("      Max: " + str(recDate) + " " + snrMax.get("SNR")
-                  + " | Min: " + str(minDate) + " " + snrMin.get("SNR"))
-            if avgCounter > 0:
-                print("      Durchschnitt: " + str((avgTime/avgCounter)/60))
-            print("-----------------------------------")
+            print("   " + fa + " | Gefertigt: " + str(avgCounter))
+            
