@@ -1,3 +1,7 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+import numpy as np
+
 import mysql
 import mysql.connector
 import datetime, time
@@ -5,6 +9,9 @@ import datetime, time
 # Connection zu DB
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
 cursor = connection.cursor()
+
+# Ausgabe
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.txt","w")
 
 # Teile
 teil_array = ["A","B","C","D","E","F","G","H","I","K"]
@@ -32,14 +39,15 @@ for teil in teil_array:
     statement = "SELECT SNR.FA FROM SNR WHERE TEIL = '" + teil + "' GROUP BY SNR.FA ORDER BY SNR.FA"
     cursor.execute(statement)
     FA_List = cursor.fetchall()
-    print("----------------------------------------------------------------------------------")
-    print()
-    print("TEIL: "+ teil_array[i] + "       Gesamtanzahl gefertigt: "+ str(sumTeil_array[i]))
-    print()
+    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    datei.write("\n")
+    datei.write("TEIL: "+ teil_array[i] + "       Gesamtanzahl gefertigt: "+ str(sumTeil_array[i])+"\n")
+    datei.write("\n")
 
          
     j = 0
     Anzahl_sum = 0
+    
     for FA in FA_List:
         statement = "SELECT COUNT(*) FROM (SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
         cursor.execute(statement)
@@ -75,7 +83,9 @@ for teil in teil_array:
         minZeit = second_min
         maxZeit = 0
         avgZeit = 0
-        
+        avg_diff = 0
+        SNR_time_list = list()
+
         for SNR in SNR_List:
             help_array = []
             # Input-Zeit
@@ -108,24 +118,41 @@ for teil in teil_array:
                 help_array.sort(reverse=True)
                 #print("HELP")
                 #print(help_array)
+                
                 if help_array[0] < 3600:
                     if help_array[0] < minZeit:
                         minZeit = help_array[0]
                     if help_array[0] > maxZeit:
                         maxZeit = help_array[0]
                     avgZeit = avgZeit + help_array[0]
+                    SNR_time_list.append(help_array[0]/60)
+                else:
+                    avg_diff = avg_diff + 1 
         
 
         if len(SNR_List) > 0:
             #print(len(SNR_List))
-            avgZeit = avgZeit/len(SNR_List)
-            avg_aus = avg_aus/Anzahl_tmp
+            #print(avg_diff)
+            divisor = len(SNR_List)-avg_diff
+            avgZeit = avgZeit/divisor
+            avg_aus = (avg_aus/Anzahl_tmp)*100
         
         
-        print("TEIL: " + teil_array[i] + "      FA: "+ FA_List[j][0] +"     Anzahl: "+str(Anzahl_tmp)+"        MIN: " +str(format(minZeit/60, '.2f'))+ " min        MAX: " +str(format(maxZeit/60, '.2f'))+ " min        AVG: " + str(format(avgZeit/60, '.2f'))+ " min     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %")
+        datei.write("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " +str(format(minZeit/60, '.2f'))+ " min        MAX: " +str(format(maxZeit/60, '.2f'))+ " min        AVG: " + str(format(avgZeit/60, '.2f'))+ " min     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
         Anzahl_sum = Anzahl_sum + Anzahl_tmp
         #print(Anzahl_sum)
+        
+        
+        plt.figure(i*10000+j)
+        plt.title('Fertigungszeit FA'+FA[0])
+        plt.ylabel('Minuten')
+        plt.axis
+        plt.boxplot(SNR_time_list, labels=[FA[0]])
+        plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/001Taktung_pro_Artikel/boxplots/FA'+FA[0]+'_time.png')
+        plt.close(i*10000+j)
+
         j = j + 1
+
     i = i + 1
         
 

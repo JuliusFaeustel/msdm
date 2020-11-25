@@ -6,9 +6,6 @@ import datetime, time
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
 cursor = connection.cursor()
 
-# Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/python/mysql/universell_relational/Auswertungen/Taktung_pro_Artikel/Ergebnisse/Taktung_pro_Artikel.txt","w")
-
 # Teile
 teil_array = ["A","B","C","D","E","F","G","H","I","K"]
 
@@ -35,10 +32,10 @@ for teil in teil_array:
     statement = "SELECT SNR.FA FROM SNR WHERE TEIL = '" + teil + "' GROUP BY SNR.FA ORDER BY SNR.FA"
     cursor.execute(statement)
     FA_List = cursor.fetchall()
-    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
-    datei.write("\n")
-    datei.write("TEIL: "+ teil_array[i] + "       Gesamtanzahl gefertigt: "+ str(sumTeil_array[i])+"\n")
-    datei.write("\n")
+    print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    print("\n")
+    print("TEIL: "+ teil_array[i] + "       Gesamtanzahl gefertigt: "+ str(sumTeil_array[i])+"\n")
+    print("\n")
 
          
     j = 0
@@ -78,7 +75,7 @@ for teil in teil_array:
         minZeit = second_min
         maxZeit = 0
         avgZeit = 0
-        
+        avg_diff = 0
         for SNR in SNR_List:
             help_array = []
             # Input-Zeit
@@ -117,20 +114,23 @@ for teil in teil_array:
                     if help_array[0] > maxZeit:
                         maxZeit = help_array[0]
                     avgZeit = avgZeit + help_array[0]
+                else:
+                    avg_diff = avg_diff + 1 
         
 
         if len(SNR_List) > 0:
             #print(len(SNR_List))
-            avgZeit = avgZeit/len(SNR_List)
-            avg_aus = avg_aus/Anzahl_tmp
+            #print(avg_diff)
+            divisor = len(SNR_List)-avg_diff
+            avgZeit = avgZeit/divisor
+            avg_aus = (avg_aus/Anzahl_tmp)*100
         
         
-        datei.write("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " +str(format(minZeit/60, '.2f'))+ " min        MAX: " +str(format(maxZeit/60, '.2f'))+ " min        AVG: " + str(format(avgZeit/60, '.2f'))+ " min     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
+        print("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " +str(format(minZeit/60, '.2f'))+ " min        MAX: " +str(format(maxZeit/60, '.2f'))+ " min        AVG: " + str(format(avgZeit/60, '.2f'))+ " min     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
         Anzahl_sum = Anzahl_sum + Anzahl_tmp
         #print(Anzahl_sum)
         j = j + 1
     i = i + 1
-datei.close()
         
 
 
