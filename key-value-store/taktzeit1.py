@@ -7,7 +7,7 @@ r = redis.Redis(decode_responses=True)
 meanTime = 0
 
 allFa = []
-for fa in r.scan_iter(match='FA:*'):
+for fa in r.scan_iter(match='FA:*',count=300000):
     allFa.append(fa)
 
 recDateBeg = datetime(1989, 1, 9, 12, 0, 0)
