@@ -10,6 +10,13 @@ import datetime, time
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
 cursor = connection.cursor(buffered=True)
 
+def convert_from_s( seconds ): 
+    minutes, seconds = divmod(seconds, 60) 
+    hours, minutes = divmod(minutes, 60) 
+    days, hours = divmod(hours, 24) 
+    string = str(int(days))+"T:"+str(int(hours))+"h:"+str(int(minutes))+"m:"+str(int(seconds))+ "s"
+    return string
+
 # Ausgabe
 datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/002Auftrennung/Auftrennung.txt","w")
 
@@ -117,7 +124,7 @@ for teil in teil_array:
 
             
         
-        datei.write("FA: "+ FA_List[j][0] +"          MIN: " +str(format(min_time/60, '.2f'))+ " min        MAX: " +str(format(max_time/60, '.2f'))+ " min        AVG: " + str(format(avgZeit/60, '.2f'))+ " min      Ausschussfaktor: " +str(format(avg_aus, '.2f'))+" %\n")
+        datei.write("FA: "+ FA_List[j][0] +"          MIN: " +convert_from_s(min_time)+ "        MAX: " +convert_from_s(max_time)+ "        AVG: " + convert_from_s(avgZeit)+ "      Ausschussfaktor: " +str(format(avg_aus, '.2f'))+" %\n")
         #Anzahl_sum = Anzahl_sum + Anzahl_tmp
         #print(Anzahl_sum)
         
@@ -127,12 +134,14 @@ for teil in teil_array:
             plt.ylabel('Minuten')
             plt.axis
             plt.boxplot(time_list, labels=[FA[0]])
-            plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/002Auftrennung/boxplots/FA'+FA[0]+'_time.png')
+            plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/002Auftrennung/boxplots/FA'+FA[0]+'.png')
             plt.close(i*10000+j)
 
         j = j + 1
 
     i = i + 1
+
+datei.close()
         
 
 
