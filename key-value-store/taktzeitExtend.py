@@ -15,7 +15,7 @@ plotDict = {}
 
 allTeil = ["TEIL:A","TEIL:B","TEIL:C","TEIL:D","TEIL:E","TEIL:F","TEIL:G",
            "TEIL:H","TEIL:I","TEIL:J","TEIL:K"]
-#allTeil = ["TEIL:A"]
+#allTeil = ["TEIL:C"]
 
 def sortListTime(givList):
     myDict = {}
@@ -70,29 +70,33 @@ for teil in allTeil:
             datList = r.lrange(snrEl+":"+inCounter,0,-1) #Verknüpfung zum Input
             datRange = len(datList)
             
+            beginDate = r.hget(datList[0],"Begin")
+            beginDateTime = datetime.strptime(beginDate, '%Y-%m-%dT%H:%M:%S.%f0')
+
             if datRange > 1:
-            
-                beginDate = r.hget(datList[0],"Begin")
-                beginDateTime = datetime.strptime(beginDate, '%Y-%m-%dT%H:%M:%S.%f0')
-                endDate = r.hget(datList[datRange-1],"Date")
-            
+                endDate = r.hget(datList[datRange-1],"Date")           
                 endDateTime = datetime.strptime(endDate, '%Y-%m-%dT%H:%M:%S.%f0')
 
-                if firstCounter:
-                    diffTime = beginDateTime - beforeEnd
+            if firstCounter:
+                diffTime = beginDateTime - beforeEnd
+                if (datRange > 1 or not beforeEnd == recDateEnd) and diffTime.total_seconds() > 0:
 
                     numCounter = numCounter + 1
                     allDiffs = allDiffs + diffTime
                     plotList.append(diffTime.total_seconds()/60)
-                    
+               
                     if diffTime < minDate:
                         minDate = diffTime
 
                     if diffTime > maxDate:
                         maxDate = diffTime
+            
+            beforeEnd = endDateTime
 
-                beforeEnd = endDateTime
-                firstCounter = 1
+            firstCounter = 1
+            
+            if not datRange > 1:
+                firstCounter = 0
 
     if not maxDate == zerDiff:
         print(teil)
