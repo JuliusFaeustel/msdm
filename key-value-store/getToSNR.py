@@ -1,7 +1,7 @@
 import redis
 r = redis.Redis(decode_responses=True)
 
-snr = 2030134931243
+snr = 2040034481631
 con = []
 
 for snrCon in r.scan_iter(match=str(snr)+':*',count=300000):
