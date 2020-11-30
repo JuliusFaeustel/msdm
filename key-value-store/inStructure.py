@@ -4,8 +4,8 @@ import csv
 #decode_responses, da die Rueckgabewerte von z.B. r.get(...) sonst als 'binaer' codiert
 r = redis.Redis(decode_responses=True)
 colInd = 0
-attributes = ["FA","TEIL","LINIE"]
-attributesIndex = [1,3,5]
+attributes = ["FA","TEIL","LINIE","LagerIn"]
+attributesIndex = [1,3,5,24]
 attrIndCounter = 0
 
 #inCounter ist ein Zaehler, der fuer Eindeutigkeit an die In-Datensaetzen (In-DS)
