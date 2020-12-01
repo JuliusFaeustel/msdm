@@ -30,6 +30,7 @@ FA: 009475     Anzahl gefertigt: 80        MIN: 0T:0h:4m:31s        MAX: 0T:0h:5
 FA: 009574     Anzahl gefertigt: 80        MIN: 0T:0h:5m:10s        MAX: 0T:0h:41m:28s        AVG: 0T:0h:9m:48s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.50 %
 FA: 009575     Anzahl gefertigt: 80        MIN: 0T:0h:5m:10s        MAX: 0T:0h:29m:45s        AVG: 0T:0h:9m:23s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 3.75 %
 FA: 009576     Anzahl gefertigt: 80        MIN: 0T:0h:4m:34s        MAX: 0T:0h:41m:10s        AVG: 0T:0h:6m:9s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
+TEIL A gesamt: 2235        MIN: 0T:0h:4m:2s        MAX: 0T:0h:59m:55s        AVG: 0T:0h:9m:38s     MIN_FAIL: 0       MAX_FAIL: 2        AVG_FAIL: 3.58 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: B       Gesamtanzahl gefertigt: 37094
@@ -405,6 +406,7 @@ FA: 009701     Anzahl gefertigt: 99        MIN: 0T:0h:4m:40s        MAX: 0T:0h:5
 FA: 009702     Anzahl gefertigt: 100        MIN: 0T:0h:4m:44s        MAX: 0T:0h:44m:17s        AVG: 0T:0h:7m:16s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.00 %
 FA: 009703     Anzahl gefertigt: 100        MIN: 0T:0h:4m:43s        MAX: 0T:0h:39m:16s        AVG: 0T:0h:8m:2s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009704     Anzahl gefertigt: 101        MIN: 0T:0h:4m:30s        MAX: 0T:0h:51m:4s        AVG: 0T:0h:8m:26s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.98 %
+TEIL B gesamt: 37146        MIN: 0T:0h:1m:22s        MAX: 0T:0h:59m:55s        AVG: 0T:0h:8m:41s     MIN_FAIL: 0       MAX_FAIL: 4        AVG_FAIL: 2.37 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: C       Gesamtanzahl gefertigt: 74814
@@ -1160,6 +1162,7 @@ FA: 009686     Anzahl gefertigt: 99        MIN: 0T:0h:7m:9s        MAX: 0T:0h:35
 FA: 009687     Anzahl gefertigt: 100        MIN: 0T:0h:7m:7s        MAX: 0T:0h:41m:26s        AVG: 0T:0h:9m:15s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009688     Anzahl gefertigt: 100        MIN: 0T:0h:7m:2s        MAX: 0T:0h:47m:41s        AVG: 0T:0h:10m:43s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.00 %
 FA: 009689     Anzahl gefertigt: 100        MIN: 0T:0h:6m:58s        MAX: 0T:0h:22m:14s        AVG: 0T:0h:8m:27s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.00 %
+TEIL C gesamt: 74861        MIN: 0T:0h:4m:56s        MAX: 0T:0h:59m:57s        AVG: 0T:0h:9m:53s     MIN_FAIL: 0       MAX_FAIL: 3        AVG_FAIL: 0.67 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: D       Gesamtanzahl gefertigt: 37460
@@ -1540,6 +1543,7 @@ FA: 009708     Anzahl gefertigt: 100        MIN: 0T:0h:4m:24s        MAX: 0T:0h:
 FA: 009709     Anzahl gefertigt: 100        MIN: 0T:0h:4m:35s        MAX: 0T:0h:53m:49s        AVG: 0T:0h:10m:49s     MIN_FAIL: 2       MAX_FAIL: 2        AVG_FAIL: 2.00 %
 FA: 009710     Anzahl gefertigt: 101        MIN: 0T:0h:4m:35s        MAX: 0T:0h:32m:58s        AVG: 0T:0h:8m:10s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 0.99 %
 FA: 009711     Anzahl gefertigt: 100        MIN: 0T:0h:4m:38s        MAX: 0T:0h:45m:42s        AVG: 0T:0h:7m:0s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
+TEIL D gesamt: 37483        MIN: 0T:0h:3m:25s        MAX: 0T:0h:59m:54s        AVG: 0T:0h:8m:23s     MIN_FAIL: 0       MAX_FAIL: 3        AVG_FAIL: 1.41 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: E       Gesamtanzahl gefertigt: 37549
@@ -1921,6 +1925,7 @@ FA: 009693     Anzahl gefertigt: 100        MIN: 0T:0h:5m:17s        MAX: 0T:0h:
 FA: 009694     Anzahl gefertigt: 100        MIN: 0T:0h:5m:8s        MAX: 0T:0h:45m:53s        AVG: 0T:0h:6m:37s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009695     Anzahl gefertigt: 101        MIN: 0T:0h:5m:7s        MAX: 0T:0h:25m:19s        AVG: 0T:0h:8m:3s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009696     Anzahl gefertigt: 99        MIN: 0T:0h:4m:58s        MAX: 0T:0h:44m:32s        AVG: 0T:0h:7m:50s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.02 %
+TEIL E gesamt: 37670        MIN: 0T:0h:4m:27s        MAX: 0T:0h:59m:36s        AVG: 0T:0h:8m:12s     MIN_FAIL: 0       MAX_FAIL: 2        AVG_FAIL: 0.58 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: F       Gesamtanzahl gefertigt: 38751
@@ -2356,6 +2361,7 @@ FA: 009729     Anzahl gefertigt: 90        MIN: 0T:0h:7m:23s        MAX: 0T:0h:2
 FA: 009730     Anzahl gefertigt: 90        MIN: 0T:0h:7m:25s        MAX: 0T:0h:30m:21s        AVG: 0T:0h:8m:45s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009731     Anzahl gefertigt: 90        MIN: 0T:0h:6m:57s        MAX: 0T:0h:39m:55s        AVG: 0T:0h:9m:23s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009732     Anzahl gefertigt: 90        MIN: 0T:0h:4m:35s        MAX: 0T:0h:37m:44s        AVG: 0T:0h:9m:53s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
+TEIL F gesamt: 38760        MIN: 0T:0h:4m:6s        MAX: 0T:0h:59m:58s        AVG: 0T:0h:7m:35s     MIN_FAIL: 0       MAX_FAIL: 2        AVG_FAIL: 0.48 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: G       Gesamtanzahl gefertigt: 37285
@@ -2775,6 +2781,7 @@ FA: 009735     Anzahl gefertigt: 90        MIN: 0T:0h:4m:37s        MAX: 0T:0h:4
 FA: 009736     Anzahl gefertigt: 90        MIN: 0T:0h:4m:37s        MAX: 0T:0h:46m:41s        AVG: 0T:0h:7m:31s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.11 %
 FA: 009737     Anzahl gefertigt: 90        MIN: 0T:0h:4m:37s        MAX: 0T:0h:38m:2s        AVG: 0T:0h:8m:48s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009738     Anzahl gefertigt: 90        MIN: 0T:0h:4m:37s        MAX: 0T:0h:34m:50s        AVG: 0T:0h:7m:18s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.11 %
+TEIL G gesamt: 37301        MIN: 0T:0h:0m:47s        MAX: 0T:0h:59m:50s        AVG: 0T:0h:7m:24s     MIN_FAIL: 0       MAX_FAIL: 14        AVG_FAIL: 0.74 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: H       Gesamtanzahl gefertigt: 38390
@@ -3208,6 +3215,7 @@ FA: 009723     Anzahl gefertigt: 91        MIN: 0T:0h:5m:6s        MAX: 0T:0h:41
 FA: 009724     Anzahl gefertigt: 91        MIN: 0T:0h:5m:15s        MAX: 0T:0h:44m:10s        AVG: 0T:0h:9m:37s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009725     Anzahl gefertigt: 89        MIN: 0T:0h:5m:9s        MAX: 0T:0h:26m:2s        AVG: 0T:0h:7m:1s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009726     Anzahl gefertigt: 90        MIN: 0T:0h:5m:8s        MAX: 0T:0h:40m:41s        AVG: 0T:0h:10m:29s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.11 %
+TEIL H gesamt: 38436        MIN: 0T:0h:4m:23s        MAX: 0T:0h:59m:55s        AVG: 0T:0h:8m:22s     MIN_FAIL: 0       MAX_FAIL: 4        AVG_FAIL: 1.10 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: I       Gesamtanzahl gefertigt: 38802
@@ -3698,6 +3706,7 @@ FA: 009715     Anzahl gefertigt: 80        MIN: 0T:0h:4m:42s        MAX: 0T:0h:4
 FA: 009716     Anzahl gefertigt: 80        MIN: 0T:0h:4m:34s        MAX: 0T:0h:51m:6s        AVG: 0T:0h:8m:19s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.50 %
 FA: 009717     Anzahl gefertigt: 80        MIN: 0T:0h:4m:33s        MAX: 0T:0h:11m:45s        AVG: 0T:0h:5m:28s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 1.25 %
 FA: 009718     Anzahl gefertigt: 80        MIN: 0T:0h:4m:32s        MAX: 0T:0h:47m:1s        AVG: 0T:0h:7m:40s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
+TEIL I gesamt: 38814        MIN: 0T:0h:4m:17s        MAX: 0T:0h:59m:59s        AVG: 0T:0h:8m:55s     MIN_FAIL: 0       MAX_FAIL: 3        AVG_FAIL: 0.82 %
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TEIL: K       Gesamtanzahl gefertigt: 37141
@@ -4075,3 +4084,4 @@ FA: 009670     Anzahl gefertigt: 100        MIN: 0T:0h:5m:12s        MAX: 0T:0h:
 FA: 009671     Anzahl gefertigt: 100        MIN: 0T:0h:5m:17s        MAX: 0T:0h:45m:20s        AVG: 0T:0h:7m:14s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009672     Anzahl gefertigt: 100        MIN: 0T:0h:5m:18s        MAX: 0T:0h:17m:21s        AVG: 0T:0h:7m:41s     MIN_FAIL: 0       MAX_FAIL: 0        AVG_FAIL: 0.00 %
 FA: 009673     Anzahl gefertigt: 100        MIN: 0T:0h:5m:19s        MAX: 0T:0h:49m:24s        AVG: 0T:0h:8m:53s     MIN_FAIL: 1       MAX_FAIL: 1        AVG_FAIL: 2.00 %
+TEIL K gesamt: 37181        MIN: 0T:0h:4m:55s        MAX: 0T:0h:59m:59s        AVG: 0T:0h:9m:31s     MIN_FAIL: 0       MAX_FAIL: 2        AVG_FAIL: 1.42 %

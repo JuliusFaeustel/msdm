@@ -1,3 +1,7 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+import numpy as np
+
 import mysql
 import mysql.connector
 import datetime, time
@@ -12,7 +16,6 @@ def convert_from_s( seconds ):
     days, hours = divmod(hours, 24) 
     string = str(int(days))+"T:"+str(int(hours))+"h:"+str(int(minutes))+"m:"+str(int(seconds))+ "s"
     return string
-
 
 # Teile
 teil_array = ["A","B","C","D","E","F","G","H","I","K"]
@@ -48,17 +51,24 @@ for teil in teil_array:
          
     j = 0
     Anzahl_sum = 0
-    FA_List.clear()
-    FA_List.append('1')
+    minZeit_gesamt = second_min
+    maxZeit_gesamt = 0
+    avgZeit_gesamt = 0
+    Anzahl_tmp_gesamt = 0
+    avg_aus_gesamt = 0
+    min_aus_gesamt = 999
+    max_aus_gesamt = 0
+    #FA_List.clear()
+    #FA_List.append('1')
     for FA in FA_List:
-        #statement = "SELECT COUNT(*) FROM (SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
-        statement = "SELECT COUNT(*) FROM (SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE FA = '008419' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
+        statement = "SELECT COUNT(*) FROM (SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
+        #statement = "SELECT COUNT(*) FROM (SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE FA = '008419' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
         cursor.execute(statement)
         Anzahl = cursor.fetchone()
         Anzahl_tmp = int(Anzahl[0])
 
-        #statement = "SELECT SNR.SNR FROM SNR WHERE SNR.FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR HAVING COUNT(DISTINCT(ID)) > 1"
-        statement = "SELECT SNR.SNR FROM SNR WHERE SNR.FA = '008419' AND SNR.SNR IS NOT NULL GROUP BY SNR HAVING COUNT(DISTINCT(ID)) > 1"
+        statement = "SELECT SNR.SNR FROM SNR WHERE SNR.FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR HAVING COUNT(DISTINCT(ID)) > 1"
+        #statement = "SELECT SNR.SNR FROM SNR WHERE SNR.FA = '008419' AND SNR.SNR IS NOT NULL GROUP BY SNR HAVING COUNT(DISTINCT(ID)) > 1"
         cursor.execute(statement)
         Ausschuss_List = cursor.fetchall()
 
@@ -80,8 +90,8 @@ for teil in teil_array:
         if min_aus == second_min:
             min_aus = 0
         
-        #statement = "SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE SNR.FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL"
-        statement = "SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE SNR.FA = '008419' AND SNR.SNR IS NOT NULL"
+        statement = "SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE SNR.FA = '" + FA[0] + "' AND SNR.SNR IS NOT NULL"
+        #statement = "SELECT SNR.ID FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE SNR.FA = '008419' AND SNR.SNR IS NOT NULL"
         cursor.execute(statement)
         SNR_List = cursor.fetchall()
 
@@ -89,6 +99,8 @@ for teil in teil_array:
         maxZeit = 0
         avgZeit = 0
         avg_diff = 0
+        SNR_time_list = list()
+
         for SNR in SNR_List:
             help_array = []
             # Input-Zeit
@@ -119,8 +131,8 @@ for teil in teil_array:
                 
             
             help_array.sort(reverse=True)
-                #print("HELP")
-                #print(help_array)
+            #print("HELP")
+            #print(help_array)
                 
             if help_array[0] < 3600:
                 if help_array[0] < minZeit:
@@ -128,7 +140,8 @@ for teil in teil_array:
                 if help_array[0] > maxZeit:
                     maxZeit = help_array[0]
                 avgZeit = avgZeit + help_array[0]
-                print(convert_from_s(help_array[0])+"   "+str(SNR[0]))
+                SNR_time_list.append(help_array[0]/60)
+                #print(str(help_array[0]/60)+"   "+str(SNR[0]))
             else:
                 avg_diff = avg_diff + 1 
         
@@ -141,12 +154,29 @@ for teil in teil_array:
             avg_aus = (avg_aus/Anzahl_tmp)*100
         
         
-        print("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " + convert_from_s(minZeit) + " min        MAX: " +convert_from_s(maxZeit)+ " min        AVG: " + convert_from_s(avgZeit) + " min     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
-        Anzahl_sum = Anzahl_sum + Anzahl_tmp
+        print("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " + convert_from_s(minZeit) + "        MAX: " +convert_from_s(maxZeit)+ "        AVG: " + convert_from_s(avgZeit) + "     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
+        Anzahl_tmp_gesamt = Anzahl_tmp_gesamt + Anzahl_tmp
         #print(Anzahl_sum)
+
+        if minZeit < minZeit_gesamt:
+            minZeit_gesamt = minZeit
+        if maxZeit > maxZeit_gesamt:
+            maxZeit_gesamt = maxZeit
+        avgZeit_gesamt = avgZeit_gesamt + avgZeit
+
+        if min_aus < min_aus_gesamt:
+            min_aus_gesamt = min_aus
+        if max_aus > max_aus_gesamt:
+            max_aus_gesamt = max_aus
+        avg_aus_gesamt = avg_aus_gesamt + avg_aus
+
         j = j + 1
+
+    avgZeit_gesamt = avgZeit_gesamt/len(FA_List)
+    avg_aus_gesamt = avg_aus_gesamt/len(FA_List)
+    print("TEIL "+ teil_array[i] + " gesamt: "+str(Anzahl_tmp_gesamt)+"        MIN: " + convert_from_s(minZeit_gesamt) + "        MAX: " +convert_from_s(maxZeit_gesamt)+ "        AVG: " + convert_from_s(avgZeit_gesamt) + "     MIN_FAIL: " + str(min_aus_gesamt)+ "       MAX_FAIL: " + str(max_aus_gesamt)+"        AVG_FAIL: "+str(format(avg_aus_gesamt, '.2f'))+" %\n")
     i = i + 1
-        
+
 
 
 

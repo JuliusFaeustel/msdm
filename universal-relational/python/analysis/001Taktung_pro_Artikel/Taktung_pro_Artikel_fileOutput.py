@@ -54,6 +54,13 @@ for teil in teil_array:
          
     j = 0
     Anzahl_sum = 0
+    minZeit_gesamt = second_min
+    maxZeit_gesamt = 0
+    avgZeit_gesamt = 0
+    Anzahl_tmp_gesamt = 0
+    avg_aus_gesamt = 0
+    min_aus_gesamt = 999
+    max_aus_gesamt = 0
     #FA_List.clear()
     #FA_List.append('1')
     for FA in FA_List:
@@ -151,8 +158,20 @@ for teil in teil_array:
         
         
         datei.write("FA: "+ FA_List[j][0] +"     Anzahl gefertigt: "+str(Anzahl_tmp)+"        MIN: " + convert_from_s(minZeit) + "        MAX: " +convert_from_s(maxZeit)+ "        AVG: " + convert_from_s(avgZeit) + "     MIN_FAIL: " + str(min_aus)+ "       MAX_FAIL: " + str(max_aus)+"        AVG_FAIL: "+str(format(avg_aus, '.2f'))+" %\n")
-        Anzahl_sum = Anzahl_sum + Anzahl_tmp
-        #print(Anzahl_sum)   
+        Anzahl_tmp_gesamt = Anzahl_tmp_gesamt + Anzahl_tmp
+        #print(Anzahl_sum)
+
+        if minZeit < minZeit_gesamt:
+            minZeit_gesamt = minZeit
+        if maxZeit > maxZeit_gesamt:
+            maxZeit_gesamt = maxZeit
+        avgZeit_gesamt = avgZeit_gesamt + avgZeit
+
+        if min_aus < min_aus_gesamt:
+            min_aus_gesamt = min_aus
+        if max_aus > max_aus_gesamt:
+            max_aus_gesamt = max_aus
+        avg_aus_gesamt = avg_aus_gesamt + avg_aus
         
         
         plt.figure(i*10000+j)
@@ -165,6 +184,9 @@ for teil in teil_array:
 
         j = j + 1
 
+    avgZeit_gesamt = avgZeit_gesamt/len(FA_List)
+    avg_aus_gesamt = avg_aus_gesamt/len(FA_List)
+    datei.write("TEIL "+ teil_array[i] + " gesamt: "+str(Anzahl_tmp_gesamt)+"        MIN: " + convert_from_s(minZeit_gesamt) + "        MAX: " +convert_from_s(maxZeit_gesamt)+ "        AVG: " + convert_from_s(avgZeit_gesamt) + "     MIN_FAIL: " + str(min_aus_gesamt)+ "       MAX_FAIL: " + str(max_aus_gesamt)+"        AVG_FAIL: "+str(format(avg_aus_gesamt, '.2f'))+" %\n")
     i = i + 1
 
 datei.close()
