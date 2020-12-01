@@ -1,0 +1,55 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LINIE: 1
+Umrüstung: A nach A          MIN: 0T:0h:22m:11s         MAX: 0T:11h:16m:38s         AVG: 0T:2h:19m:56s
+Umrüstung: A nach E          MIN: 0T:0h:53m:1s         MAX: 0T:1h:9m:11s         AVG: 0T:0h:59m:47s
+Umrüstung: A nach H          MIN: 0T:0h:40m:20s         MAX: 0T:18h:57m:26s         AVG: 0T:5h:31m:15s
+Umrüstung: E nach A          MIN: 0T:1h:58m:10s         MAX: 0T:4h:11m:32s         AVG: 0T:2h:54m:10s
+Umrüstung: E nach E          MIN: 0T:0h:10m:8s         MAX: 2T:22h:11m:31s         AVG: 0T:14h:39m:10s
+Umrüstung: E nach H          MIN: 0T:0h:6m:57s         MAX: 0T:1h:38m:28s         AVG: 0T:0h:23m:28s
+Umrüstung: H nach A          MIN: 0T:0h:47m:53s         MAX: 2T:11h:53m:4s         AVG: 1T:15h:48m:57s
+Umrüstung: H nach E          MIN: 0T:0h:10m:37s         MAX: 0T:2h:2m:22s         AVG: 0T:0h:26m:7s
+Umrüstung: H nach H          MIN: 0T:0h:5m:12s         MAX: 7T:15h:52m:15s         AVG: 1T:22h:11m:1s
+Umrüstung: H nach K          MIN: 0T:0h:29m:56s         MAX: 0T:0h:29m:56s         AVG: 0T:0h:29m:56s
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LINIE: 2
+Umrüstung: F nach F          MIN: 0T:0h:11m:39s         MAX: 5T:13h:48m:41s         AVG: 0T:15h:22m:47s
+Umrüstung: F nach G          MIN: 0T:0h:16m:6s         MAX: 0T:2h:41m:51s         AVG: 0T:1h:25m:10s
+Umrüstung: F nach I          MIN: 0T:0h:13m:55s         MAX: 0T:1h:4m:25s         AVG: 0T:0h:24m:44s
+Umrüstung: G nach F          MIN: 0T:0h:26m:11s         MAX: 0T:0h:26m:11s         AVG: 0T:0h:26m:11s
+Umrüstung: G nach G          MIN: 0T:4h:22m:11s         MAX: 0T:4h:22m:11s         AVG: 0T:4h:22m:11s
+Umrüstung: G nach I          MIN: 0T:0h:11m:8s         MAX: 0T:0h:46m:58s         AVG: 0T:0h:22m:50s
+Umrüstung: I nach F          MIN: 0T:0h:11m:38s         MAX: 0T:2h:14m:9s         AVG: 0T:0h:29m:22s
+Umrüstung: I nach G          MIN: 0T:0h:13m:9s         MAX: 0T:3h:16m:22s         AVG: 0T:0h:28m:31s
+Umrüstung: I nach I          MIN: 2T:7h:9m:41s         MAX: 2T:7h:9m:41s         AVG: 2T:7h:9m:41s
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LINIE: 3
+Umrüstung: C nach K          MIN: 0T:17h:37m:52s         MAX: 0T:17h:37m:52s         AVG: 0T:17h:37m:52s
+Umrüstung: E nach H          MIN: 0T:0h:52m:19s         MAX: 0T:0h:52m:19s         AVG: 0T:0h:52m:19s
+Umrüstung: E nach K          MIN: 0T:0h:19m:29s         MAX: 0T:14h:11m:29s         AVG: 0T:3h:48m:59s
+Umrüstung: H nach E          MIN: 0T:0h:14m:32s         MAX: 0T:0h:14m:32s         AVG: 0T:0h:14m:32s
+Umrüstung: H nach K          MIN: 0T:0h:26m:43s         MAX: 0T:0h:52m:31s         AVG: 0T:0h:39m:37s
+Umrüstung: K nach C          MIN: 0T:1h:9m:34s         MAX: 0T:1h:9m:34s         AVG: 0T:1h:9m:34s
+Umrüstung: K nach E          MIN: 0T:0h:22m:32s         MAX: 0T:3h:6m:27s         AVG: 0T:1h:30m:17s
+Umrüstung: K nach H          MIN: 0T:0h:22m:56s         MAX: 0T:1h:0m:30s         AVG: 0T:0h:41m:43s
+Umrüstung: K nach K          MIN: 0T:0h:3m:56s         MAX: 5T:18h:48m:15s         AVG: 1T:23h:14m:34s
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LINIE: 4
+Umrüstung: C nach C          MIN: 0T:0h:4m:25s         MAX: 5T:13h:23m:23s         AVG: 0T:2h:18m:8s
+Umrüstung: C nach F          MIN: 0T:0h:6m:50s         MAX: 0T:0h:31m:49s         AVG: 0T:0h:15m:16s
+Umrüstung: C nach I          MIN: 0T:0h:5m:22s         MAX: 0T:7h:10m:18s         AVG: 0T:0h:28m:42s
+Umrüstung: F nach C          MIN: 0T:0h:11m:24s         MAX: 0T:0h:52m:48s         AVG: 0T:0h:30m:19s
+Umrüstung: I nach C          MIN: 0T:0h:4m:10s         MAX: 0T:1h:52m:59s         AVG: 0T:0h:19m:32s
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LINIE: 5
+Umrüstung: B nach B          MIN: 0T:0h:11m:42s         MAX: 5T:16h:2m:0s         AVG: 1T:12h:11m:29s
+Umrüstung: B nach D          MIN: 0T:0h:32m:49s         MAX: 0T:0h:32m:49s         AVG: 0T:0h:32m:49s
+Umrüstung: B nach H          MIN: 0T:1h:5m:21s         MAX: 0T:1h:5m:21s         AVG: 0T:1h:5m:21s
+Umrüstung: D nach B          MIN: 0T:0h:23m:58s         MAX: 0T:5h:20m:33s         AVG: 0T:2h:52m:15s
+Umrüstung: D nach D          MIN: 0T:0h:16m:6s         MAX: 0T:0h:35m:38s         AVG: 0T:0h:25m:52s
+Umrüstung: D nach H          MIN: 0T:0h:20m:34s         MAX: 0T:0h:20m:34s         AVG: 0T:0h:20m:34s
+Umrüstung: H nach D          MIN: 0T:0h:29m:39s         MAX: 0T:0h:29m:58s         AVG: 0T:0h:29m:48s
