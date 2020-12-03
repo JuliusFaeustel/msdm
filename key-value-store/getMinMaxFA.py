@@ -7,7 +7,7 @@ r = redis.Redis(decode_responses=True)
 meanTime = 0
 
 allFa = []
-for fa in r.scan_iter(match='FA:*'):
+for fa in r.scan_iter(match='FA:*',count=300000):
     allFa.append(fa)
 
 recDateBeg = datetime(1989, 1, 9, 12, 0, 0)
@@ -41,9 +41,12 @@ for teil in allTeil:
                 if len(connData) > 1:              
                     beginDate = r.hget(connData[0],"Begin")
                     beginDatetime = datetime.strptime(beginDate, '%Y-%m-%dT%H:%M:%S.%f0')
+
+                    smallerOneH = 0
+
+                    lastRec = recDate
                     
                     for outDat in connOutData:
-                        smallerOneH = 0
                         endDate = r.hget(outDat,"Date")
                         endDatetime = datetime.strptime(endDate, '%Y-%m-%dT%H:%M:%S.%f0')
                         diffTime = endDatetime - beginDatetime
@@ -56,6 +59,11 @@ for teil in allTeil:
 
                             if diffTime > localRec:
                                 localRec = diffTime
+
+                        else:
+                            smallerOneH = 0
+                            recDate = lastRec
+                            break
                                 
                     if smallerOneH:
                         if localRec < minDate:

@@ -1,7 +1,11 @@
 import redis
 r = redis.Redis(decode_responses=True)
 
-snr = 4152432766450
+snr = 4072934236515
+con = []
+
+for snrCon in r.scan_iter(match=str(snr)+':*',count=300000):
+    con.append(snrCon)
 
 if r.exists(snr):
     for inData in r.lrange(snr,0,-1):
@@ -16,6 +20,8 @@ if r.exists(snr):
         for outData in r.lrange(inDatensatz,1,-1):
             allOutInfo = r.hgetall(outData)
             print("Out"+": "+allOutInfo.get("Date"))
+
+    print(con)
 
 else:
     print('SNR nicht gefunden')
