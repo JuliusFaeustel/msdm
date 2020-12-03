@@ -45,7 +45,7 @@ for Linie in Linie_List:
     i = 0
 
     for FA in FA_List:
-        statement = "SELECT Ausprägung, SNR.ID, SNR.TEIL FROM SNR JOIN Objekt2Merkmalsausprägung O2MA ON (O2MA.ObjektID = SNR.ID AND o2MA.ObjektTyp = 1) JOIN Merkmalsausprägung MA ON MA.ID = O2MA.MerkmalsausprägungID WHERE MA.MerkmalID = 1 AND SNR.FA = '"+FA[0]+"' ORDER BY Ausprägung"
+        statement = "SELECT Ausprägung, SNR.ID, SNR.TEIL FROM SNR JOIN Objekt2Merkmalsausprägung O2MA ON (O2MA.ObjektID = SNR.ID AND o2MA.ObjektTyp = 1) JOIN Merkmalsausprägung MA ON MA.ID = O2MA.MerkmalsausprägungID WHERE MA.MerkmalID = 1 AND SNR.FA = '"+FA[0]+"' AND SNR.SNR IS NOT NULL ORDER BY Ausprägung"
         #print(statement)
         cursor.execute(statement)
         Input_List = cursor.fetchall()
@@ -94,7 +94,7 @@ for Linie in Linie_List:
             #print(diff)
 
         if diff >= 0:
-            pair = complete_list[j][1] + " nach " +complete_list[j+1][1]
+            pair = complete_list[j][1] + complete_list[j+1][1]
             index = find(erg_list, pair)
             if index == -1:
                 position = len(erg_list)
@@ -116,4 +116,4 @@ for Linie in Linie_List:
     erg_list.sort()
     for erg in erg_list:
         avg = erg[3]/erg[4]
-        print("Umrüstung: " +erg[0]+"          MIN: "+convert_from_s(erg[1])+"         MAX: "+convert_from_s(erg[2])+"         AVG: "+convert_from_s(avg))
+        print("Von: " +erg[0][0]+"    Nach: "+erg[0][1]+"          MIN: "+convert_from_s(erg[1])+"         MAX: "+convert_from_s(erg[2])+"         AVG: "+convert_from_s(avg))
