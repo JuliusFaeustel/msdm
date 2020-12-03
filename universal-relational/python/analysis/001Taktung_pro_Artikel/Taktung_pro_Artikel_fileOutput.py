@@ -1,6 +1,5 @@
 import matplotlib as mlp
 import matplotlib.pyplot as plt
-import numpy as np
 
 import mysql
 import mysql.connector
