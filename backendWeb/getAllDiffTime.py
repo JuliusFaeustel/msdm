@@ -16,7 +16,7 @@ maxDiff = minDateEnd - recDateBeg
 allTeil = ["TEIL:A", "TEIL:B", "TEIL:C", "TEIL:D", "TEIL:E", "TEIL:F", "TEIL:G",
            "TEIL:H", "TEIL:I", "TEIL:J", "TEIL:K"]
 
-diffFile = open("diffs.txt", "w")
+diffFile = open("AuswertungCSV/diffs.txt", "w")
 
 for teil in allTeil:
     print(teil)

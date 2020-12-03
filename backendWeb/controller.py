@@ -1,12 +1,11 @@
 from flask import Flask, request, render_template
 import loader
 import plotly
-import plotly.graph_objs as go
-import numpy as np
 import json
 import plotly.graph_objects as go
 import re
-import more_itertools
+import datetime
+import statistics
 
 app = Flask(__name__)
 
@@ -30,29 +29,22 @@ def snr():
 
     return render_template("snrLoader.html", content=dataSet)
 
-
-@app.route('/taktung', methods=['GET'])
-def taktung():
-    bar = create_plot()
-    return render_template("taktung.html", plot=bar)
-
-
-@app.route('/secondPlot')
+@app.route('/taktzeit1')
 def render_realPlot():
 
-    rohData_t =txt_loader()
-    bar = create_realPlot(rohData_t)
-    return render_template("secondTry.html", plot=bar)
+    rohData = txt_loader_tz1()
+    bar = create_Plot_Taktzeit(rohData)
+    return render_template("taktzeit1.html", plot=bar)
 
 @app.route('/laufzeitFA')
 def render_realPlot_FA():
 
     rohData_t =txt_loader_FA()
-    bar = create_realPlot(rohData_t)
+    bar = create_Laufzeit_Artikel(rohData_t)
     return render_template("laufzeitFA.html", plot=bar)
 
 def txt_loader_FA():
-    f = open("faMax.txt", "r")
+    f = open("AuswertungCSV/faMax.txt", "r")
     first=True
     returnSet=[]
     for line in f:
@@ -71,63 +63,75 @@ def txt_loader_FA():
             tupel=[]
     return returnSet
 
-def txt_loader():
-    f = open("diffs.txt", "r")
+
+def txt_loader_tz1():
+    f = open("AuswertungCSV/takt1.txt", "r")
     first=True
     returnSet=[]
     for line in f:
         if re.search('TEIL:*', line):
             teil=line[:-1]
             if False==first:
-               returnSet.append([snrListe,werteListe])
-            snrListe=[]
-            werteListe=[]
+               returnSet.append([teil,faListe,maxListe,minListe,mittelListe])
+            faListe=[]
+            maxListe=[]
+            minListe=[]
+            mittelListe=[]
             first=False
 
         else:
             tupel = line.split(" ")
-            snrListe.append(teil)
-            werteListe.append(tupel[1][:-1])
+            faListe.append(tupel[0])
+            maxtime=datetime.datetime.strptime(tupel[2], '%H:%M:%S').time()
+            maxListe.append(maxtime.hour/60+maxtime.minute+maxtime.second/100)
+            mintime = datetime.datetime.strptime(tupel[3], '%H:%M:%S').time()
+            minListe.append(mintime.hour / 60 + mintime.minute + mintime.second / 100)
+            mittelListe.append(float(tupel[4][:-2]))
             tupel=[]
+    returnSet.append([teil, faListe, maxListe, minListe, mittelListe])
     return returnSet
 
+def create_Plot_Taktzeit(rohData):
+    data = []
+    #fig = go.Figure(layout=go.Layout(yaxis=dict(range=[0, 1000])))
+    #layout = go.Layout(yaxis={'tickformat': '%H:%M:%S'})
+    #layout = go.Layout(yaxis={'type': 'linear'})
+    fig = go.Figure().update_layout(title={'text':'Taktzeit Analyse in Minuten', 'xanchor': 'center'})
 
-def create_realPlot(rohData):
+    for rdat in rohData:
+        teil=rdat.pop(0)
+        faListe = rdat.pop(0)
+        maxListe = rdat.pop(0)
+        minListe = rdat.pop(0)
+        mittelListe = rdat.pop(0)
+        try:
+            print(teil)
+            print(statistics.mean(minListe))
+            print(statistics.mean(mittelListe))
+            print(statistics.mean(maxListe))
+        except:
+            print("error")
+        fig.add_box(y=minListe, name="min" + teil)
+        fig.add_box(y=mittelListe, name="Mittel" + teil, yaxis='y')
+        fig.add_box(y=maxListe, name="max" + teil, yaxis='y')
+
+
+
+
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
+
+
+def create_Laufzeit_Artikel(rohData):
     data = []
     for rdat in rohData:
         snrList=rdat.pop(0)
         time=rdat.pop(0)
-        more_itertools.sort_together([time,snrList])
-        data.append(go.Scattergl(x=time, y=snrList,mode='markers'))
+        data.append(go.Box(y=time))
 
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graphJSON
 
-
-def create_plot():
-    N = 1000
-    random_x = np.random.randn(N)
-    random_y = np.random.randn(N)
-    random_z = np.random.randn(N)
-    random_d = np.random.randn(N)
-
-    # Create a trace
-    data = [go.Scatter(
-        x=random_x,
-        y=random_y,
-        mode='markers',
-        fillcolor="red",
-        name="Testwerte 1",
-        hovertext="x-Werte"
-    ), go.Scatter(
-        x=random_z,
-        y=random_d,
-        mode='markers',
-        fillcolor="red",
-        name="Testwerte 2",
-        hovertext="y-Werte")]
-
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
-
-    return graphJSON
