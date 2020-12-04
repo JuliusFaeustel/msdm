@@ -2,7 +2,6 @@ import redis
 import re
 from datetime import datetime, timedelta
 import time
-import plot
 r = redis.Redis(decode_responses=True)
 
 minDate = datetime(1989, 1, 9, 12, 0, 0)
@@ -13,6 +12,8 @@ maxDiff = maxDate - minDate
 #allLi = []
 #for li in r.scan_iter(match='LINIE:*',count=300000):
 #    allLi.append(li)
+
+diffFile = open("takt7.txt", "w")
 
 allLi = ['LINIE:1','LINIE:2','LINIE:3','LINIE:4','LINIE:5']
 #allLi = ['LINIE:3']
@@ -94,16 +95,8 @@ for linie in allLi:
         lastTeil = newTeil
         lastEnd = endDat
         notFirst = 1
-
-    print(linie)
-    print('')
-    for k,v in teilDict.items():
-        print(k)
-        print("Min: " + str(v[1]),"Max: " + str(v[0]),"Ges: "
-              + str(v[2]),"Menge: " + str(v[3]))
-    print("--------------------")
     
-                
-        
-    
-
+    for k, v in teilDict.items():
+        # key max min ges menge
+        writer = k +" "+  str(v[0]) + " " + str(v[1]) + " " + str(v[2]/v[3])+"\n"
+        diffFile.write(writer)
