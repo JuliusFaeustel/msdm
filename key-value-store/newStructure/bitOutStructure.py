@@ -34,18 +34,15 @@ with open('../../allout.txt', 'rt', encoding='utf-16') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';')     
     i=1        
     for row in spamreader:
-
-        """
-        if i%10000==0:
-            print(i)
-        i = i + 1
-        """
         
-        writeOut(i,row)
-        recDate = maxDiff
+        #writeOut(i,row)
+        #recDate = maxDiff
         
         #Zugehörigen Input-SNR-Key finden und aus Liste entfernen
         if r.exists(row[0]):
+
+            writeOut(i,row)
+            recDate = maxDiff
 
             #Output dem Input mit geringstem Zeitabstand zuordnen
             for inputdat in r.lrange(row[0],0,-1):
@@ -66,20 +63,22 @@ with open('../../allout.txt', 'rt', encoding='utf-16') as csvfile:
             dateStamp = dateDatetime.timestamp()
             inDateTime = datetime.strptime(r.hget(conInput,"Begin"), '%Y-%m-%dT%H:%M:%S.%f0')
             inStamp = inDateTime.timestamp()
+
+            inSNR = r.hget(conInput,"SNR")
             
             #Input-Daten finden und Out-DS-Key in Verknuepfung schreiben
             inList = r.lrange(inCounter,0,-1)
             if len(inList) > 1:
-                con = str(inStamp)+":"+str(inCounter)+":"+str(inList[1])
+                con = str(inStamp)+":"+str(inCounter)+":"+str(inList[1])+":"+str(inSNR)
                 if float(dateStamp) > float(inList[1]):
-                    newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp))
+                    newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp)+":"+str(inSNR))
                     r.rename(con, newKey)
                     con = newKey
                     r.rpop(inCounter)
                     r.rpush(inCounter,dateStamp)
             else:
-                con = (str(inStamp)+":"+str(inCounter)+":"+str(inStamp))
-                newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp))
+                con = (str(inStamp)+":"+str(inCounter)+":"+str(inStamp)+":"+str(inSNR))
+                newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp)+":"+str(inSNR))
                 #print(con)
                 r.rename(con,newKey)
                 r.rpush(inCounter,dateStamp)
@@ -104,11 +103,11 @@ with open('../../allout.txt', 'rt', encoding='utf-16') as csvfile:
 
             r.lset("con",int(inCounter)-1,con)
 
-        #outCounter setzen
-        outCounter = str(int(outCounter)+1)
-        r.incr("outCounter")
+            #outCounter setzen
+            outCounter = str(int(outCounter)+1)
+            r.incr("outCounter")
         
-        #Begrenzung der Datensatzanzahl zum testen
-        #i=i+1
-        #if(i==100):
-            #break
+            #Begrenzung der Datensatzanzahl zum testen
+            #i=i+1
+            #if(i==100):
+                #break

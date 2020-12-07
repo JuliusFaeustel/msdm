@@ -32,21 +32,22 @@ with open('../../allin.txt', 'rt', encoding='utf-16') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';')
     i = 1
     for row in spamreader:
-        writeIn(i,row)
-        
-        #Hilfsliste für jede SNR mit offenem (nicht zugeordetem) Output
-        #Attribute sind die Input-Keys
-        #Nur Inputs mit SNR werden beachtet
         if not row[4]=='':
+            writeIn(i,row)
+        
+            #Hilfsliste für jede SNR mit offenem (nicht zugeordetem) Output
+            #Attribute sind die Input-Keys
+            #Nur Inputs mit SNR werden beachtet
+            #if not row[4]=='':
             r.rpush(row[4],"in"+":"+inCounter)
 
             beginDatetime = datetime.strptime(row[0], '%Y-%m-%dT%H:%M:%S.%f0')
             beginStamp = beginDatetime.timestamp()
 
             #Liste zur Verknuepfung In und Out bereitstellen
-            r.lpush(str(beginStamp)+":"+inCounter+":"+str(beginStamp),"in"+":"+inCounter)
+            r.lpush(str(beginStamp)+":"+inCounter+":"+str(beginStamp)+":"+row[4],"in"+":"+inCounter)
 
-            r.rpush("con",str(beginStamp)+":"+inCounter+":"+str(beginStamp))
+            r.rpush("con",str(beginStamp)+":"+inCounter+":"+str(beginStamp)+":"+row[4])
 
             #In-Out-Verknuepfung in gewuenschte Bitmaps einfuegen
             for attr in attributes:
@@ -57,11 +58,11 @@ with open('../../allin.txt', 'rt', encoding='utf-16') as csvfile:
 
             r.lpush(inCounter,beginStamp)
             
-        #inCounter setzen
-        inCounter = str(int(inCounter)+1)
-        r.incr("inCounter")
+            #inCounter setzen
+            inCounter = str(int(inCounter)+1)
+            r.incr("inCounter")
 
-        #Begrenzung der Datensatzanzahl zum testen
-        #i=i+1
-        #if(i==100):
-            #break
+            #Begrenzung der Datensatzanzahl zum testen
+            #i=i+1
+            #if(i==100):
+                #break
