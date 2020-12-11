@@ -37,6 +37,8 @@ def sortFaByBegin(faList):
 for linie in allLi:
     connFaList = []
     allLinieCon = r.lrange(linie,0,-1)
+
+    diffFile.write(linie + "\n")
     
     for con in allLinieCon:
         connFaList.append(r.hget(r.lrange(con,0,-1)[0],"FA"))
@@ -98,5 +100,5 @@ for linie in allLi:
     
     for k, v in teilDict.items():
         # key max min ges menge
-        writer = k +" "+  str(v[0]) + " " + str(v[1]) + " " + str(v[2]/v[3])+"\n"
+        writer = k +";"+  str(v[0]) + ";" + str(v[1]) + ";" + str(v[2]/v[3])+"\n"
         diffFile.write(writer)
