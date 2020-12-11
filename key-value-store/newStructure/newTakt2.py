@@ -75,7 +75,6 @@ myLua = r.register_script(lua)
 for teil in allTeil:
     i=0
     diffFile.write(teil + "\n")
-    print(teil)
 
     snrBegDict = {}
     snrEndDict = {}
@@ -141,13 +140,16 @@ for teil in allTeil:
                     if beg == end:
                         firstCounter = 0
 
-    print(str(timedelta(seconds=maxDate)))
+    writer = str(numCounter)+";"+str(timedelta(seconds=minDate))+";"+str(timedelta(seconds=maxDate))+";"+str(timedelta(seconds=(allDiffs/numCounter)))+";"+str(fail/len(allSnr))+"\n"
+    diffFile.write(writer)
+    
+    #print(str(timedelta(seconds=maxDate)))
     #print(maxDate)
-    print(str(timedelta(seconds=minDate)))
+    #print(str(timedelta(seconds=minDate)))
     #print(minDate)
-    print(str(timedelta(seconds=(allDiffs/numCounter))))
+    #print(str(timedelta(seconds=(allDiffs/numCounter))))
     #print(str(allDiffs/numCounter))
-    print(str(fail/len(allSnr)))
+    #print(str(fail/len(allSnr)))
 
         
                      

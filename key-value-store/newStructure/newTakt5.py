@@ -1,5 +1,5 @@
 import redis
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import process_time_ns
 import csv
 #decode_responses, da die Rueckgabewerte von z.B. r.get(...) sonst als 'binaer' codiert
