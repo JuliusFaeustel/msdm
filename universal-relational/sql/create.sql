@@ -80,16 +80,17 @@ ALTER TABLE Rückmeldung ADD CONSTRAINT FKRück_LINIE FOREIGN KEY (LINIE) REFERE
 
 CREATE INDEX INDEX_TBL_SNR ON SNR (SNR);
 CREATE INDEX INDEX_TBL_SNR2 ON SNR (TEIL);
+CREATE INDEX INDEX_TBL_SNR3 ON SNR (FA);
 
 CREATE INDEX INDEX_TBL_MerkP ON Merkmalsausprägung (MerkmalID, Ausprägung);
 CREATE INDEX INDEX_TBL_MerkP2 ON Merkmalsausprägung (MerkmalID);
 
 CREATE INDEX INDEX_TBL_O2MerkP ON Objekt2Merkmalsausprägung (ObjektID, ObjektTyp);
+CREATE INDEX INDEX_TBL_O2MerkP2 ON Objekt2MErkmalsausprägung (ObjektTyp);
 
 CREATE INDEX INDEX_TBL_O2Merk ON Objekt2Merkmal (ObjektID, ObjektTyp);
 
 CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR);
-
 
 
 
