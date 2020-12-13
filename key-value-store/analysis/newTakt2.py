@@ -120,25 +120,25 @@ for teil in allTeil:
         if len(sortedDict) > 1:
             for beg,end in sortedDict.items():
 
-                    anfang = beg
-                    ende = end
+                anfang = beg
+                ende = end
                 
-                    if firstCounter:
-                        diffTime = anfang - beforeEnd
-                        if (not beg == end or not beforeEnd == 0):
-                            if diffTime < minDate:
-                                minDate = diffTime
-                            if diffTime > maxDate:
-                                maxDate = diffTime
+                if firstCounter:
+                    diffTime = anfang - beforeEnd
+                    if (not beg == end or not beforeEnd == 0):
+                        if diffTime < minDate:
+                            minDate = diffTime
+                        if diffTime > maxDate:
+                            maxDate = diffTime
 
-                            numCounter = numCounter + 1
-                            allDiffs = allDiffs + diffTime
+                        numCounter = numCounter + 1
+                        allDiffs = allDiffs + diffTime
 
-                    beforeEnd = ende
-                    firstCounter = 1
+                beforeEnd = ende
+                firstCounter = 1
 
-                    if beg == end:
-                        firstCounter = 0
+                if beg == end:
+                    firstCounter = 0
 
     writer = str(numCounter)+";"+str(timedelta(seconds=minDate))+";"+str(timedelta(seconds=maxDate))+";"+str(timedelta(seconds=(allDiffs/numCounter)))+";"+str(fail/len(allSnr))+"\n"
     diffFile.write(writer)

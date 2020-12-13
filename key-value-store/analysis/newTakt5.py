@@ -75,20 +75,23 @@ myLua = r.register_script(lua)
 for teil in allTeil:
     diffFile.write(teil + "\n")
     for lager in allLa:
+        allSnr = set()
         r.bitop("AND","opCon",lager,teil)
         result = myLua(keys=['opCon'],args=[1,200])
         minDiff = maxDate.total_seconds()
         maxDiff = zerDiff.total_seconds()
-        avgTime = zerDiff
+        avgTime = maxDiff
         if result:
             for res in result:
                 con = allCons[res-1]
                 conSplit = con.split(":")
                 beginDateStamp = float(conSplit[0])
                 endDateStamp = float(conSplit[2])
+                allSnr.add(conSplit[3])
 
                 if not beginDateStamp == endDateStamp:
                     diffTimeStamp = float(endDateStamp - beginDateStamp)
+                    avgTime = avgTime + diffTimeStamp
 
                     if diffTimeStamp < minDiff:
                         minDiff = diffTimeStamp
@@ -97,7 +100,7 @@ for teil in allTeil:
                     if diffTimeStamp > maxDiff:
                         maxDiff = diffTimeStamp
 
-            writer = lager+";"+str(maxDiff)+";"+str(minDiff)+"\n"
+            writer = lager+";"+str(len(allSnr))+";"+str(maxDiff)+";"+str(minDiff)+";"+str(avgTime/len(allSnr))+"\n"
             diffFile.write(writer)
 
 stop = process_time_ns()
