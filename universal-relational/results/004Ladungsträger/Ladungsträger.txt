@@ -318,7 +318,7 @@ Ladungsträger: 000029957        Anzahl: 81        Dauer: 0T:4h:15m:1s        Sta
 Ladungsträger: 000029960        Anzahl: 80        Dauer: 0T:3h:29m:29s        Start: 2018-01-29T15:39:52         Ende: 2018-01-29T19:09:21
 Ladungsträger: 000029963        Anzahl: 80        Dauer: 5T:6h:38m:8s        Start: 2018-01-24T15:38:50         Ende: 2018-01-29T22:16:58
 Ladungsträger: 000029968        Anzahl: 80        Dauer: 0T:5h:44m:14s        Start: 2018-01-24T10:07:08         Ende: 2018-01-24T15:51:22
-Ladungsträger: 000029972        Anzahl: 80        Dauer: 0T:13h:31m:15s        Start: 2018-01-23T20:45:11         Ende: 2018-01-24T10:16:26
+Ladungsträger: 000029972        Anzahl: 79        Dauer: 0T:13h:31m:15s        Start: 2018-01-23T20:45:11         Ende: 2018-01-24T10:16:26
 Ladungsträger: 000029976        Anzahl: 80        Dauer: 0T:17h:12m:13s        Start: 2018-01-29T22:13:22         Ende: 2018-01-30T15:25:35
 Ladungsträger: 000030011        Anzahl: 90        Dauer: 0T:5h:13m:52s        Start: 2018-01-24T13:14:29         Ende: 2018-01-24T18:28:21
 Ladungsträger: 000030016        Anzahl: 90        Dauer: 5T:0h:55m:52s        Start: 2018-01-24T18:23:54         Ende: 2018-01-29T19:19:46
@@ -811,7 +811,7 @@ Ladungsträger: 000032848        Anzahl: 98        Dauer: 0T:20h:49m:25s        S
 Ladungsträger: 000032852        Anzahl: 100        Dauer: 2T:17h:21m:42s        Start: 2018-03-09T16:12:28         Ende: 2018-03-12T09:34:10
 Ladungsträger: 000032856        Anzahl: 100        Dauer: 0T:8h:36m:56s        Start: 2018-03-08T06:05:05         Ende: 2018-03-08T14:42:01
 Ladungsträger: 000032860        Anzahl: 100        Dauer: 0T:11h:12m:14s        Start: 2018-03-15T19:14:03         Ende: 2018-03-16T06:26:17
-Ladungsträger: 000032879        Anzahl: 100        Dauer: 5T:0h:16m:20s        Start: 2018-03-14T11:41:30         Ende: 2018-03-19T11:57:50
+Ladungsträger: 000032879        Anzahl: 99        Dauer: 5T:0h:16m:20s        Start: 2018-03-14T11:41:30         Ende: 2018-03-19T11:57:50
 Ladungsträger: 000032882        Anzahl: 100        Dauer: 0T:12h:51m:10s        Start: 2018-03-13T20:03:28         Ende: 2018-03-14T08:54:38
 Ladungsträger: 000032885        Anzahl: 101        Dauer: 0T:14h:2m:8s        Start: 2018-03-13T06:04:45         Ende: 2018-03-13T20:06:53
 Ladungsträger: 000032887        Anzahl: 100        Dauer: 0T:3h:18m:48s        Start: 2018-03-14T08:26:07         Ende: 2018-03-14T11:44:55
@@ -959,10 +959,10 @@ Ladungsträger: 000033858        Anzahl: 100        Dauer: 0T:5h:14m:3s        St
 Ladungsträger: 000033861        Anzahl: 100        Dauer: 0T:5h:2m:15s        Start: 2018-04-09T08:15:09         Ende: 2018-04-09T13:17:24
 Ladungsträger: 000033864        Anzahl: 101        Dauer: 0T:21h:28m:21s        Start: 2018-04-03T10:59:17         Ende: 2018-04-04T08:27:38
 Ladungsträger: 000033868        Anzahl: 100        Dauer: 5T:23h:45m:34s        Start: 2018-03-28T11:17:17         Ende: 2018-04-03T11:02:51
-Ladungsträger: 000033871        Anzahl: 100        Dauer: 0T:14h:29m:7s        Start: 2018-03-27T20:52:04         Ende: 2018-03-28T11:21:11
+Ladungsträger: 000033871        Anzahl: 99        Dauer: 0T:14h:29m:7s        Start: 2018-03-27T20:52:04         Ende: 2018-03-28T11:21:11
 Ladungsträger: 000033874        Anzahl: 100        Dauer: 0T:4h:37m:10s        Start: 2018-03-26T09:46:19         Ende: 2018-03-26T14:23:29
 Ladungsträger: 000033878        Anzahl: 100        Dauer: 0T:12h:4m:39s        Start: 2018-04-09T19:36:36         Ende: 2018-04-10T07:41:15
-Ladungsträger: 000033880        Anzahl: 101        Dauer: 6T:9h:38m:25s        Start: 2018-04-03T08:38:33         Ende: 2018-04-09T18:16:58
+Ladungsträger: 000033880        Anzahl: 100        Dauer: 6T:9h:38m:25s        Start: 2018-04-03T08:38:33         Ende: 2018-04-09T18:16:58
 Ladungsträger: 000033886        Anzahl: 101        Dauer: 6T:3h:17m:57s        Start: 2018-03-28T05:28:17         Ende: 2018-04-03T08:46:14
 Ladungsträger: 000033887        Anzahl: 100        Dauer: 0T:11h:44m:2s        Start: 2018-03-22T18:44:40         Ende: 2018-03-23T06:28:42
 Ladungsträger: 000033890        Anzahl: 101        Dauer: 0T:4h:6m:25s        Start: 2018-04-09T18:10:32         Ende: 2018-04-09T22:16:57
@@ -986,7 +986,7 @@ Ladungsträger: 000034276        Anzahl: 100        Dauer: 0T:4h:57m:13s        S
 Ladungsträger: 000034282        Anzahl: 100        Dauer: 0T:5h:48m:0s        Start: 2018-04-11T15:48:39         Ende: 2018-04-11T21:36:39
 Ladungsträger: 000034288        Anzahl: 102        Dauer: 2T:14h:54m:36s        Start: 2018-04-13T16:23:07         Ende: 2018-04-16T07:17:43
 Ladungsträger: 000034295        Anzahl: 103        Dauer: 5T:11h:16m:27s        Start: 2018-04-04T08:23:38         Ende: 2018-04-09T19:40:05
-Ladungsträger: 000034302        Anzahl: 100        Dauer: 0T:3h:53m:21s        Start: 2018-04-10T07:37:44         Ende: 2018-04-10T11:31:05
+Ladungsträger: 000034302        Anzahl: 99        Dauer: 0T:3h:53m:21s        Start: 2018-04-10T07:37:44         Ende: 2018-04-10T11:31:05
 Ladungsträger: 000034306        Anzahl: 100        Dauer: 0T:5h:7m:41s        Start: 2018-04-10T11:27:32         Ende: 2018-04-10T16:35:13
 Ladungsträger: 000034309        Anzahl: 80        Dauer: 0T:3h:17m:41s        Start: 2018-04-06T08:02:25         Ende: 2018-04-06T11:20:06
 Ladungsträger: 000034313        Anzahl: 80        Dauer: 0T:2h:45m:59s        Start: 2018-04-11T08:07:47         Ende: 2018-04-11T10:53:46
@@ -1525,7 +1525,7 @@ Ladungsträger: 000038200        Anzahl: 100        Dauer: 0T:4h:39m:44s        S
 Ladungsträger: 000038204        Anzahl: 100        Dauer: 2T:22h:25m:38s        Start: 2018-06-01T10:21:06         Ende: 2018-06-04T08:46:44
 Ladungsträger: 000038212        Anzahl: 100        Dauer: 0T:7h:59m:59s        Start: 2018-05-31T11:42:40         Ende: 2018-05-31T19:42:39
 Ladungsträger: 000038218        Anzahl: 100        Dauer: 0T:2h:46m:52s        Start: 2018-05-31T09:03:25         Ende: 2018-05-31T11:50:17
-Ladungsträger: 000038224        Anzahl: 91        Dauer: 0T:10h:53m:6s        Start: 2018-06-06T21:16:17         Ende: 2018-06-07T08:09:23
+Ladungsträger: 000038224        Anzahl: 90        Dauer: 0T:10h:53m:6s        Start: 2018-06-06T21:16:17         Ende: 2018-06-07T08:09:23
 Ladungsträger: 000038229        Anzahl: 90        Dauer: 0T:5h:2m:30s        Start: 2018-06-01T16:05:30         Ende: 2018-06-01T21:08:00
 Ladungsträger: 000038231        Anzahl: 90        Dauer: 0T:4h:10m:4s        Start: 2018-06-01T11:59:00         Ende: 2018-06-01T16:09:04
 Ladungsträger: 000038235        Anzahl: 90        Dauer: 0T:5h:23m:27s        Start: 2018-06-05T12:36:14         Ende: 2018-06-05T17:59:41
@@ -1582,7 +1582,7 @@ Ladungsträger: 000038596        Anzahl: 100        Dauer: 1T:21h:44m:21s        
 Ladungsträger: 000038601        Anzahl: 100        Dauer: 0T:4h:56m:30s        Start: 2018-06-04T08:42:43         Ende: 2018-06-04T13:39:13
 Ladungsträger: 000038604        Anzahl: 103        Dauer: 0T:20h:42m:32s        Start: 2018-06-05T10:23:31         Ende: 2018-06-06T07:06:03
 Ladungsträger: 000038607        Anzahl: 100        Dauer: 0T:4h:35m:57s        Start: 2018-06-06T07:01:56         Ende: 2018-06-06T11:37:53
-Ladungsträger: 000038613        Anzahl: 98        Dauer: 0T:20h:52m:27s        Start: 2018-06-04T13:35:11         Ende: 2018-06-05T10:27:38
+Ladungsträger: 000038613        Anzahl: 97        Dauer: 0T:20h:52m:27s        Start: 2018-06-04T13:35:11         Ende: 2018-06-05T10:27:38
 Ladungsträger: 000038620        Anzahl: 100        Dauer: 4T:0h:5m:43s        Start: 2018-06-04T08:39:41         Ende: 2018-06-08T08:45:24
 Ladungsträger: 000038623        Anzahl: 99        Dauer: 0T:3h:29m:29s        Start: 2018-06-08T08:37:38         Ende: 2018-06-08T12:07:07
 Ladungsträger: 000038626        Anzahl: 100        Dauer: 2T:13h:42m:9s        Start: 2018-06-01T19:08:23         Ende: 2018-06-04T08:50:32
@@ -1821,7 +1821,7 @@ Ladungsträger: 000040321        Anzahl: 100        Dauer: 2T:1h:37m:21s        S
 Ladungsträger: 000040322        Anzahl: 102        Dauer: 0T:4h:28m:16s        Start: 2018-06-27T13:46:26         Ende: 2018-06-27T18:14:42
 Ladungsträger: 000040326        Anzahl: 98        Dauer: 0T:3h:35m:57s        Start: 2018-06-27T10:14:34         Ende: 2018-06-27T13:50:31
 Ladungsträger: 000040329        Anzahl: 100        Dauer: 0T:4h:17m:14s        Start: 2018-06-25T16:47:52         Ende: 2018-06-25T21:05:06
-Ladungsträger: 000040331        Anzahl: 101        Dauer: 0T:22h:48m:11s        Start: 2018-06-25T07:42:07         Ende: 2018-06-26T06:30:18
+Ladungsträger: 000040331        Anzahl: 100        Dauer: 0T:22h:48m:11s        Start: 2018-06-25T07:42:07         Ende: 2018-06-26T06:30:18
 Ladungsträger: 000040338        Anzahl: 100        Dauer: 0T:5h:6m:26s        Start: 2018-06-28T11:04:16         Ende: 2018-06-28T16:10:42
 Ladungsträger: 000040340        Anzahl: 100        Dauer: 0T:4h:11m:45s        Start: 2018-06-26T06:26:29         Ende: 2018-06-26T10:38:14
 Ladungsträger: 000040345        Anzahl: 99        Dauer: 1T:15h:35m:56s        Start: 2018-06-26T14:20:38         Ende: 2018-06-28T05:56:34
@@ -2332,7 +2332,7 @@ Ladungsträger: 000043938        Anzahl: 90        Dauer: 0T:3h:26m:1s        Sta
 Ladungsträger: 000043939        Anzahl: 90        Dauer: 0T:5h:11m:28s        Start: 2018-08-14T10:33:06         Ende: 2018-08-14T15:44:34
 Ladungsträger: 000043944        Anzahl: 98        Dauer: 1T:3h:19m:1s        Start: 2018-08-16T07:39:16         Ende: 2018-08-17T10:58:17
 Ladungsträger: 000043948        Anzahl: 100        Dauer: 0T:7h:12m:4s        Start: 2018-08-17T10:46:10         Ende: 2018-08-17T17:58:14
-Ladungsträger: 000043952        Anzahl: 100        Dauer: 4T:1h:30m:59s        Start: 2018-08-10T12:14:13         Ende: 2018-08-14T13:45:12
+Ladungsträger: 000043952        Anzahl: 99        Dauer: 4T:1h:30m:59s        Start: 2018-08-10T12:14:13         Ende: 2018-08-14T13:45:12
 Ladungsträger: 000043957        Anzahl: 90        Dauer: 2T:2h:13m:5s        Start: 2018-08-13T13:22:58         Ende: 2018-08-15T15:36:03
 Ladungsträger: 000043960        Anzahl: 90        Dauer: 0T:3h:40m:37s        Start: 2018-08-13T09:48:55         Ende: 2018-08-13T13:29:32
 Ladungsträger: 000043961        Anzahl: 90        Dauer: 0T:3h:22m:14s        Start: 2018-08-13T06:30:04         Ende: 2018-08-13T09:52:18
@@ -2387,7 +2387,7 @@ Ladungsträger: 000044168        Anzahl: 99        Dauer: 0T:10h:33m:43s        S
 Ladungsträger: 000044171        Anzahl: 98        Dauer: 0T:3h:25m:51s        Start: 2018-08-16T08:47:17         Ende: 2018-08-16T12:13:08
 Ladungsträger: 000044173        Anzahl: 100        Dauer: 0T:3h:21m:14s        Start: 2018-08-21T08:08:30         Ende: 2018-08-21T11:29:44
 Ladungsträger: 000044175        Anzahl: 100        Dauer: 0T:11h:1m:46s        Start: 2018-08-22T20:35:48         Ende: 2018-08-23T07:37:34
-Ladungsträger: 000044178        Anzahl: 90        Dauer: 0T:10h:29m:2s        Start: 2018-08-15T19:13:18         Ende: 2018-08-16T05:42:20
+Ladungsträger: 000044178        Anzahl: 89        Dauer: 0T:10h:29m:2s        Start: 2018-08-15T19:13:18         Ende: 2018-08-16T05:42:20
 Ladungsträger: 000044179        Anzahl: 90        Dauer: 0T:5h:13m:38s        Start: 2018-08-16T08:56:22         Ende: 2018-08-16T14:10:00
 Ladungsträger: 000044183        Anzahl: 89        Dauer: 1T:5h:27m:25s        Start: 2018-08-16T14:06:32         Ende: 2018-08-17T19:33:57
 Ladungsträger: 000044185        Anzahl: 90        Dauer: 4T:13h:1m:39s        Start: 2018-08-23T09:07:50         Ende: 2018-08-27T22:09:29
@@ -2628,7 +2628,7 @@ Ladungsträger: 000045584        Anzahl: 100        Dauer: 0T:20h:44m:9s        S
 Ladungsträger: 000045588        Anzahl: 100        Dauer: 0T:3h:7m:11s        Start: 2018-09-05T07:32:46         Ende: 2018-09-05T10:39:57
 Ladungsträger: 000045596        Anzahl: 100        Dauer: 0T:20h:10m:22s        Start: 2018-09-04T11:26:21         Ende: 2018-09-05T07:36:43
 Ladungsträger: 000045692        Anzahl: 99        Dauer: 0T:2h:54m:44s        Start: 2018-09-07T18:56:28         Ende: 2018-09-07T21:51:12
-Ladungsträger: 000045696        Anzahl: 198        Dauer: 4T:18h:48m:18s        Start: 2018-09-07T21:46:45         Ende: 2018-09-12T16:35:03
+Ladungsträger: 000045696        Anzahl: 197        Dauer: 4T:18h:48m:18s        Start: 2018-09-07T21:46:45         Ende: 2018-09-12T16:35:03
 Ladungsträger: 000045732        Anzahl: 80        Dauer: 0T:4h:34m:39s        Start: 2018-09-06T16:56:08         Ende: 2018-09-06T21:30:47
 Ladungsträger: 000045733        Anzahl: 80        Dauer: 3T:15h:21m:56s        Start: 2018-09-06T21:27:17         Ende: 2018-09-10T12:49:13
 Ladungsträger: 000045737        Anzahl: 80        Dauer: 0T:2h:49m:0s        Start: 2018-09-10T18:40:47         Ende: 2018-09-10T21:29:47
@@ -3016,7 +3016,7 @@ Ladungsträger: 000048098        Anzahl: 80        Dauer: 0T:4h:16m:48s        St
 Ladungsträger: 000048100        Anzahl: 80        Dauer: 0T:2h:36m:3s        Start: 2018-10-04T10:29:38         Ende: 2018-10-04T13:05:41
 Ladungsträger: 000048103        Anzahl: 78        Dauer: 0T:11h:5m:50s        Start: 2018-10-04T19:36:01         Ende: 2018-10-05T06:41:51
 Ladungsträger: 000048104        Anzahl: 83        Dauer: 4T:9h:2m:32s        Start: 2018-10-05T06:32:44         Ende: 2018-10-09T15:35:16
-Ladungsträger: 000048115        Anzahl: 101        Dauer: 2T:10h:48m:39s        Start: 2018-10-05T20:10:24         Ende: 2018-10-08T06:59:03
+Ladungsträger: 000048115        Anzahl: 100        Dauer: 2T:10h:48m:39s        Start: 2018-10-05T20:10:24         Ende: 2018-10-08T06:59:03
 Ladungsträger: 000048116        Anzahl: 99        Dauer: 0T:10h:56m:50s        Start: 2018-10-08T18:54:33         Ende: 2018-10-09T05:51:23
 Ladungsträger: 000048124        Anzahl: 100        Dauer: 0T:7h:38m:8s        Start: 2018-10-08T11:19:53         Ende: 2018-10-08T18:58:01
 Ladungsträger: 000048125        Anzahl: 99        Dauer: 0T:6h:47m:19s        Start: 2018-10-08T06:55:36         Ende: 2018-10-08T13:42:55

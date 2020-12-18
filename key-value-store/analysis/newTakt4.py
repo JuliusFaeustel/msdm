@@ -7,7 +7,6 @@ r = redis.Redis(decode_responses=True)
 
 minDate = datetime(1989, 1, 9, 12, 0, 0)
 minDateStamp = minDate.timestamp()
-print(minDateStamp)
 maxDate = datetime(2030, 1, 9, 12, 0, 0)
 maxDateStamp = maxDate.timestamp()
 
@@ -72,11 +71,13 @@ for la in allLa:
     result = myLua(keys=[la],args=[1,200])
     localMin = maxDateStamp
     localMax = minDateStamp
+    snrSet = set()
     for res in result:
         con = allCons[res-1]
         conSplit = con.split(":")
         beginDateStamp = float(conSplit[0])
         endDateStamp = float(conSplit[2])
+        snrSet.add(conSplit[3])
         
         if beginDateStamp < localMin:
             localMin = beginDateStamp
@@ -86,8 +87,9 @@ for la in allLa:
 
     localMin = datetime.fromtimestamp(localMin)
     localMax = datetime.fromtimestamp(localMax)
+    localDiff = localMax - localMin
     
-    writer = la+";"+str(localMax)+";"+str(localMin)+"\n"
+    writer = la+";"+str(localDiff)+";"+str(localMin)+";"+str(localMax)+";"+str(len(snrSet))+"\n"
     #writer = la+";"+str(localMax)+";"+str(localMin)+";"+str(localDiff)+";"+str(localDiff.total_seconds())+";"+str(len(allData))+"\n"
     diffFile.write(writer)
 
