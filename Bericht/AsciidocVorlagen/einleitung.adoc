@@ -1,0 +1,4 @@
+= Einleitung
+:toc:
+:toc-title: Inhaltsverzeichnis
+:imagesdir: bilder

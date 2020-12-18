@@ -1,0 +1,4 @@
+= Zusammenfassung und Ausblick
+:toc:
+:toc-title: Inhaltsverzeichnis
+:imagesdir: bilder

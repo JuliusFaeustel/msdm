@@ -1,0 +1,16 @@
+= Dokumentenorientierte Datenbank
+:toc:
+:toc-title: Inhaltsverzeichnis
+ifndef::main-file[]
+:imagesdir: bilder
+endif::main-file[]
+ifdef::main-file[]
+:imagesdir: Implemetierung/bilder
+endif::main-file[]
+
+
+
+== Implementierung der Input Loader
+== Implementierung der Analysen
+== Evolution des Datenmodells
+
