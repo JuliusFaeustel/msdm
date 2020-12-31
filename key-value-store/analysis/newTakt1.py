@@ -1,6 +1,8 @@
 import redis
 from datetime import datetime
+from time import process_time_ns
 import csv
+start = process_time_ns()
 #decode_responses, da die Rueckgabewerte von z.B. r.get(...) sonst als 'binaer' codiert
 r = redis.Redis(decode_responses=True)
 
@@ -18,6 +20,7 @@ allFa = r.smembers("FA")
 
 writer = ""
 diffFile = open("takt1.txt", "w")
+diffFile.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
 
 lua = """
 local offset = tonumber(ARGV[1]);
@@ -71,8 +74,9 @@ return ids;
 myLua = r.register_script(lua)
 
 for teil in allTeil:
-    diffFile.write(teil + "\n")
+    teilSplit = teil.split(":")[1]
     for fa in allFa:
+        faSplit = fa.split(":")[1]
         r.bitop("AND","opCon",teil,fa)
         result = myLua(keys=['opCon'],args=[1,allConLen])
         minDiff = maxDate.total_seconds()
@@ -145,8 +149,11 @@ for teil in allTeil:
                 avgGesTime = 0
                 avgGesReject = 0
             
-            writer = fa+";"+str(menge)+";"+str(minDiff)+";"+str(maxDiff)+";"+str(avgGesTime)+";"+str(minRejects)+";"+str(maxRejects)+";"+str(avgGesReject)+"\n"
+            #writer = teilSplit+";"+faSplit+";"+str(menge)+";"+str(minDiff)+";"+str(maxDiff)+";"+str(avgGesTime)+";"+str(minRejects)+";"+str(maxRejects)+";"+str(avgGesReject)+"\n"
+            writer = teilSplit+";"+faSplit+";"+str(menge)+";"+str(minDiff)+";"+str(maxDiff)+";"+str(round(avgGesTime,2))+"\n"
             diffFile.write(writer)
 
+stop = process_time_ns()
+print(str((stop-start)/10**9))
 
 

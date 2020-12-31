@@ -15,6 +15,7 @@ allCons = r.lrange("con",0,-1)
 allLa = r.smembers("LagerIn")
 
 diffFile = open("takt4.txt", "w")
+diffFile.write("LAGER;DURATION;START;END;COUNT\n")
 
 lua = """
 local offset = tonumber(ARGV[1]);
@@ -68,6 +69,7 @@ return ids;
 myLua = r.register_script(lua)
 
 for la in allLa:
+    laSplit = la.split(":")[1]
     result = myLua(keys=[la],args=[1,200])
     localMin = maxDateStamp
     localMax = minDateStamp
@@ -89,9 +91,10 @@ for la in allLa:
     localMax = datetime.fromtimestamp(localMax)
     localDiff = localMax - localMin
     
-    writer = la+";"+str(localDiff)+";"+str(localMin)+";"+str(localMax)+";"+str(len(snrSet))+"\n"
+    #writer = la+";"+str(localDiff)+";"+str(localMin)+";"+str(localMax)+";"+str(len(snrSet))+"\n"
     #writer = la+";"+str(localMax)+";"+str(localMin)+";"+str(localDiff)+";"+str(localDiff.total_seconds())+";"+str(len(allData))+"\n"
+    writer = laSplit+";"+str(localDiff.total_seconds())+";"+str(localMin)+";"+str(localMax)+";"+str(len(snrSet))+"\n"
     diffFile.write(writer)
 
 stop = process_time_ns()
-print("TIME: "+str((stop-start)/10**9))
+print(str((stop-start)/10**9))

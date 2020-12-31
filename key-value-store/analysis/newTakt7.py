@@ -20,7 +20,8 @@ allTeil = r.smembers("TEIL")
 allFa = r.smembers("FA")
 
 writer = ""
-diffFile = open("takt7.txt", "w")
+diffFile = open("takt7.csv", "w")
+diffFile.write("LINIE;FROM;TO;MIN;MAX;AVG\n")
 
 lua = """
 local offset = tonumber(ARGV[1]);
@@ -73,10 +74,10 @@ return ids;
 
 myLua = r.register_script(lua)
 
-print("Alles geladen")
+#print("Alles geladen")
 
 for linie in allLinie:
-    diffFile.write(linie+"\n")
+    liSplit = linie.split(":")[1]
     faDict = {}
     for fa in allFa:
         r.bitop("AND","opCon",linie,fa)
@@ -133,11 +134,13 @@ for linie in allLinie:
     
     for k, v in teilDict.items():
         # key max min ges menge
-        writer = k +";"+  str(v[1]) + ";" + str(v[0]) + ";" + str(v[2]/v[3])+"\n"
+        #writer = k +";"+  str(v[1]) + ";" + str(v[0]) + ";" + str(v[2]/v[3])+"\n"
+        fromToSplit = k.split(":")
+        writer = liSplit+";"+fromToSplit[0]+";"+fromToSplit[1]+";"+str(v[0])+";"+str(v[1])+";"+str(round(v[2]/v[3],2))+"\n"
         diffFile.write(writer)
 
 stop = process_time_ns()
-print("TIME: "+str((stop-start)/10**9))
+print(str((stop-start)/10**9))
 
 #Erstes In vom neuesten FA minus letztes In vom letzten FA
                 

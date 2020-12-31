@@ -20,6 +20,7 @@ allLa = r.smembers("LagerIn")
 
 writer = ""
 diffFile = open("takt5.txt", "w")
+diffFile.write("TEIL;LAGER;COUNT;MIN;MAX;AVG\n")
 
 lua = """
 local offset = tonumber(ARGV[1]);
@@ -73,8 +74,9 @@ return ids;
 myLua = r.register_script(lua)
 
 for teil in allTeil:
-    diffFile.write(teil + "\n")
+    teilSplit = teil.split(":")[1]
     for lager in allLa:
+        laSplit = lager.split(":")[1]
         allSnr = set()
         r.bitop("AND","opCon",lager,teil)
         result = myLua(keys=['opCon'],args=[1,200])
@@ -100,11 +102,12 @@ for teil in allTeil:
                     if diffTimeStamp > maxDiff:
                         maxDiff = diffTimeStamp
 
-            writer = lager+";"+str(len(allSnr))+";"+str(maxDiff)+";"+str(minDiff)+";"+str(avgTime/len(allSnr))+"\n"
+            #writer = lager+";"+str(len(allSnr))+";"+str(maxDiff)+";"+str(minDiff)+";"+str(avgTime/len(allSnr))+"\n"
+            writer = teilSplit+";"+laSplit+";"+str(len(allSnr))+";"+str(minDiff)+";"+str(maxDiff)+";"+str(round(avgTime/len(allSnr),2))+"\n"
             diffFile.write(writer)
 
 stop = process_time_ns()
-print("TIME: "+str((stop-start)/10**9))
+print(str((stop-start)/10**9))
                 
 
 

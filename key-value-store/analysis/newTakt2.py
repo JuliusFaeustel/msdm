@@ -20,6 +20,7 @@ allTeil = r.smembers("TEIL")
 
 writer = ""
 diffFile = open("takt2.txt", "w")
+diffFile.write("TEIL;COUNT;MIN;MAX;AVG;FAILURE\n")
 
 lua = """
 local offset = tonumber(ARGV[1]);
@@ -74,7 +75,7 @@ myLua = r.register_script(lua)
 
 for teil in allTeil:
     i=0
-    diffFile.write(teil + "\n")
+    teilSplit = teil.split(":")[1]
 
     snrBegDict = {}
     snrEndDict = {}
@@ -140,7 +141,9 @@ for teil in allTeil:
                 if beg == end:
                     firstCounter = 0
 
-    writer = str(numCounter)+";"+str(timedelta(seconds=minDate))+";"+str(timedelta(seconds=maxDate))+";"+str(timedelta(seconds=(allDiffs/numCounter)))+";"+str(fail/len(allSnr))+"\n"
+    #writer = str(maxDate)+";"+str(minDate)+";"+str(allDiffs/numCounter)+";"+str(fail/len(allSnr))+"\n"
+    #writer = str(numCounter)+";"+str(minDate)+";"+str(maxDate)+";"+str(allDiffs/numCounter)+";"+str(fail/len(allSnr))+"\n"
+    writer = teilSplit+";"+str(numCounter)+";"+str(minDate)+";"+str(maxDate)+";"+str(round(allDiffs/numCounter,2))+";"+str(round(fail/len(allSnr),4))+"\n"
     diffFile.write(writer)
     
     #print(str(timedelta(seconds=maxDate)))
@@ -151,5 +154,7 @@ for teil in allTeil:
     #print(str(allDiffs/numCounter))
     #print(str(fail/len(allSnr)))
 
+stop = process_time_ns()
+print(str((stop-start)/10**9))
         
                      
