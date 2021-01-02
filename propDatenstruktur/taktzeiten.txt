@@ -1,0 +1,14 @@
+Taktung 2
+1.743s
+
+Taktung 4
+2.637s
+
+taktung 5
+3.190s
+
+taktung 1 
+2.052s
+
+Taktung 7
+4.700s
