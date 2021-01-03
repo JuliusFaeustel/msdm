@@ -1,8 +1,12 @@
 import mysql
 import mysql.connector
 import datetime, time
+from time import process_time_ns
+
 
 for lap in range(10):
+
+    start = process_time_ns()
 
     # Verbindung zu DB aufbauen
     connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
@@ -13,7 +17,7 @@ for lap in range(10):
     cursor.execute(statement)
     statement = "SET @@profiling_history_size = 0"
     cursor.execute(statement)
-    statement = "SET @@profiling_history_size = 10000000;"
+    statement = "SET @@profiling_history_size = 100;"
     cursor.execute(statement)
     statement = "SET @@profiling = 1"
     cursor.execute(statement)
@@ -258,8 +262,14 @@ for lap in range(10):
 
     connection.close()
 
+    stop = process_time_ns()
+    DurationScript = (stop-start)/10**9
+    print("Durchlaufzeit Skript: "+str(DurationScript)+" s")
+
     completeDurationDB = actualDurationDB + DurationDB[0]
     completeQuery = actualQueryDB + QueryCount[0] - 1
 
     print("Durchlaufzeit DB: "+str(completeDurationDB)+" s")
     print("Queries DB: "+str(completeQuery))
+
+    

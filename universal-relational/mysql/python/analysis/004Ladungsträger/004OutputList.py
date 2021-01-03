@@ -1,9 +1,12 @@
 import mysql
 import mysql.connector
 import datetime, time
+from time import process_time_ns
 
 for lap in range(10):
 
+    start = process_time_ns()
+    
     # Verbindung zu DB aufbauen
     connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
     cursor = connection.cursor(buffered=True)
@@ -193,6 +196,10 @@ for lap in range(10):
         QueryCount.append(0)
 
     connection.close()
+
+    stop = process_time_ns()
+    DurationScript = (stop-start)/10**9
+    print("Durchlaufzeit Skript: "+str(DurationScript)+" s")
 
     completeDurationDB = actualDurationDB + DurationDB[0]
     completeQuery = actualQueryDB + QueryCount[0] - 1

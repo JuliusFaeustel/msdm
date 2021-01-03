@@ -49,7 +49,7 @@ statement = "SET @@profiling = 0"
 cursor.execute(statement)
 statement = "SET @@profiling_history_size = 0"
 cursor.execute(statement)
-statement = "SET @@profiling_history_size = 10000000;"
+statement = "SET @@profiling_history_size = 100;"
 cursor.execute(statement)
 statement = "SET @@profiling = 1"
 cursor.execute(statement)
