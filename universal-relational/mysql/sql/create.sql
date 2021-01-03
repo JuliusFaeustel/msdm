@@ -79,18 +79,20 @@ ALTER TABLE Rückmeldung ADD CONSTRAINT FKRück_LINIE FOREIGN KEY (LINIE) REFERE
 
 
 CREATE INDEX INDEX_TBL_SNR ON SNR (SNR);
-CREATE INDEX INDEX_TBL_SNR2 ON SNR (TEIL);
-CREATE INDEX INDEX_TBL_SNR3 ON SNR (FA);
+CREATE INDEX INDEX_TBL_SNR2 ON SNR (TEIL, SNR);
+CREATE INDEX INDEX_TBL_SNR3 ON SNR (FA, SNR);
+CREATE INDEX INDEX_TBL_SNR4 ON SNR (LINIE);
 
-CREATE INDEX INDEX_TBL_MerkP ON Merkmalsausprägung (MerkmalID, Ausprägung);
-CREATE INDEX INDEX_TBL_MerkP2 ON Merkmalsausprägung (MerkmalID);
+CREATE INDEX INDEX_TBL_MA ON Merkmalsausprägung (MerkmalID, Ausprägung);
 
-CREATE INDEX INDEX_TBL_O2MerkP ON Objekt2Merkmalsausprägung (ObjektID, ObjektTyp);
-CREATE INDEX INDEX_TBL_O2MerkP2 ON Objekt2MErkmalsausprägung (ObjektTyp);
+CREATE INDEX INDEX_TBL_O2MA ON Objekt2Merkmalsausprägung (ObjektID, ObjektTyp);
+CREATE INDEX INDEX_TBL_O2MA2 ON Objekt2Merkmalsausprägung (ObjektTyp);
+CREATE INDEX INDEX_TBL_O2MA3 ON Objekt2Merkmalsausprägung (MerkmalsausprägungID, ObjektID, ObjektTyp);
 
-CREATE INDEX INDEX_TBL_O2Merk ON Objekt2Merkmal (ObjektID, ObjektTyp);
+CREATE INDEX INDEX_TBL_O2M ON Objekt2Merkmal (MerkmalID, ObjektID, ObjektTyp);
 
-CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR);
+CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR_ID);
+CREATE INDEX INDEX_TBL_Rück2 ON Rückmeldung (SNR);
 
 
 
