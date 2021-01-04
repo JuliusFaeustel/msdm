@@ -26,5 +26,5 @@ avg = []
 text_file = open("Analyse_4_Output.txt", "w")
 text_file.write("LAGER;DURATION;START;END;COUNT\n")
 for data in x:
-    text_file.write("{};{};{};{};{}\n".format(data.get('_id'), data.get('duration'), data.get('start'), data.get('end'), data.get('anz')))
+    text_file.write("{};{};{};{};{}\n".format(data.get('_id'), data.get('duration')/1000, data.get('start'), data.get('end'), data.get('anz')))
 text_file.close()
