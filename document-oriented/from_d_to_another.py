@@ -12,4 +12,4 @@ i=1
 for filename in files:
     shutil.move(filename, "C:/Users/liepe/Desktop/Projektseminar/htw/target_in")
     print(i)
-    time.sleep(5)
+    time.sleep(10)

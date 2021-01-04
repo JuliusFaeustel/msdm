@@ -22,7 +22,7 @@ mycol = mydb["out_data_embedded"]
 
 d = mydb.in_data_embedded.distinct("TEIL")
 
-text_file = open("Analyse_1_Output.txt", "w")
+text_file = open("./results/Analyse_1_Output.txt", "w")
 text_file.write("TEIL;FA;COUNT;MIN;MAX;AVG;MIN_O;MAX_O;AVG_O\n")
 for teil in d:
     
@@ -35,9 +35,9 @@ for teil in d:
 
     i = 1
     for data in x:
-        avg_t = data.get("avgFert")
-        min_t = data.get("minFert")
-        max_t = data.get("maxFert")
+        avg_t = data.get("avgFert")/1000
+        min_t = data.get("minFert")/1000
+        max_t = data.get("maxFert")/1000
         fa = data.get("_id").get("fa")
         amount = data.get("teile_count")
         y = mydb.in_data_embedded.aggregate([{"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "output": {"$arrayElemAt": ["$out", -1]}}},

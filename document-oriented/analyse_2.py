@@ -26,7 +26,7 @@ x = mydb.in_data_embedded.distinct("TEIL")
 
 liste = []
 text_file = open("Analyse_2_Output.txt", "w")
-text_file.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
+text_file.write("TEIL;COUNT;MIN;MAX;AVG;FAILURE\n")
 for teil in x:
     max_val = []
     min_val = []
@@ -69,5 +69,5 @@ for teil in x:
     maximum = max(max_val)
     minimum = min(min_val)
     avg = sum(avg_val)/len(avg_val)
-    text_file.write("{};{};{};{};{:.2f};{:.2f}\n".format(teil, amount,minimum, maximum, avg,amount/total_amount))
+    text_file.write("{};{};{};{};{:.2f};{:.2f}\n".format(teil, amount,minimum, maximum, avg, amount/total_amount))
 text_file.close()
