@@ -31,6 +31,7 @@ text_file.close()
 
 x = mydb.system.profile.find({"op": "command"})
 
+
 text_file = open("./results/Analyse_Output_find_snr_performance_index.txt", "w")
 for data in x:
     text_file.write("{}\n".format(data.get("millis")))
