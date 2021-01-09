@@ -7,6 +7,9 @@ import datetime, time
 
 # Ausgabe
 datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.csv","w")
+
+dateiCSV.write("TEIL;LAGER;COUNT;MIN;MAX;AVG\n")
 
 # Flag zur Boxplotzeichnung pro Teiltyp
 BoxFlag = False
@@ -141,6 +144,7 @@ for Teil in Teil_List:
 
         # Ausgabe pro FA
         datei.write("Ladungsträger: "+LagerIn[0]+"            Anzahl gefertigt: "+str(AnzahlProLad[0])+"            MIN: "+convert_from_s(minTime)+"            MAX: "+convert_from_s(maxTime)+"            AVG: "+convert_from_s(avgTime)+"\n")
+        dateiCSV.write(Teil[0] +";"+ LagerIn[0] +";"+ str(AnzahlProLad[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
 
         if BoxFlag == True:
             BoxAvg_List.append(avgTime/60)
@@ -160,4 +164,5 @@ if BoxFlag == True:
     plt.close(1)
 
 datei.close()
+dateiCSV.close()
 connection.close()

@@ -7,6 +7,8 @@ import datetime, time
 
 # Ausgabe
 datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.csv","w")
+dateiCSV.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
 
 # Flag zur Boxplotzeichnung pro FA
 BoxFlag = False
@@ -199,7 +201,8 @@ for Teil in Teil_List:
         
         # Ausgabe pro FA
         datei.write("FA: "+ FA[0] +"     Anzahl gefertigt: "+str(AnzahlProFA[0])+"        MIN: " + convert_from_s(minTime) + "        MAX: " +convert_from_s(maxTime)+ "        AVG: " + convert_from_s(avgTime) + "     MIN_FAIL: " + str(minFail)+ "       MAX_FAIL: " + str(maxFail)+"        AVG_FAIL: "+str(format(avgFail, '.2f'))+" %\n")
-        
+        dateiCSV.write(Teil[0] +";"+ FA[0] +";"+ str(AnzahlProFA[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
+
         # Werte des FA mit Werten pro Teiltyp vergleichen
         if minTime < minTime_gesamt:
             minTime_gesamt = minTime
@@ -231,6 +234,7 @@ for Teil in Teil_List:
     datei.write("TEIL "+ Teil[0] + " gesamt: "+str(AnzahlProTyp[0])+"        MIN: " + convert_from_s(minTime_gesamt) + "        MAX: " +convert_from_s(maxTime_gesamt)+ "        AVG: " + convert_from_s(avgTime_gesamt) + "     MIN_FAIL: " + str(minFail_gesamt)+ "       MAX_FAIL: " + str(maxFail_gesamt)+"        AVG_FAIL: "+str(format(avgFail_gesamt, '.2f'))+" %\n")
 
 datei.close()
+dateiCSV.close()
 connection.close()
 
 

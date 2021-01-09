@@ -1,11 +1,17 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+
 import mysql
 import mysql.connector
 import datetime, time
 
 # Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/002Auftrennung/Auftrennung.csv","w")
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/002Auftrennung/Auftrennung.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/002Auftrennung/Auftrennung.csv","w")
+dateiCSV.write("TEIL;COUNT;MIN;MAX;AVG;FAILURE\n")
 
-datei.write("TEIL;COUNT;MIN;MAX;AVG;FAILURE\n")
+# Flag zur Boxplotzeichnung pro Teiltyp
+BoxFlag = False
 
 # Verbindung zu DB aufbauen
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
@@ -44,6 +50,7 @@ cursor.execute(statement)
 Teil_List = cursor.fetchall()
 
 
+i = 0
 # Alle Teiltypen durchlaufen
 for Teil in Teil_List:
         
@@ -63,6 +70,9 @@ for Teil in Teil_List:
     avgTime = 0
     avgFail = 0
     countTime = 0
+
+    if BoxFlag == True:
+        BoxTime_List = list()
 
     # Alle SNR, die Ausschuss haben, durchlaufen
     for Ausschuss in Ausschuss_List:
@@ -114,6 +124,9 @@ for Teil in Teil_List:
                 # Dauer zur AVG Berechnung hinzufügen
                 avgTime = avgTime + diffTime
                 countTime = countTime + 1
+
+                if BoxFlag == True:
+                    BoxTime_List.append(diffTime/60)
             
             nextElement = nextElement +1
             
@@ -124,14 +137,34 @@ for Teil in Teil_List:
     # Division durch 0 verhindern
     if countTime > 0:
         avgTime = avgTime / countTime
-        avgFail = (avgFail/AnzahlProTyp[0])
+        avgFail = (avgFail/AnzahlProTyp[0])*100
 
+    # Boxplot zeichnen    
+    if BoxFlag == True:
+        if avgTime != 0:
+            plt.figure(1)
+            plt.title('Ausschusszeiten')
+            plt.ylabel('Minuten')
+            plt.xlabel('Teilart')
+            plt.axis
+            plt.boxplot(BoxTime_List, labels=[Teil[0]], showfliers=False, positions=[i+1])
+        
     # Ausgabe
-    datei.write(Teil[0] +";"+ str(AnzahlProTyp[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +";"+ str(format(avgFail, '.4f')) +"\n")
+    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    datei.write("TEIL: "+ Teil[0])
+    datei.write("\n")
+    datei.write("MIN: " +convert_from_s(minTime)+ "        MAX: " +convert_from_s(maxTime)+ "        AVG: " + convert_from_s(avgTime)+ "      Ausschussfaktor: " +str(format(avgFail, '.2f'))+" %\n")
+    dateiCSV.write(Teil[0] +";"+ str(AnzahlProTyp[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +";"+ str(format(avgFail/100, '.4f')) +"\n")
+
+    i = i + 1
+
+if BoxFlag == True:
+    plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/002Auftrennung/boxplots/Ausschuss.png')
+    plt.close(1)
 
 connection.close()
 datei.close()
-        
+dateiCSV.close()        
 
 
 

@@ -2,14 +2,16 @@ import mysql
 import mysql.connector
 import datetime, time
 
+
 # Connection zu DB
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
 cursor = connection.cursor(buffered=True)
 
 # Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/007Umrüstung/Umrüstung.csv","w")
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/007Umrüstung/Umrüstung.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/007Umrüstung/Umrüstung.csv","w")
 
-datei.write("LINIE;FROM;TO;MIN;MAX;AVG\n")
+dateiCSV.write("LINIE;FROM;TO;MIN;MAX;AVG\n")
 
 # Funktion zur Umwandlung Zeit-String in Sekunden
 def convert_from_datestring( TimeString ): 
@@ -51,7 +53,10 @@ Linie_List = cursor.fetchall()
 # Alle Linien durchlaufen
 for Linie in Linie_List:
 
-    datei.write("LINIE:"+ Linie[0]+"\n")
+    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    datei.write("\n")
+    datei.write("LINIE: "+ Linie[0])
+    datei.write("\n")
 
     # Alle FA einer Linie abfragen
     statement = "SELECT SNR.FA FROM SNR WHERE SNR.LINIE = '"+Linie[0]+"' GROUP BY FA"
@@ -102,7 +107,7 @@ for Linie in Linie_List:
             # Zeitdifferenz berechnen
             diff = FirstInNextSecond - LastInSeconds
 
-        if diff >= 0:
+        if diff > 0:
             # Wechsel von Teiltyp nach Teiltyp festhalten (Umrüstung)
             ChangeFromTo = complete_list[j][1] + complete_list[j+1][1]
 
@@ -145,7 +150,11 @@ for Linie in Linie_List:
     # Ergebnisliste ausgeben
     for erg in Result_List:
         avg = erg[3]/erg[4]
-        datei.write(Linie[0] +";"+ erg[0][0] +":"+ erg[0][1] +";"+ str(format(erg[1], '.2f')) +";"+ str(format(erg[2], '.2f')) +";"+ str(format(avg, '.2f')) +"\n")
+        datei.write("Von: " +erg[0][0]+"    Nach: "+erg[0][1]+"          MIN: "+convert_from_s(erg[1])+"         MAX: "+convert_from_s(erg[2])+"         AVG: "+convert_from_s(avg)+"\n")
+        dateiCSV.write(Linie[0] +";"+ erg[0][0] +";"+ erg[0][1] +";"+ str(format(erg[1], '.2f')) +";"+ str(format(erg[2], '.2f')) +";"+ str(format(avg, '.2f')) +"\n")
 
 datei.close()
+dateiCSV.close()
 connection.close()
+
+    

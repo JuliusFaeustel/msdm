@@ -1,11 +1,18 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+
 import mysql
 import mysql.connector
 import datetime, time
 
 # Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/004Ladungsträger/Ladungsträger.csv","w")
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/004Ladungsträger/Ladungsträger.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mysql/Ergebnisse/004Ladungsträger/Ladungsträger.csv","w")
 
-datei.write("LAGER;DURATION;START;END;COUNT\n")
+dateiCSV.write("LAGER;DURATION;START;END;COUNT\n")
+
+# Flag zur Boxplotzeichnung pro Teiltyp
+BoxFlag = False
 
 # Verbindung zu DB aufbauen
 connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
@@ -50,6 +57,9 @@ LagerIn_List = cursor.fetchall()
 
 # Variablendeklaration
 Dauer = 0
+
+if BoxFlag == True:
+    BoxTime_List = list()
 
 # Alle Ladungsträger durchlaufen
 for LagerIn in LagerIn_List:
@@ -114,10 +124,25 @@ for LagerIn in LagerIn_List:
     # Differenz zwischen max und min berechnen
     Dauer = maxOutputSecond - minInputSecond
 
+    if BoxFlag == True:
+        BoxTime_List.append(Dauer/3600)
+
     # Ausgabe
-    datei.write(LagerIn[0] +";"+ str(format(Dauer, '.2f')) +";"+ minInputDate[:19] +";"+ maxOutputDate[:19] +";"+ str(AnzahlProLad[0]) +"\n")
+    datei.write("Ladungsträger: "+LagerIn[0]+"        Anzahl: "+str(AnzahlProLad[0])+"        Dauer: "+convert_from_s(Dauer)+"        Start: "+minInputDate[:19]+"         Ende: "+maxOutputDate[:19]+"\n")
+    dateiCSV.write(LagerIn[0] +";"+ str(format(Dauer, '.2f')) +";"+ minInputDate[:19] +";"+ maxOutputDate[:19] +";"+ str(AnzahlProLad[0]) +"\n")
+
+# Boxplot zeichnen
+if BoxFlag == True:
+    plt.figure(1)
+    plt.title('Ladungsträger gesamt')
+    plt.ylabel('Stunden')
+    plt.axis
+    plt.boxplot(BoxTime_List, labels=['Alle Ladungsträger'], showfliers=False)
+    plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/004Ladungsträger/Ladungsträger.png')
+    plt.close(1)
 
 datei.close()
+dateiCSV.close()
 connection.close()
 
         
