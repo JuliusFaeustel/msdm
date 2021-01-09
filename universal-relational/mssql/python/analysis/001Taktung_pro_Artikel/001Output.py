@@ -1,10 +1,17 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+
 import pyodbc
 import datetime, time
 
 # Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.csv","w")
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/001Taktung_pro_Artikel/Taktung_pro_Artikel.csv","w")
 
-datei.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
+dateiCSV.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
+
+# Flag zur Boxplotzeichnung pro FA
+BoxFlag = False
 
 # Verbindung zu DB aufbauen
 server = 'DESKTOP-0IJEV10\\SQLEXPRESS'
@@ -50,11 +57,32 @@ Teil_List = cursor.fetchall()
 # Alle Teiltypen durchlaufen
 for Teil in Teil_List:
 
+    # Anzahl gefertigter Teile pro Teiltyp ermitteln 
+    statement = "SELECT COUNT(*) FROM (SELECT DISTINCT(SNR.SNR) FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE TEIL = '"+Teil[0]+"' AND SNR.SNR IS NOT NULL) Q"
+    cursor.execute(statement)
+    AnzahlProTyp = cursor.fetchone()
+
     # FA des Teiltyps abfragen
     statement = "SELECT DISTINCT(SNR.FA) FROM SNR WHERE TEIL = '" + Teil[0] + "' ORDER BY SNR.FA"
     cursor.execute(statement)
     FA_List = cursor.fetchall()
 
+    # Ausgabe des Teiltyps mit gefertigter Menge
+    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    datei.write("\n")
+    datei.write("TEIL: "+ Teil[0] +"       Gesamtanzahl gefertigt: "+ str(AnzahlProTyp[0]) +"\n")
+    datei.write("\n")
+
+
+    # Variablendeklaration pro Teiltyp
+    minTime_gesamt = second_min
+    maxTime_gesamt = 0
+    avgTime_gesamt = 0
+    minFail_gesamt = 999
+    maxFail_gesamt = 0
+    avgFail_gesamt = 0
+
+    
     # Alle FA des Teiltyps durchlaufen
     for FA in FA_List:
         
@@ -76,7 +104,7 @@ for Teil in Teil_List:
         for Ausschuss in Ausschuss_List:
 
             # Anzahl Input DS für SNR finden in diesem FA
-            statement = "SELECT COUNT(*) FROM (SELECT ID FROM SNR WHERE SNR.SNR ='" + Ausschuss[0] + "' AND FA = '" + FA[0] +"') Q"
+            statement = "SELECT COUNT(*) FROM (SELECT ID FROM SNR WHERE SNR.SNR ='" + Ausschuss[0] + "' AND FA = '" + FA[0] + "') Q"
             cursor.execute(statement)
             AnzahlFail = cursor.fetchone()
 
@@ -108,6 +136,9 @@ for Teil in Teil_List:
         avgTime = 0
         avgDifference = 0
         
+        if BoxFlag == True:
+            BoxTime_List = list()
+
         # Alle ID's durchlaufen
         for SNRID in SNRID_List:
 
@@ -155,7 +186,9 @@ for Teil in Teil_List:
                 # Dauer zur AVG Berechnung hinzufügen
                 avgTime = avgTime + help_List[0]
 
-            # Falls kein Einbezug der Dauer, Anzahl für AVG Berchnung mindern
+                if BoxFlag == True:
+                    BoxTime_List.append(help_List[0]/60)
+            # Falls kein Einbezug der Dauer, Anzahl für AVG Berechnung mindern
             else:
                 avgDifference = avgDifference + 1 
         
@@ -168,15 +201,45 @@ for Teil in Teil_List:
             # AVG-Zeit pro FA in Sekunden
             avgTime = avgTime/divisor
             # AVG-Fail pro FA in Prozent
+            avgFail_gesamt = avgFail_gesamt + avgFail
             avgFail = (avgFail/AnzahlProFA[0])*100
         
         # Ausgabe pro FA
-        datei.write(Teil[0] +";"+ FA[0] +";"+ str(AnzahlProFA[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
+        datei.write("FA: "+ FA[0] +"     Anzahl gefertigt: "+str(AnzahlProFA[0])+"        MIN: " + convert_from_s(minTime) + "        MAX: " +convert_from_s(maxTime)+ "        AVG: " + convert_from_s(avgTime) + "     MIN_FAIL: " + str(minFail)+ "       MAX_FAIL: " + str(maxFail)+"        AVG_FAIL: "+str(format(avgFail, '.2f'))+" %\n")
+        
+        # Werte des FA mit Werten pro Teiltyp vergleichen
+        if minTime < minTime_gesamt:
+            minTime_gesamt = minTime
+        if maxTime > maxTime_gesamt:
+            maxTime_gesamt = maxTime
+        if minFail < minFail_gesamt:
+            minFail_gesamt = minFail
+        if maxFail > maxFail_gesamt:
+            maxFail_gesamt = maxFail
 
-connection.close()
+        avgTime_gesamt = avgTime_gesamt + avgTime
+
+        # Boxplot zeichnen
+        if BoxFlag == True:
+            plt.figure(int(FA[0]))
+            plt.title('Fertigungszeit FA'+FA[0])
+            plt.ylabel('Minuten')
+            plt.axis
+            plt.boxplot(BoxTime_List, labels=[FA[0]])
+            plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/001Taktung_pro_Artikel/boxplots/FA'+FA[0]+'_time.png')
+            plt.close(int(FA[0]))
+
+    # AVG-Werte pro Teiltyp berechnen
+    avgTime_gesamt = avgTime_gesamt/len(FA_List)
+    #print("FAIL:"+str(avgFail_gesamt)+" Divisor:"+str(AnzahlProTyp[0]))
+    avgFail_gesamt = (avgFail_gesamt/AnzahlProTyp[0])*100
+
+    # Ausgabe pro Teiltyp
+    datei.write("TEIL "+ Teil[0] + " gesamt: "+str(AnzahlProTyp[0])+"        MIN: " + convert_from_s(minTime_gesamt) + "        MAX: " +convert_from_s(maxTime_gesamt)+ "        AVG: " + convert_from_s(avgTime_gesamt) + "     MIN_FAIL: " + str(minFail_gesamt)+ "       MAX_FAIL: " + str(maxFail_gesamt)+"        AVG_FAIL: "+str(format(avgFail_gesamt, '.2f'))+" %\n")
+    dateiCSV.write(Teil[0] +";"+ FA[0] +";"+ str(AnzahlProFA[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
+
 datei.close()
-
-
-
+dateiCSV.close()
+connection.close()
 
 

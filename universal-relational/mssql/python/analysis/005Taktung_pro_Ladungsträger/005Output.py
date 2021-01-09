@@ -1,10 +1,17 @@
+import matplotlib as mlp
+import matplotlib.pyplot as plt
+
 import pyodbc
 import datetime, time
 
 # Ausgabe
-datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.csv","w")
+datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.csv","w")
 
-datei.write("TEIL;LAGER;COUNT;MIN;MAX;AVG\n")
+dateiCSV.write("TEIL;LAGER;COUNT;MIN;MAX;AVG\n")
+
+# Flag zur Boxplotzeichnung pro Teiltyp
+BoxFlag = False
 
 # Verbindung zu DB aufbauen
 server = 'DESKTOP-0IJEV10\\SQLEXPRESS'
@@ -54,7 +61,14 @@ Teil_List = cursor.fetchall()
 
 i = 0
 for Teil in Teil_List:
-    
+    datei.write("-------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
+    datei.write("\n")
+    datei.write("TEIL: "+ Teil[0])
+    datei.write("\n")
+
+    if BoxFlag == True:
+        BoxAvg_List = list()
+
     # Alle LadungsträgerIn für den Teiltyp abfragen
     statement = "SELECT Ausprägung FROM SNR JOIN Objekt2Merkmalsausprägung O2MA ON (O2MA.ObjektID = SNR.ID AND o2MA.ObjektTyp = 1) JOIN Merkmalsausprägung MA ON MA.ID = O2MA.MerkmalsausprägungID JOIN Objekt2Merkmal O2M ON (O2M.ObjektID = SNR.ID AND O2M.ObjektTyp = 1) JOIN Merkmal M ON (O2M.MerkmalID = M.ID AND M.ID = MA.MerkmalID) WHERE SNR.TEIL = '"+ Teil[0] +"' AND M.ID = "+ str(attributeLagerIn[0]) +" GROUP BY Ausprägung ORDER BY Ausprägung"
     cursor.execute(statement)
@@ -83,7 +97,7 @@ for Teil in Teil_List:
         for InputID in Input_List:
 
             # Input-Date für die SNR ID abfragen
-            statement = "SELECT Ausprägung FROM SNR JOIN Objekt2Merkmalsausprägung O2MA ON (O2MA.ObjektID = SNR.ID AND O2MA.ObjektTyp = 1) JOIN Merkmalsausprägung MA ON MA.ID = O2MA.MerkmalsausprägungID JOIN Objekt2Merkmal O2M ON (O2M.ObjektID = SNR.ID AND O2M.ObjektTyp = 1) JOIN Merkmal M ON (O2M.MerkmalID = M.ID AND M.ID = MA.MerkmalID) WHERE M.ID = "+ str(attributeDateIn[0]) +" AND SNR.ID = "+str(InputID[0])
+            statement = "SELECT Ausprägung FROM SNR JOIN Objekt2Merkmalsausprägung O2MA ON (O2MA.ObjektID = SNR.ID AND o2MA.ObjektTyp = 1) JOIN Merkmalsausprägung MA ON MA.ID = O2MA.MerkmalsausprägungID JOIN Objekt2Merkmal O2M ON (O2M.ObjektID = SNR.ID AND O2M.ObjektTyp = 1) JOIN Merkmal M ON (O2M.MerkmalID = M.ID AND M.ID = MA.MerkmalID) WHERE M.ID = "+ str(attributeDateIn[0]) +" AND SNR.ID = "+str(InputID[0])
             cursor.execute(statement)
             InputDate = cursor.fetchone()
 
@@ -133,7 +147,26 @@ for Teil in Teil_List:
         avgTime = avgTime/(len(Input_List)-counter)
 
         # Ausgabe pro FA
-        datei.write(Teil[0] +";"+ LagerIn[0] +";"+ str(AnzahlProLad[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
+        datei.write("Ladungsträger: "+LagerIn[0]+"            Anzahl gefertigt: "+str(AnzahlProLad[0])+"            MIN: "+convert_from_s(minTime)+"            MAX: "+convert_from_s(maxTime)+"            AVG: "+convert_from_s(avgTime)+"\n")
+        dateiCSV.write(Teil[0] +";"+ LagerIn[0] +";"+ str(AnzahlProLad[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +"\n")
+
+        if BoxFlag == True:
+            BoxAvg_List.append(avgTime/60)
+
+    # Boxplot zeichnen
+    if BoxFlag == True:
+        plt.figure(1)
+        plt.title('Durchschnittliche Taktungen pro Ladungsträger')
+        plt.ylabel('Minuten')
+        plt.xlabel('Teilart')
+        plt.axis
+        plt.boxplot(BoxAvg_List, labels=[Teil[0]], showfliers=False, positions=[i+1])
+        i = i + 1
+
+if BoxFlag == True:
+    plt.savefig('C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/Ergebnisse/005Taktung_pro_Ladungsträger/boxplots/Average.png')
+    plt.close(1)
 
 datei.close()
+dateiCSV.close()
 connection.close()

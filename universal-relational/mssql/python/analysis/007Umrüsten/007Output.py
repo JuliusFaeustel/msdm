@@ -12,6 +12,9 @@ cursor = connection.cursor()
 
 # Ausgabe
 datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/007Umrüstung/Umrüstung.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/007Umrüstung/Umrüstung.csv","w")
+
+dateiCSV.write("LINIE;FROM;TO;MIN;MAX;AVG\n")
 
 # Funktion zur Umwandlung Zeit-String in Sekunden
 def convert_from_datestring( TimeString ): 
@@ -151,8 +154,11 @@ for Linie in Linie_List:
     for erg in Result_List:
         avg = erg[3]/erg[4]
         datei.write("Von: " +erg[0][0]+"    Nach: "+erg[0][1]+"          MIN: "+convert_from_s(erg[1])+"         MAX: "+convert_from_s(erg[2])+"         AVG: "+convert_from_s(avg)+"\n")
+        dateiCSV.write(Linie[0] +";"+ erg[0][0] +";"+ erg[0][1] +";"+ str(format(erg[1], '.2f')) +";"+ str(format(erg[2], '.2f')) +";"+ str(format(avg, '.2f')) +"\n")
+
 
 datei.close()
+dateiCSV.close()
 connection.close()
 
     

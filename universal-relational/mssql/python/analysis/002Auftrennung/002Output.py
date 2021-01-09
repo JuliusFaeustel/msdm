@@ -6,6 +6,9 @@ import datetime, time
 
 # Ausgabe
 datei = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/002Auftrennung/Auftrennung.txt","w")
+dateiCSV = open("C:/Users/picht/Desktop/Projektseminar I-490/universell-relational/mssql/Ergebnisse/002Auftrennung/Auftrennung.csv","w")
+
+dateiCSV.write("TEIL;COUNT;MIN;MAX;AVG;FAILURE\n")
 
 # Flag zur Boxplotzeichnung pro Teiltyp
 BoxFlag = False
@@ -57,7 +60,7 @@ i = 0
 for Teil in Teil_List:
         
     # Anzahl gefertigter Teile pro Teiltyp ermitteln 
-    statement = "SELECT COUNT(*) FROM (SELECT SNR.SNR FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE TEIL = 'A' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
+    statement = "SELECT COUNT(*) FROM (SELECT SNR.SNR FROM SNR JOIN Rückmeldung R ON SNR.ID = R.SNR_ID WHERE TEIL = '" + Teil[0] + "' AND SNR.SNR IS NOT NULL GROUP BY SNR.SNR) Q"
     cursor.execute(statement)
     AnzahlProTyp = cursor.fetchone()
 
@@ -156,6 +159,8 @@ for Teil in Teil_List:
     datei.write("TEIL: "+ Teil[0])
     datei.write("\n")
     datei.write("MIN: " +convert_from_s(minTime)+ "        MAX: " +convert_from_s(maxTime)+ "        AVG: " + convert_from_s(avgTime)+ "      Ausschussfaktor: " +str(format(avgFail, '.2f'))+" %\n")
+    dateiCSV.write(Teil[0] +";"+ str(AnzahlProTyp[0]) +";"+ str(format(minTime, '.2f')) +";"+ str(format(maxTime, '.2f')) +";"+ str(format(avgTime, '.2f')) +";"+ str(format(avgFail, '.4f')) +"\n")
+
     i = i + 1
 
 if BoxFlag == True:
@@ -164,6 +169,7 @@ if BoxFlag == True:
 
 connection.close()
 datei.close()
+dateiCSV.close()
         
 
 
