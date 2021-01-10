@@ -95,11 +95,11 @@ CREATE INDEX INDEX_TBL_O2MA2 ON Objekt2Merkmalsausprägung (ObjektTyp) INCLUDE (M
 CREATE INDEX INDEX_TBL_O2MA3 ON Objekt2Merkmalsausprägung (MerkmalsausprägungID, ObjektTyp) INCLUDE (ObjektID);
 
 
---CREATE INDEX INDEX_TBL_O2Merk ON Objekt2Merkmal (ObjektID, ObjektTyp);
-CREATE INDEX INDEX_TBL_O2M ON Objekt2Merkmal (MerkmalID, ObjektID, ObjektTyp);
+CREATE INDEX INDEX_TBL_O2M ON Objekt2Merkmal (ObjektID, ObjektTyp);
+CREATE INDEX INDEX_TBL_O2M2 ON Objekt2Merkmal (MerkmalID, ObjektID, ObjektTyp);
 
---CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR);
-CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR_ID);
+CREATE INDEX INDEX_TBL_Rück ON Rückmeldung (SNR);
+CREATE INDEX INDEX_TBL_Rück2 ON Rückmeldung (SNR_ID);
 
 
 
