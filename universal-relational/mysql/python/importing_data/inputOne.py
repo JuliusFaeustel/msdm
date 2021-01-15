@@ -3,10 +3,20 @@ import mysql.connector
 import glob
 import datetime
 
-def input (file):
+def insert (file):
     # Connection zu DB
-    connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_x")
+    connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_4")
     cursor = connection.cursor()
+
+    # Log in DB clearen
+    statement = "SET @@profiling = 0"
+    cursor.execute(statement)
+    statement = "SET @@profiling_history_size = 0"
+    cursor.execute(statement)
+    statement = "SET @@profiling_history_size = 100;"
+    cursor.execute(statement)
+    statement = "SET @@profiling = 1"
+    cursor.execute(statement)
 
     # Positionen der Merkmale im Input
     pos_FA = 1
@@ -149,7 +159,12 @@ def input (file):
                 cursor.execute(statement)
                 connection.commit()
 
+    # Prozesszeit auf DB abfragen
+    statement = "SELECT SUM(DURATION) FROM INFORMATION_SCHEMA.PROFILING"
+    cursor.execute(statement)
+    DurationDB = cursor.fetchone()
 
     cursor.close()
     connection.close()
-    return None
+
+    return DurationDB[0]

@@ -9,13 +9,20 @@ def convert_from_datestring( TimeString ):
     Second = time.mktime(Date.timetuple())
     return Second
 
-def input (file):
+def insert (file):
     # Connection zu DB
-    connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_2")
+    connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "demo", database = "project_4")
     cursor = connection.cursor()
 
-    # alle Files aus Ordner
-    files = glob.glob("C:/Users/picht/Desktop/Projektseminar I-490/data/htw/out/*.txt")
+    # Log in DB clearen
+    statement = "SET @@profiling = 0"
+    cursor.execute(statement)
+    statement = "SET @@profiling_history_size = 0"
+    cursor.execute(statement)
+    statement = "SET @@profiling_history_size = 100;"
+    cursor.execute(statement)
+    statement = "SET @@profiling = 1"
+    cursor.execute(statement)
 
     # Positionen der Merkmale im Input
     pos_SNR = 0
@@ -156,7 +163,7 @@ def input (file):
             connection.commit()           
                 
     # ID der eben hinzugefügten Output SNR abfragen
-    statement = "SELECT MAX(ID) FROM Rückmeldung R WHERE R.SNR = " + data[pos_SNR]
+    statement = "SELECT MAX(ID) FROM Rückmeldung"
     cursor.execute(statement)
     result = cursor.fetchone()
     RückmeldungID = result[0]
@@ -207,6 +214,12 @@ def input (file):
                 cursor.execute(statement)
                 connection.commit()
 
+    # Prozesszeit auf DB abfragen
+    statement = "SELECT SUM(DURATION) FROM INFORMATION_SCHEMA.PROFILING"
+    cursor.execute(statement)
+    DurationDB = cursor.fetchone()
+
     cursor.close()
     connection.close()
-    return None
+
+    return DurationDB[0]
