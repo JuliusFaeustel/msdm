@@ -1,17 +1,27 @@
 import shutil, os
 import time
 import glob
+import projecttest_in as pi
+import projecttest_out as po
+import pymongo
 
 
+files_in = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/in/*.txt")
+files_out = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/out/*.txt")
 
-files_in = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/data_simulation/in_source/*.txt")
-files_out = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/data_simulation/out_source/*.txt")
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+
+mydb = myclient["projekttest"]
+
+
+resp = mydb.in_data_embedded.create_index([ ("SNR", 1) ])
+resp = mydb.in_data_embedded.create_index([ ("FA", 1) ])
 
 i=0
-
-while True:
-    shutil.move(files_in[i], "C:/Users/liepe/Desktop/Projektseminar/htw/data_simulation/target/in_data")
-    shutil.move(files_out[i], "C:/Users/liepe/Desktop/Projektseminar/htw/data_simulation/target/out_data")
-    i += 1
+while i<len(files_out):
+    if i<len(files_in):
+        pi.loadInput(files_in[i])
+    
+    po.loadOutput(files_out[i])
+    i+=1
     print(i)
-    time.sleep(0.5)

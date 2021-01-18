@@ -8,15 +8,9 @@ import matplotlib.pyplot as plt
 import statistics
 import datetime
 import time
-from time import process_time_ns
-start = process_time_ns()
+from time import process_time
 
-def convert_from_s( seconds ): 
-    minutes, seconds = divmod(seconds, 60) 
-    hours, minutes = divmod(minutes, 60) 
-    days, hours = divmod(hours, 24) 
-    string = str(int(days))+"T:"+str(int(hours))+"h:"+str(int(minutes))+"m:"+str(int(seconds))+ "s"
-    return string
+start = process_time()
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -70,3 +64,7 @@ for line in x:
         avg = sum(helper_list)/len(helper_list)
         text_file.write("{};{};{};{};{};{:.2f}\n".format(line,value[0],value[-1],minimum, maximum, avg))
 text_file.close()
+
+end = process_time()
+
+print(end - start)

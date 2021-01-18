@@ -5,14 +5,9 @@ import glob
 import json
 import bson
 import matplotlib.pyplot as plt
+from time import process_time
 
-def convert_from_ms( milliseconds ): 
-    seconds, milliseconds = divmod(milliseconds,1000)
-    minutes, seconds = divmod(seconds, 60) 
-    hours, minutes = divmod(minutes, 60) 
-    days, hours = divmod(hours, 24) 
-    string = str(int(days))+"T:"+str(int(hours))+"h:"+str(int(minutes))+"m:"+str(int(seconds))+ "s"
-    return string
+start = process_time()
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -25,13 +20,10 @@ d = mydb.in_data_embedded.distinct("TEIL")
 text_file = open("./results/Analyse_1_Output.txt", "w")
 text_file.write("TEIL;FA;COUNT;MIN;MAX;AVG;MIN_O;MAX_O;AVG_O\n")
 for teil in d:
-    
-
     x = mydb.in_data_embedded.aggregate([{"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "output": {"$arrayElemAt": ["$out", -1]}}},
                                       {"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "difference":{'$subtract':['$output.Date','$Begin']}}},
                                       {'$match': {"difference": {"$lt": 3600000},"SNR": { "$ne": "nan" }, "TEIL": teil}},
                                       {"$group" : {"_id":{"teil":"$TEIL","fa":"$FA"}, "teile_count": {"$sum":1},"maxFert": {"$max": "$difference"},"minFert": {"$min": "$difference"}, "avgFert": {"$avg": "$difference"}}}])
-
 
     i = 1
     for data in x:
@@ -55,5 +47,9 @@ for teil in d:
         text_file.write("{};{};{};{};{};{:.2f};{};{};{:.2f}\n".format(teil, fa, amount, min_t, max_t, avg_t, min_o, max_o, avg_o))
         print(i)
         i += 1
+
 text_file.close()
-    
+
+end = process_time()
+
+print(end-start)

@@ -11,12 +11,7 @@ mycol = mydb["in_data_embedded"]
 
 files = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/in/*.txt")
 
-print(len(files))
-
-rows = []
-i = 0
-
-for filename in files:
+def loadInput(filename):
     df = pd.read_csv(filename, sep = ';', names = ["DATE", "FA", "NR", "TEIL", "SNR", "LINIE", "E","ScanE","MessageE","A2","V2","A1","V1","UseM3","UseM1","UseM2","Delta","Fehler","Span","ChargeM1","ChargeM2","ChargeM3","ScanA","MessungA","LagerIn","LagerOut","Begin"], index_col=None)
     df.reset_index(drop = True, inplace = True)
     df['DATE'] = pd.to_datetime(df['DATE'])
@@ -44,7 +39,3 @@ for filename in files:
     df['LagerOut'] = df['LagerOut'].astype(str)
     df['Begin'] = pd.to_datetime(df['Begin'])
     mycol.insert_many(df.to_dict('records'))
-    i = i+1
-    print(i)
-
-print("Finished uploading all Data")
