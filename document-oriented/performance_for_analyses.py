@@ -14,7 +14,11 @@ mycol = mydb["in_data_embedded"]
 
 x = mydb.system.profile.find({"op": "command"})
 
-text_file = open("Analyse_Output_find_snr_performance_noindex.txt", "w")
+
+text_file = open("Performance_Analyse_7.txt", "w")
+summe = 0
 for data in x:
-    text_file.write("{}\n".format(data.get("millis")))
+    summe += data.get("millis")
+
+text_file.write("{}\n".format(summe))
 text_file.close()

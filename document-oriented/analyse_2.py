@@ -6,22 +6,16 @@ import json
 import bson
 import matplotlib.pyplot as plt
 import datetime
+from time import process_time
 
-def convert_from_ms( milliseconds ): 
-	seconds, milliseconds = divmod(milliseconds,1000) 
-	minutes, seconds = divmod(seconds, 60) 
-	hours, minutes = divmod(minutes, 60) 
-	days, hours = divmod(hours, 24) 
-	seconds = seconds + milliseconds/1000
-	return days, hours, minutes, seconds
+start = process_time()
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
-mydb = myclient["projekttest"]
+mydb = myclient["projekt_simulation"]
 
 mycol = mydb["out_data_embedded"]
 
-# Analyse 2
 x = mydb.in_data_embedded.distinct("TEIL")
 
 liste = []
@@ -71,3 +65,7 @@ for teil in x:
     avg = sum(avg_val)/len(avg_val)
     text_file.write("{};{};{};{};{:.2f};{:.2f}\n".format(teil, amount,minimum, maximum, avg, amount/total_amount))
 text_file.close()
+
+end = process_time()
+
+print(end - start)

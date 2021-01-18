@@ -9,7 +9,6 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
 mydb = myclient["projekttest"]
 
-mycol = mydb["out_data_join"]
 mycol_null = mydb["empty_out"]
 
 files = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/out/*.txt")
@@ -23,14 +22,10 @@ def convert_from_ms( milliseconds ):
 	seconds = seconds + milliseconds/1000 
 	return days, hours, minutes, seconds 
 
-
-i = 0
-
-for filename in files:
+def loadOutput(filename):
     snr = None
     return_df = []
     obj_id = None
-
 
     df = pd.read_csv(filename, sep = ';', names = ["SNR", "LINIE","TRÄGER", "MAT", "NAHT", "DistMmX", "DistMmy", "AngleGrad", "LengthMM", "LengthDiffMM", "AngleDiffGrad", "AxisDistMMX", "AxisDistMMY", "AxisDistMM", "RTotalNominal", "RTotalCurrent", "RCount", "Date"], index_col=None)
     df.reset_index(drop = True, inplace = True)
@@ -87,8 +82,4 @@ for filename in files:
             return_df = return_df.drop(return_df[return_df.difference < 0].index)
             if (not return_df.empty):  
                 obj_id = return_df['difference'].idxmin() 
-                mydb.in_data_embedded.update_one({'_id': obj_id}, {"$addToSet": {"out": dictionary}})    
-    i = i + 1
-    print(i)
-
-print("Finished uploading all Data")
+                mydb.in_data_embedded.update_one({'_id': obj_id}, {"$addToSet": {"out": dictionary}})
