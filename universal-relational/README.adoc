@@ -1,0 +1,11 @@
+= universelle relationale Struktur
+
+* Die Excel-Datei im aktuellen Ordner fasst alle Ausführungszeiten zusammen und hält auf den Daten basierende Diagramme.
+
+* Jeder der zwei Unterordner Dateien und Ergebnisse der Analysen zum jeweiligen RDBMS.
+** Der Ordner *python* enthält Skripts, welche im Umfang kleine Abfragen nutzen, um die Analysen auszuführen.
+** Der Ordner *python2.0* enthält Skripts, welche im Umfang mittlere Abfragen nutzen, um die Analysen auszuführen.
+** Der Ordner *results* enthält die Resultate der Analysen ggfls. mit Boxplots.
+** Der Ordner *sql* enthält alle nötigen Skripts zum Anlegen der jeweiligen Struktur. 
+*** Die Indizes in MySQL und MSSQL sind unterschiedlich.
+*** Zum Überprüfen bestimmter RDBMS-Parameter sind Abfragen für MySQL vorhanden.

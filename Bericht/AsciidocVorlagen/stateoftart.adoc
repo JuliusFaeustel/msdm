@@ -1,0 +1,4 @@
+= State of the Art Lösungen
+:toc:
+:toc-title: Inhaltsverzeichnis
+:imagesdir: bilder

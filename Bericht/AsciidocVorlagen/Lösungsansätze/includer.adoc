@@ -1,0 +1,11 @@
+= Lösungansätze
+:toc:
+:toc-title: Inhaltsverzeichnis
+ifndef::main-file[]
+:imagesdir: bilder
+endif::main-file[]
+ifdef::main-file[]
+:imagesdir: Lösungsansätze/bilder
+endif::main-file[]
+
+include::document-oriented.adoc[leveloffset=+1]

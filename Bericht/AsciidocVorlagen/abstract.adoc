@@ -1,0 +1,4 @@
+= Abstract
+:toc:
+:toc-title: Inhaltsverzeichnis
+:imagesdir: bilder

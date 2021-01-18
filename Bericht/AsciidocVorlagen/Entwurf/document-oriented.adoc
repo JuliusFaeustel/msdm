@@ -1,0 +1,13 @@
+= Dokumentenorientierte Datenbank
+:toc:
+:toc-title: Inhaltsverzeichnis
+ifndef::main-file[]
+:imagesdir: bilder
+endif::main-file[]
+ifdef::main-file[]
+:imagesdir: Entwurf/bilder
+endif::main-file[]
+
+
+== Erstes Datenmodell
+
