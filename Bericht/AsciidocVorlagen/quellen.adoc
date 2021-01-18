@@ -1,4 +1,0 @@
-= Quellen
-:toc:
-:toc-title: Inhaltsverzeichnis
-:imagesdir: bilder

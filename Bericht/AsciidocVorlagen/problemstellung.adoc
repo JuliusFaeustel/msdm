@@ -1,4 +1,0 @@
-= Problemstellung
-:toc:
-:toc-title: Inhaltsverzeichnis
-:imagesdir: bilder
