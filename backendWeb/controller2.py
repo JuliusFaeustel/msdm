@@ -348,7 +348,7 @@ def create_Plot_laufzeit(fig, rohData, row, col):
 @app.route('/about')
 def render_Plot_tkt9():
     fig = make_subplots(
-        rows=1, cols=1, subplot_titles=("Maximum", "MIN Universell-Relational"))
+        rows=1, cols=1, subplot_titles=("Durchschnitt", "MIN Universell-Relational"))
     data = [["C:/Users/juliu/OneDrive/Studium/WS_20_21/Projekt_Munkelt/projectMunkelt/backendWeb/" +
              "AuswertungenCSV_Corn/Analyse_7_Output.csv", [1, 1]]
             ]
@@ -379,11 +379,11 @@ def create_Plot_Taktzeit9(fig, rohData, row, col):
     else:
         showlegend = False
 
-    # fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.MIN, col=col, row=row, legendgroup='group1'
-    #               , zmin=0, zmax=4000).update_layout(width=800,height=800)
-    # fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.AVG, col=col, row=row, legendgroup='group2'
-    #             , zmin=0, zmax=10000).update_layout(width=800,height=800)
-    fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.MAX, col=col, row=row, legendgroup='group3'
+    #fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.MIN, col=col+1, row=row, legendgroup='group1'
+     #             , zmin=0, zmax=4000).update_layout(width=800,height=800)
+    #fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.AVG, col=col+2, row=row, legendgroup='group2'
+     #            , zmin=0, zmax=10000).update_layout(width=800,height=800)
+    fig.add_heatmap(x=rohData.FROM, y=rohData.TO, z=rohData.AVG, col=col, row=row, legendgroup='group3'
                     , zmin=0, zmax=50000).update_layout(width=800, height=800)
 
     return fig

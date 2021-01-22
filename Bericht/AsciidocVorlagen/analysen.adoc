@@ -5,3 +5,19 @@
 
 
 == Analyse 1
+image::analyse1.png[]
+== Analyse 2
+image::analyse2.png[]
+image::analyse2_failure.png[]
+== Analyse 3
+
+== Analyse 4
+image::analyse4.png[]
+== Analyse 5
+image::analyse5minavg.png[]
+image::analyse5max.png[]
+== Analyse 6
+== Analyse 7
+image::analyse7min.png[]
+image::analyse7avg.png[]
+image::analyse7max.png[]

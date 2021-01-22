@@ -10,3 +10,6 @@ endif::main-file[]
 
 == Übersicht
 
+== Performance
+image::analysendauer1.png[]
+image::analysendauer2.png[]

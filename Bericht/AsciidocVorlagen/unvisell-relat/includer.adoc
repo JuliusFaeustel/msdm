@@ -1,0 +1,15 @@
+= Universelle relationale Struktur
+:toc:
+:toc-title: Inhaltsverzeichnis
+:imagesdir: bilder
+ifdef::main-file[]
+:imagesdir: document-oriented/bilder
+endif::main-file[]
+
+
+
+
+
+include::ansatzvorstellung.adoc[leveloffset=+1]
+include::entwurf.adoc[leveloffset=+1]
+include::implementierung.adoc[leveloffset=+1]

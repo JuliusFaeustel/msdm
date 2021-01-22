@@ -1,0 +1,24 @@
+= Implementierung
+:toc:
+:toc-title: Inhaltsverzeichnis
+ifndef::main-file[]
+:imagesdir: bilder
+endif::main-file[]
+ifdef::main-file[]
+:imagesdir: document-oriented/bilder
+endif::main-file[]
+
+
+== Implementierung der Struktur
+== Implementierung der Datenloader
+== Implementierung der Analysen
+
+[source, python]
+----
+@app.route('/')
+def home():
+    return render_template("inline.html")
+----
+
+== Evolution des Datenmodells
+

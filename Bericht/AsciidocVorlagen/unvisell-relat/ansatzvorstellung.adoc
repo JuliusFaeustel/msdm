@@ -1,0 +1,13 @@
+= Einführung in Datenbankstruktur
+:toc:
+:toc-title: Inhaltsverzeichnis
+ifndef::main-file[]
+:imagesdir: bilder
+endif::main-file[]
+ifdef::main-file[]
+:imagesdir: document-oriented/bilder
+endif::main-file[]
+
+
+
+== Datenbankvorstellung
