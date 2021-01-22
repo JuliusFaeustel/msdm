@@ -1,13 +1,13 @@
-= Dokumentenorientierte Datenbank
+= Einführung in Datenbankstruktur
 :toc:
 :toc-title: Inhaltsverzeichnis
 ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: Lösungsansätze/bilder
+:imagesdir: document-oriented/bilder
 endif::main-file[]
 
-== Konzept
-== Marktübersicht
-== Entscheidung
+
+
+== Datenbankvorstellung

@@ -1,14 +1,12 @@
-= Dokumentenorientierte Datenbank
+= Lösungsvergleich
 :toc:
 :toc-title: Inhaltsverzeichnis
 ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: Tests/bilder
+:imagesdir: Ergebnissanalyse/bilder
 endif::main-file[]
 
-== Analysenvergleich
-
-== Performancetests
+== Übersicht
 

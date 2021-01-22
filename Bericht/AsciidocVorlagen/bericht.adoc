@@ -1,6 +1,6 @@
 :doctype: book
 :toc:
-:toclevels: 2
+:toclevels: 3
 :toc-title: Abschlussbericht
 :sectnums:
 :doctype: book
@@ -17,16 +17,13 @@
 :main-file: true
 :imagesdir: bilder
 
-include::abstract.adoc[leveloffset=+1]
 include::einleitung.adoc[leveloffset=+1]
 include::problemstellung.adoc[leveloffset=+1]
 include::anfanalyse.adoc[leveloffset=+1]
 include::stateoftart.adoc[leveloffset=+1]
-include::Lösungsansätze/includer.adoc[leveloffset=+1]
-include::Entwurf/includer.adoc[leveloffset=+1]
-include::Implementierung/includer.adoc[leveloffset=+1]
-include::Tests/includer.adoc[leveloffset=+1]
-include::Ergebnissanalyse/includer.adoc[leveloffset=+1]
+include::lösungsincluder.adoc[leveloffset=+1]
+include::analysen.adoc[leveloffset=+1]
+include::ergebnissanalyse.adoc[leveloffset=+1]
 include::zsfua.adoc[leveloffset=+1]
 include::quellen.adoc[leveloffset=+1]
 

@@ -5,11 +5,9 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: Entwurf/bilder
+:imagesdir: document-oriented/bilder
 endif::main-file[]
 
 
+== Erstes Datenmodell
 
-
-include::document-oriented.adoc[leveloffset=+1]
-image::13_15-Facebook.png[]
