@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1500ab8e-031b-4ad1-b1b7-63a3f626978c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/Taktung_pro_Artikel.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/Taktung_pro_Artikel_CSV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA005681_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA005695_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA005699_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA005701_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA005708_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA006891_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA006894_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA006898_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA006900_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA007305_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA007494_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA007503_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA007507_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA008624_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA008627_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA009145_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA009718_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/001Taktung_pro_Artikel/boxplots/FA009735_time.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/002Auftrennung/Auftrennung.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/002Auftrennung/AuftrennungCSV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/002Auftrennung/Ausschuss.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/004Ladungsträger/Ladungsträger.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/004Ladungsträger/Ladungsträger.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/004Ladungsträger/LadungsträgerCSV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/005Taktung_pro_Ladungsträger/Taktung_pro_Ladungsträger.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/005Taktung_pro_Ladungsträger/Taktung_pro_LadungsträgerCSV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/005Taktung_pro_Ladungsträger/boxplots/Average.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/005Taktung_pro_Ladungsträger/boxplots/Minima.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/007Umrüstung/007Umrüstung.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuswertungCSV_Paul/007Umrüstung/007UmrüstungCSV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/controller2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bericht/AsciidocVorlagen/Entwurf/includer.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/../Bericht/AsciidocVorlagen/Entwurf/includer.adoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuswertungCSV/takt2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/AuswertungCSV/takt2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mywatchdog.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mywatchdog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/formatHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/formatHelper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/taktzeit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/taktzeit1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/taktzeit2.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/taktzeit2.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="JupyterTrust" id="a3d72032-ce91-4d25-aa9d-3a56b816ac72" />
+  <component name="ProjectId" id="1kL8FH5me15qPho0jYrvan81dJT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.project" />
+  </component>
+  <component name="PyDebuggerOptionsProvider">
+    <option name="mySaveCallSignatures" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\Auswertungen" />
+      <recent name="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\AuswertungCSV" />
+      <recent name="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\templates" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Flask server.Final Server">
+    <configuration name="Mywatchdog" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Julius_Programme\Python\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\Mywatchdog.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="backendWeb" type="PythonConfigurationType" factoryName="Python">
+      <module name="backendWeb" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/controller.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="controller2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/controller2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="delimiterchange" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Julius_Programme\Python\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/AuswertungCSV" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/AuswertungCSV/delimiterchange.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="taktzeitanalyse1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="backendWeb" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\Auswertungen\taktzeitanalyse1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="taktzeitanalyse2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="backendWeb" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Auswertungen" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Auswertungen/taktzeitanalyse2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Final Server" type="Python.FlaskServer">
+      <option name="target" value="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\controller2.py" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Julius_Programme\Python\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Flask (C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\controller.py)" type="Python.FlaskServer" nameIsGenerated="true">
+      <module name="backendWeb" />
+      <option name="target" value="C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\controller.py" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Julius_Programme\Python\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Flask server.Flask (C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\controller.py)" />
+      <item itemvalue="Flask server.Final Server" />
+      <item itemvalue="Python.backendWeb" />
+      <item itemvalue="Python.taktzeitanalyse1" />
+      <item itemvalue="Python.taktzeitanalyse2" />
+      <item itemvalue="Python.delimiterchange" />
+      <item itemvalue="Python.Mywatchdog" />
+      <item itemvalue="Python.controller2" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.controller2" />
+        <item itemvalue="Python.Mywatchdog" />
+        <item itemvalue="Python.delimiterchange" />
+        <item itemvalue="Python.taktzeitanalyse2" />
+        <item itemvalue="Python.taktzeitanalyse1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1500ab8e-031b-4ad1-b1b7-63a3f626978c" name="Default Changelist" comment="" />
+      <created>1605468406585</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605468406585</updated>
+      <workItem from="1605468417101" duration="2409000" />
+      <workItem from="1605516252916" duration="1097000" />
+      <workItem from="1605517397657" duration="3534000" />
+      <workItem from="1605796982560" duration="5948000" />
+      <workItem from="1605982651801" duration="789000" />
+      <workItem from="1606041701060" duration="21080000" />
+      <workItem from="1606121051918" duration="16578000" />
+      <workItem from="1606658144741" duration="8204000" />
+      <workItem from="1606730900032" duration="15028000" />
+      <workItem from="1607003482631" duration="15419000" />
+      <workItem from="1607095137276" duration="2188000" />
+      <workItem from="1607177512534" duration="3179000" />
+      <workItem from="1607273239666" duration="5279000" />
+      <workItem from="1607335200195" duration="2219000" />
+      <workItem from="1607340461203" duration="172000" />
+      <workItem from="1607340655563" duration="331000" />
+      <workItem from="1607341006402" duration="324000" />
+      <workItem from="1607341532012" duration="8139000" />
+      <workItem from="1607607772696" duration="2332000" />
+      <workItem from="1607857194874" duration="10486000" />
+      <workItem from="1607881888844" duration="2188000" />
+      <workItem from="1607950107126" duration="8921000" />
+      <workItem from="1608039137934" duration="1098000" />
+      <workItem from="1608234220105" duration="59000" />
+      <workItem from="1608306579982" duration="718000" />
+      <workItem from="1608630193479" duration="3038000" />
+      <workItem from="1608633264103" duration="318000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.txt" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1018" y="524" key="#Notifications" timestamp="1605470151606">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1018" y="524" key="#Notifications/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1605470151606" />
+    <state x="734" y="355" width="1092" height="786" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608632644701">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="734" y="355" width="1092" height="786" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608632644701" />
+    <state x="3111" y="264" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607608426122" />
+    <state x="1036" y="502" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1608632669704">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1036" y="502" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608632669704" />
+    <state x="3337" y="373" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1606662777919" />
+    <state x="719" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1607276469024">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="719" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1607276469024" />
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1606075815317">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1606075815317" />
+    <state x="3354" y="338" key="FileChooserDialogImpl" timestamp="1605516314107">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1059" y="455" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1605468801802" />
+    <state x="3354" y="338" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1605516314107" />
+    <state width="2517" height="492" key="GridCell.Tab.0.bottom" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.0.center" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.0.center/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.0.left" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.0.left/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.0.right" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.0.right/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.1.bottom" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.1.bottom/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053845" />
+    <state width="2517" height="492" key="GridCell.Tab.1.center" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.1.center/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.1.left" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.1.left/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053844" />
+    <state width="2517" height="492" key="GridCell.Tab.1.right" timestamp="1608633250760">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="492" key="GridCell.Tab.1.right/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633250760" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607872053845" />
+    <state x="781" y="345" key="SettingsEditor" timestamp="1608633403753">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="781" y="345" key="SettingsEditor/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608633403753" />
+    <state x="3146" y="256" key="SettingsEditor/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1607340961599" />
+    <state x="3392" y="364" key="cloudConfig.SelfSettingsDialog" timestamp="1605519746936">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="3392" y="364" key="cloudConfig.SelfSettingsDialog/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1605519746936" />
+    <state x="2300" y="-8" width="2376" height="1216" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1607336591142">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2300" y="-8" width="2376" height="1216" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1607336591142" />
+    <state x="720" y="236" key="editAsTableFormatDialogDimension" timestamp="1608631589811">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="720" y="236" key="editAsTableFormatDialogDimension/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608631589811" />
+    <state x="3100" y="175" key="editAsTableFormatDialogDimension/0.0.2560.1400/2560.0.1920.1040@2560.0.1920.1040" timestamp="1608631401977" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1608632964031">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1608632964031" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/AuswertungCSV/delimiterchange.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller.py</url>
+          <line>302</line>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller.py</url>
+          <line>301</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/formatHelper.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller.py</url>
+          <line>243</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller.py</url>
+          <line>211</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller.py</url>
+          <line>185</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Mywatchdog.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller2.py</url>
+          <line>47</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/backendWeb$Mywatchdog.coverage" NAME="Mywatchdog Coverage Results" MODIFIED="1608039611299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$watchdog.coverage" NAME="Mywatchdog Coverage Results" MODIFIED="1607609368528" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$taktzeitanalyse1.coverage" NAME="taktzeitanalyse1 Coverage Results" MODIFIED="1606664912179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$Final_Server.coverage" NAME="Final Server Coverage Results" MODIFIED="1608632372843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$delimiterchange.coverage" NAME="delimiterchange Coverage Results" MODIFIED="1607193895423" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AuswertungCSV" />
+    <SUITE FILE_PATH="coverage/backendWeb$getAllDiffTime.coverage" NAME="getAllDiffTime Coverage Results" MODIFIED="1606121297531" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$Flask__C__Users_juliu_OneDrive_Studium_WS_20_21_Projekt_Munkelt_projectMunkelt_backendWeb_controller_py_.coverage" NAME="Flask (C:\Users\juliu\OneDrive\Studium\WS_20_21\Projekt_Munkelt\projectMunkelt\backendWeb\controller.py) Coverage Results" MODIFIED="1607956990397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/backendWeb$taktzeitanalyse2.coverage" NAME="taktzeitanalyse2 Coverage Results" MODIFIED="1606749405527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Auswertungen" />
+    <SUITE FILE_PATH="coverage/backendWeb$backendWeb.coverage" NAME="backendWeb Coverage Results" MODIFIED="1605468903233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/backendWeb$Another_Auswertung.coverage" NAME="Another_Auswertung Coverage Results" MODIFIED="1606134749650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
