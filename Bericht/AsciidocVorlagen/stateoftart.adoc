@@ -2,3 +2,29 @@
 :toc:
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
+
+== Hinführung
+Die Recherche zum Thema Speicherung von Daten im IOT Bereich erwies sich schwieriger als gedacht.
+
+
+== Amazon Webservice
+
+== Iconics Hyper Historian
+
+Zeitreihen --> gut für wenige Sensordaten ständige Wertmessung
+Speicherung in einer proprietäre Datenbank und das Änderungen auf Dateieben darauf schließen Sortierte Hashmap oder ähnliches
+--> Anpassung der Schlüssel und neu Sortierung des Baumes
+
+
+== Kontron AIS GmbH
+Die Kontron AIS hat je nach Projekt verschiedene Datenbanklösungen im Einsatz, dabei werden oft verschiedene
+Ansätze kombiniert. So ist meist auf der Auswertungsseite ein relationaler Datenbank Server wie Beispielsweise
+von Oracle oder Microsoft.
+Da der Aufbau von den Relationen, aber beim Speichern Zeit benötigt wird mit einem sogenannten Fast Layer gearbeitet.
+Um das diesen zu implementieren werden verschiedene Lösungen genutzt. Zum einem das Big Data System Hadoop
+es ermöglicht eine hoch performante Speicherung in einem redundanten und parallelisiertem Dateisystem.
+Ebenfalls werden als Zwischenspeicher die auch im folgenden diskutierten Ansätze wie Schlüssel-Wert-Datenbank und
+Dokumentenorientierte Datenbank genutzt, dabei werden die nicht nur Datensammlung, sondern auch als
+Zzwischenspeicher für Auswertungen genutzt. Auffallend dabei ist das die Lösungen von Projekt zu Projekt variieren und
+das oft auch nur eine Kombination eine adequate Problemlösung schafft.
+

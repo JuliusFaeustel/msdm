@@ -2,3 +2,18 @@
 :toc:
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
+
+
+In der Produktion fallen neben viele sogenannte Qualitätsdaten an, diese sind logisch stark mit Produktionsdaten in
+ERP-Systemen verknüpft. Sie sind logistisch, kostenrechnerisch oder buchhalterisch relevant. Diese Sensordaten produzieren
+hohe Datenmenge, im besonderen durch eine Vielzahl an Sensoren. Dadurch gibt es eine sehr heterogenen Datenbestand.
+Da der Bestand an Sensoren mit der Unternehmensgröße wächst und es ständig zu Änderungen durch das Hinzukommen und
+Enfallen von Messinstrumenten kommt braucht man eine Datenstruktur die sich diesem Wandel anpassen kann.
+
+Ziel dieses Projektes war es das Problem der Datenspeicherung mit 4 Lösungsansätzen zu lösen. Dabei sollte eine
+proprietäre Datenstruktur, eine universell relational Struktur, eine Schlüssel-Werte-Datenbank und eine
+dokumentenorientierte Datenbank zum Einsatz kommen. In allen Lösungen sollten Daten konsistent gespeichert werden.
+Weiterhin sollten verschiedene Analysen möglich sein und auch auch das Darstellen der Analyseergebnisse.
+
+
+

@@ -5,11 +5,68 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: Ergebnissanalyse/bilder
+:imagesdir: bilder
 endif::main-file[]
 
 == Übersicht
 
+[cols=5*]
+|===
+
+
+| Kriterium/Datenbank
+|Proprietäre Datenstruktur
+|Universelle relationale Struktur
+|Schlüssel-Werte-
+Datenbank
+|Dokumenten-
+orientiert
+
+|geringer Entwicklungs-
+aufwand
+|++
+|--
+|--
+|+
+
+
+|geringe Komplexität des Datenmodells
+|++
+|-
+|-
+|++
+
+|Hinzufügen eines Attribut
+|--
+|++
+|++
+|++
+|Performance
+|++
+|--
+|+
+|+
+|geringer Speicher-
+aufwand
+|++
+|--
+|+
+|++
+|Entwickler Dokumentation
+|++
+|++
+|-
+|+
+|kumuliertes Ergebnis
+|8
+|-1
+|0
+|9
+
+|===
+
 == Performance
+=== Analysenperformance
+
 image::analysendauer1.png[]
 image::analysendauer2.png[]

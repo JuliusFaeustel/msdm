@@ -2,3 +2,19 @@
 :toc:
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
+
+In dem konkreten zu implementierenden Beispiel ging es um fünf Maschinen beteiligt an einem carbonteilfertigungs
+Prozess. Dabei werden teure Carbonfasern mit einem günstigen Trägerstoff vernäht. Ziel dabei ist es eine bessere
+Handhabarkeit bei geringeren Herstellungskosten bereitzustellen. Die Maschine erzeugt einen  Eingangsdatensatz mit 23
+Werten und einen Ausgangsdatensatz mit 16 Werten. Dabei werden neben der Seriennummer, die spezifisch für ein Werkstück
+(Teil) ist, der Fertigungsauftrag und die Ladungsträgernummer gespeichert. Zu einem Fertigungsauftrag gehören mehrere
+Teile. Weiterhin wird auch die Nummer des Ladungsträgers abgespeichert, dieser ist Abhängig von der Teilart und kann
+für mehrere Wekstücke verwendet werden.
+
+Der Einlesealgorhytmus stellt etwas vereinfacht dar wie die Datensatzerstellung mit der Fertigung auf der Maschine
+zusmmenhängt. Sobald das Teil korrekt in die Maschine eingelegt wurde wird der Eingangsdatensatz erstellt. Nach der
+eigentlichen Fertigungsarbeit auf der Maschine wird das Teil überprüft. Dabei entsteht der Ausgangsdatensatz. Falls
+die Prüfung nicht erfolgreich war wird das Produkt erneut überprüft. Danach verlässt das Teil die Maschine, falls
+nun Probleme mit dem Werkstück gefunden wurden wird das Werkstück erneut in die Maschine gegeben, falls nicht
+
+image::einlesealgorhytmus.png[title="Einlesealgorhytmus"]

@@ -19,7 +19,6 @@
 
 include::einleitung.adoc[leveloffset=+1]
 include::problemstellung.adoc[leveloffset=+1]
-include::anfanalyse.adoc[leveloffset=+1]
 include::stateoftart.adoc[leveloffset=+1]
 include::lösungsincluder.adoc[leveloffset=+1]
 include::analysen.adoc[leveloffset=+1]

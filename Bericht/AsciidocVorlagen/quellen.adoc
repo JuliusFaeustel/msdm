@@ -2,3 +2,15 @@
 :toc:
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
+
+
+
+
+|===
+
+|Laurenz Wuttke (29 Apr. 2020) Hadoop Einfach Erklärt: Was Ist Hadoop? Was Kann Hadoop?,
+URL: https://datasolut.com/apache-hadoop-einfuehrung/#Unterschied-zwischen-Hadoop-relationalen-Datenbank
+[Letzter Besuch: 5 Feb. 2021].
+|
+
+|===
