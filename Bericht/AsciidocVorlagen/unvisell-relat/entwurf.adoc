@@ -15,7 +15,7 @@ Der konzeptionelle Entwurf basiert auf der Anforderungsanalyse und beschreibt de
 Eine abstrakte Modellierung wurde mittels eines Entity-Relationship-Models (ERM) umgesetzt. (siehe Abbildung 1) 
 
 .Entity-Relationship-Model
-image::ERM.jpg[]
+image::ERM.JPG[]
 
 In Abbildung 1 kann man drei grundlegende Modellelemente eines ERM erkennen. +
 Als blaue Rechtecke sind Entitäten (auch Entity) dargestellt, welche im Allgemeinen ein abgrenzbares Objekt der Realität darstellen. Im Fallbeispiel wären dies Input, Output, Fertigungsauftrag, Linie und Teil. Diese Entitäten besitzen normalerweise Attribute bzw. spezielle Eigenschaften, welche die Entitäten charakterisieren, identifizieren und klassifizieren. Um jedoch eine universelle relationale Struktur zu entwickeln, ist es notwendig die Eigenschaften, welche in keinem Verhältnis zu einer anderen Entität stehen, als eigene Entität zu betrachten. Da Attribute im Gegensatz zu Entitäten Wertausprägungen haben, ist es erforderlich, die Ausprägungen der Entität Merkmal in der Entität Merkmalsausprägung darzustellen. +
@@ -27,7 +27,7 @@ Im Fallbeispiel besitzen nur die Entitäten Input und Output spezielle Eigenscha
 Ziel des logischen Entwurfs ist es, das konzeptionelle Datenmodell in ein relationales Datenmodell zu überführen.
 
 .Relationenmodell
-image::Relationen.jpg[]
+image::Relationen.JPG[]
 
 Die Abbildung 2 zeigt, dass abgeleitete Relationenmodell. Die Beziehungen, welche im konzeptionellen Entwurf noch bestanden, wurden gemäß den Ableitungsregeln aufgelöst. Wichtig für die universelle relationale Struktur sind insbesondere die gelb markierten Verbindungsrelationen, die auf Grund einer mc:mc Verbindung im konzeptionellen Entwurf entstanden. Diese Verbindungsrelationen definieren die Merkmale eines Tupels und dessen Ausprägungen und bestehen aus einer eindeutigen ID und zwei Fremdschlüsseln. Da jedoch mit jeder Relation, die spezielle Merkmale hat, zwei neue Verbindungsrelationen entstehen, steigt die Komplexität schnell an. Um die Komplexität zu kontrollieren, kann die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmal und die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmalsausprägung genutzt werden, um diese zu vereinen. +
 In Abbildung 2 wären das Output2Merkmal und Input2Merkmal bezüglich der Relation Merkmal und Output2Merkmalsausprägung und Input2Merkmalsauprägung bezüglich der Relation Merkmalsausprägung, welche zusammengefasst werden können. Beim Zusammenfassen entsteht jedoch das Problem, dass die neu entstandene Relation sich in einem Attribut auf zwei Relationen, in unserem Fall beispielhaft auf Input und Output, bezieht, wodurch ein Tupel beiden Relationen zugeordnet werden kann. +
@@ -37,7 +37,7 @@ Ein Diskriminator ist ein Attribut einer Relation, das festlegt, welcher Relatio
 Das angepasste Relationenmodell für die universelle relationale Relationenmodell ist in Abbildung 3 dargestellt.
 
 .universelle relationale Struktur im Relationenmodell
-image::Relationen2.jpg[]
+image::Relationen2.JPG[]
 
 Ein wichtiger Punkt im Relationenmodell ist, dass die Relation Merkmal das Attribut Datentyp besitzt. Grund für dieses Attribut ist, dass in der Relation Merkmalsausprägung alle Ausprägungen als _varchar_ gespeichert werden, da diese alle in einem Attribut stehen. Um später den Datentyp einer Ausprägung einfach abfragen zu können, wird er mit dem Merkmal gespeichert.
 

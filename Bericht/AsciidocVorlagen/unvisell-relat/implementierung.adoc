@@ -152,7 +152,7 @@ Durch diese Veränderung ließ sich eine starke Senkung in den Ausführungszeite
 |===
 
 .Ausführungszeiten MySQL-DB in Abhängigkeit von der Puffergröße
-image::Buffervergleich.jpg[]
+image::Buffervergleich.JPG[]
 
 == Anwendungen
 === Programmiersprache
@@ -597,12 +597,12 @@ FOR EACH Linie in Linien {
 Nach Messung aller Ausführungszeiten ergab sich eine deutliche Senkung der Datenbankausführungszeiten durch die Umstellung der Analysevorgehen. (siehe Bild 8)
 
 .Vergleich der Analysevorgehen bezüglich der Datenbankausführungszeit
-image::Analysevorgehen.jpg[]
+image::Analysevorgehen.JPG[]
 
 Jedoch zeigte sich auch in der Ausführungszeit der Skripte ein deutliche Zeitverbesserung. (siehe Bild 9)
 
 .Vergleich der Analysevorgehen bezüglich der Skriptausführungszeit
-image::Analysevorgehen2.jpg[]
+image::Analysevorgehen2.JPG[]
 
 ==== Lessons Learned
 
