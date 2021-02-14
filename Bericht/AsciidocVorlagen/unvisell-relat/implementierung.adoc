@@ -5,20 +5,609 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: unvisell-relat/bilder
 endif::main-file[]
 
 
-== Implementierung der Struktur
-== Implementierung der Datenloader
-== Implementierung der Analysen
+== Systemvoraussetzungen
 
+Alle Implementierungen wurden unter den folgenden Voraussetzungen vorgenommen:
+
+* Windows 10 Pro 64-bit
+* Intel Core i5-8265U
+* 16 GB RAM
+
+== Datenbank
+=== Allgemein
+
+Die universelle relationale Struktur kann einfach über ein relationales DBMS (RDBMS) realisiert werden. +
+Es wurden der MySQL Server 8.0, als Open-Source Variante, und der kostenlose SQL Server Express 2017 (MSSQL-Server) von Microsoft genutzt. +
+Beide Systeme können einfach durch die im Internet bereitgestellten Installer der Hersteller installiert und mit Hilfe eines Assistenten konfiguriert und danach genutzt werden. +
+Für das Anlegen der Datenstruktur ist es wichtig zu wissen, dass die Hersteller unterschiedliche Dialekte der Structured Query Language (SQL) nutzen. + 
+Die folgenden beispielhaften Quelltexte beziehen sich, sofern nicht anders angegeben, auf den MySQL-Dialekt. +
+
+.Code 3 - Anlegen der Tabelle Input mittels Data Definition Language
+[source, sql]
+----
+CREATE TABLE Input (
+  ID 	int(10) NOT NULL AUTO_INCREMENT,
+  SNR 	char(18) NULL,
+  FA	char(20) NULL,
+  TEIL	char(1) NULL,
+  LINIE char(1) NULL,
+  PRIMARY KEY (ID));
+----
+
+.Code 4 - Anlegen eines Fremdschlüssels zwischen den Tabellen Input und Teil
+[source, sql]
+----
+ALTER TABLE Input ADD CONSTRAINT FKInput_TEIL FOREIGN KEY (TEIL) REFERENCES TEIL (TEIL);
+----
+
+Da bei den Analysen, deren Implementierung später noch beschrieben wird, große Datenmengen der Tabellen abgefragt und teilweise über JOINS miteinander verbunden werden, spielen Indizes eine wichtige Rolle, um die Datenabfragen performant zu gestalten. Durch Indizes wird, vereinfacht beschrieben, das vollständige Durchsuchen einer Menge von Tupeln (FullTableScan) vermieden, da bestimmte Attributwerte in einem B-Baum gespeichert werden, was die Laufzeit verringert.
+
+.Code 5 - Anlegen von Indizes für die Tabelle Input
+[source, sql]
+----
+CREATE INDEX INDEX_TBL_Input ON Input (SNR);
+CREATE INDEX INDEX_TBL_Input2 ON Input (TEIL, SNR);
+CREATE INDEX INDEX_TBL_Input3 ON Input (FA, SNR);
+CREATE INDEX INDEX_TBL_Input4 ON Input (LINIE);
+----
+
+Die Auswahl der Attribute, welche in einen Index aufgenommen werden, steht in starkem Zusammenhang, mit den abgefragten Spalten in den Analysen. Beispielsweise bezieht sich Analyse 1 auf die Teilart, weshalb _INDEX_TBL_Input2_ angelegt wurde. +
+An dieser Stelle ist es wichtig zu erwähnen, dass Microsoft mit seinem SQL-Dialekt dem Nutzer mehr Möglichkeiten gibt einen Index zielgenauer zu definieren.
+
+.Code 6 - Anlegen von Indizes mittels Microsoft SQL-Dialekt
+[source, sql]
+----
+CREATE INDEX INDEX_TBL_Input2 ON Input (TEIL) INCLUDE (FA);
+CREATE INDEX INDEX_TBL_MA ON Merkmalsausprägung (MerkmalID) INCLUDE (Ausprägung) WHERE MerkmalID = 21;
+----
+
+Über die INCLUDE-Klausel ist es möglich Werte zu speichern und schnell abzufragen, welche nicht im Indexschlüssel stehen. +
+Über die WHERE- Klausel ist es möglich einen Index nur für gefilterte Werte zu erstellen. +
+
+Die meisten Tupel der Struktur werden dynamisch über die Datenloader erstellt, sofern ein neues Tupel eines Objekts angelegt wird. Doch bevor dieses Laden geschehen kann, müssen die Merkmale der speziellen Daten in der Tabelle Merkmal und die Objekttypen definiert sein. Dabei müssen der Tabelle Merkmal Werte für Bezeichnung, Beschreibung und Datentyp übergeben werden (Code 7). Das Attribut ID muss im MySQL-Dialekt nicht mittels _NULL_ übergeben werden. +
+
+.Code 7 - Anlegen der Merkmale mittels DML
+[source, sql]
+----
+INSERT INTO Merkmal VALUES ('DateIn', 'Zeitstempel der Prüfdaten', 'timestamp');
+INSERT INTO Merkmal VALUES ('NR', 'Eingangszähler', 'int');
+INSERT INTO Merkmal VALUES ('E', 'GreiferID', 'string');
+----
+
+.Code 8 - Anlegen der Objettypen mittels DML
+[source, sql]
+----
+INSERT INTO ObjektTyp VALUES ('Input', 'Input Datensätze');
+INSERT INTO ObjektTyp VALUES ('Output', 'Output Datensätze');
+----
+
+=== Messung der Datenbankausführungszeiten der Analysen
+==== MySQL
+
+Der MySQL-Server stellt standardmäßig die Status der 100 zuletzt ausgeführten Queries in der Systemtabelle _INFORMATION_SCHEMA.PROFILING_ mit bestimmten Merkmalen bereit, sofern das Profiling aktiviert wurde (siehe Code 9).
+
+.Code 9 - Aktivieren des Profilings im MySQL-Server
+[source, sql]
+----
+SET @@profiling = 1;
+----
+
+Normalerweise verfügt diese Variante über die Möglichkeit, die Größe der Historie (auch _profiling_history_size_) zu bestimmen (siehe Code 10). Jedoch funktionierte dies im Projekt unzuverlässig, weshalb immer der Standardwert von 100 genutzt wurde, um die Zeiten zuverlässig zu messen und die ausgeführten Queries zu zählen (siehe Code 11). 
+
+.Code 10 - Setzen der Query-Historie auf 500
+[source, sql]
+----
+SET @@profiling_history_size = 500;
+----
+
+.Code 11 - Messen der Ausführungszeiten und Zählen der ausgeführten Queries
+[source, sql]
+----
+SELECT SUM(DURATION) FROM INFORMATION_SCHEMA.PROFILING;
+SELECT COUNT(Query_ID) FROM INFORMATION_SCHEMA.PROFILING WHERE STATE = 'end';
+----
+
+Das Zurücksetzen der Historie kann einfach über die folgende Befehlsfolge im Codeabschnitt 12 erfolgen.
+
+.Code 12 - Initialisieren der Systemtabelle
+[source, sql]
+----
+SET @@profiling = 0;
+SET @@profiling_history_size = 0;
+SET @@profiling_history_size = 100;
+SET @@profiling = 1;
+----
+
+==== MSSQL
+
+Für die Nutzung des SQL Server Express 2017 wurde das Microsoft SQL Server Management Studio 17 genutzt. Diese Software ermöglicht eine einfache Administration des Datenbankservers. +
+Über den integrierten _XEventProfiler_ können, ab Aufruf des Profilers, alle Events und Queries des Datenbankservers bzw. einer Datenbank, welche in diesem Zeitraum stattfinden, getrackt werden. +
+Da Systemevents während der Ausführung auftreten, muss nach dem Stoppen des Datenfeed die Ergebnismenge nach dem _client_app_name_ gruppiert werden, um nur die gewünschten Ereignisse auszuwerten. Nach der Gruppierung ist noch eine Aggregation zur Summe des Feldes _duration_ möglich, um die Ausführungszeit direkt abzulesen. 
+
+.Menü zur Gruppierung und Aggregation der getrackten Queries im Microsoft SQL Server Management Studio 17
+image::SQLStudio.jpg[]
+
+=== Lessons Learned
+
+Nachdem in beiden Systemen dieselbe Struktur mit gleichen Indizes (auf Basis MySQL) erstellt wurde und erste Analysen gefahren wurden, zeigte sich, dass drei der fünf Analysen auf dem MSSQL-Server langsamer liefen.
+Nach der Fehlersuche stellte sich heraus, dass der Buffer des MSSQL-Servers, mit 1.4 GB, sehr schnell aufgebraucht ist. Da es sich um eine kostenlose Variante von Microsoft handelt, besteht keine Möglichkeit diesen Buffer zu erhöhen. +
+Da beim MySQL-Server der Buffer auch noch nicht betrachtet wurde, wurde hier die Größe überprüft (800 MB voreingestellt) und auf 6 GB erhöht. Die Erhöhung ist möglich, indem in der Datei _/ProgramData/MySQL/MySQLServer8.0/my.ini_ die Variable _innodb_buffer_pool_size_ auf _6G_ gesetzt wurde. Wichtig ist dabei, dass die Datei mit Rechten des Administrators geändert werden muss. +
+Durch diese Veränderung ließ sich eine starke Senkung in den Ausführungszeiten der Analysen erreichen (siehe Tabelle 1 und Bild ).
+
+.Ausführungszeiten MySQL-DB in Abhängigkeit von der Puffergröße
+[%header, cols="10%,35%,35%,20%"]
+|===
+
+|Analyse | Ausführungszeit 800MB Puffer |Ausführungszeit 6GB Puffer |Senkung
+|001     |19 min : 19 sek               |06 min : 12 sek            | 67.9 %
+|002     |00 min : 56 sek               |00 min : 07 sek            | 86.6 %
+|004     |23 min : 20 sek               |06 min : 24 sek            | 72.6 %
+|005     |31 min : 49 sek               |07 min : 28 sek            | 76.5 %
+|007     |07 min : 31 sek               |00 min : 43 sek            | 90.4 %
+
+|===
+
+.Ausführungszeiten MySQL-DB in Abhängigkeit von der Puffergröße
+image::Buffervergleich.jpg[]
+
+== Anwendungen
+=== Programmiersprache
+
+Zur Implementierung der Anwendungen wurde die Programmiersprache Python verwendet. +
+Im Projekt wurde Visual Studio Code als Entwicklungsumgebung (IDE) genutzt, welche es ermöglicht, einfach die Python-Extension herunterzuladen und zu nutzen. +
+Für die Implementierung wurde die Python-Version 3.7.3 genutzt.
+
+=== Verwendete Bibliotheken zur Kommunikation zwischen Anwendung und Datenbank
+==== MySQL
+
+Zur Verbindung zwischen Anwendung und MySQL-Datenbankserver wurde die Python-Bibliothek _mysql-connector-python_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 13 dargestellten Code installiert werden. +
+
+.Code 13 - Installieren der MySQL-Bibliothek für Python
+[source, sh]
+----
+pip install mysql-connector-python
+----
+
+Damit die Anwendung eine Verbindung zur Datenbank herstellt, muss die Bibliothek eingebunden und die Parameter _user_, _password_, _host_ und _database_ übergeben werden. Um Operationen ausführen zu können, muss ein Cursor genutzt werden. (siehe Code 14)
+
+.Code 14 - Herstellen der Verbindung und Erstellen eines Cursors
 [source, python]
 ----
-@app.route('/')
-def home():
-    return render_template("inline.html")
+import mysql.connector
+
+connection = mysql.connector.connect(user = "root", password = "demo", host = "127.0.0.1",  database = "project")
+cursor = connection.cursor()
 ----
 
-== Evolution des Datenmodells
+Für SELECT-Abfragen muss nun lediglich ein Statement der Cursor-Funktion _execute_ übergeben werden, damit die Abfrage ausgeführt wird. Der Cursor bietet drei Methoden, um zu definieren, welche Menge der Ergebnismenge bereitgestellt wird:
 
+* _fetchall()_ für die komplette Ergebnismenge
+* _fetchone()_ für die erste Zeile der Ergebnismenge
+* _fetchmany(size = x )_ für die ersten x Zeilen der Ergebnismenge
+
+.Code 15 - Ausführen einer Abfrage und Fetch der kompletten Ergebnismenge
+[source, python]
+----
+statement = "SELECT Input.FA FROM Input WHERE TEIL = 'A' GROUP BY Input.FA ORDER BY Input.FA;"
+  cursor.execute(statement)
+  FA_List = cursor.fetchall()
+----
+
+Sofern ein Insert, Update oder Delete durchgeführt wurde, muss nach der Ausführung mittels _execute()_ ein Commit erfolgen, um die Änderungen zu übernehmen. (siehe Code 16)
+
+.Code 16 - Verbindungscommit nach Insert-Anweisung
+[source, python]
+----
+statement = "INSERT INTO LINIE VALUES (1);"
+  cursor.execute(statement)
+  connection.commit()
+----
+
+Am Ende der Anwendung können der Cursor und die Verbindung einfach über die Funktion _close()_ geschlossen werden. (siehe Code 17)
+
+.Code 17 - Schließen des Cursors und Abbau der Verbindung
+[source, python]
+----
+cursor.close()
+connection.close()
+----
+
+Genauere Ausführungen und weitere Informationen sind in der link:https://dev.mysql.com/doc/connector-python/en/[MySQL-Dokumentation] verfügbar.
+
+==== MSSQL
+Zur Verbindung zwischen Anwendung und MSSQL-Datenbankserver wurde die Python-Bibliothek _pyodbc_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 18 dargestellten Code installiert werden. Außerdem muss der "Microsoft ODBC Driver for SQL Server", welcher in der Microsoft Dokumentation zu finden ist (link:https://docs.microsoft.com/de-de/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver15#download-for-windows[ODBC Driver]), installiert werden. +
+
+.Code 18 - Installieren der pyodbc-Bibliothek für Python
+[source, sh]
+----
+pip install pyodbc
+----
+
+Im Unterschied zu MySQL muss zum Verbindungsaufbau noch der weitere Parameter _DRIVER_ übergeben werden. Um Operationen ausführen zu können, muss auch hier ein Cursor genutzt werden. (siehe Code 19)
+
+.Code 19 - Herstellen der Verbindung und Erstellen eines Cursors
+[source, python]
+----
+import pyodbc
+
+connection = pyodbc.connect(driver = '{ODBC Driver 17 for SQL Server}', server = 'Desktop\\SQLEXPRESS' , database = 'project', UID = 'root', PWD = 'demo')
+cursor = connection.cursor()
+----
+
+Alle weiteren im MySQL-Teil ausgeführten Befehle gelten unter pyodbc ebenfalls in der gleichen Form.
+
+=== Messung der Skriptausführungszeiten
+
+Zur Messung der Skriptausführungszeiten wurde von der Python-Bibliothek _time_ die Methode _process_time_ns()_ geladen, mit der die Summe der System- und Benutzer-CPU-Zeit des aktuellen Prozesses in Nanosekunden berechnet werden kann. Diese Methode schließt die während des Ruhezustands verstrichene Zeit nicht ein. +
+
+.Code 20 - Messen der Skriptausführungszeit
+[source, python]
+----
+from time import process_time_ns()
+
+start = process_time_ns()
+# Code der auszuführen ist
+stop = process_time_ns()
+
+duration = stop - start
+----
+
+=== Datenloader
+
+Die Datenloader, über die Datensätze in die Struktur geladen werden, unterscheiden sich auf Grund der unterschiedlichen SQL-Dialekte. Jedoch ist das allgemeine Vorgehen, welches hier erläutert wird, gleich. Ein kleiner Unterschied liegt nur in der Verknüpfung des Outputs mit dem Input, was später erläutert wird. +
+Voraussetzung, bevor Datensätze eingelesen werden können, ist wie bereits erwähnt, dass Merkmale und Objekttypen bereits in der Struktur definiert wurden. +
+
+Aus dem bereits erläuterten Watchdog, erhält die Anwendung den Pfad des Textdokuments, welches ausgelesen werden muss. Im Codebeispiel 21 ist dargestellt, wie eine Datei mit Leserechten geöffnet wird, der Inhalt mittels _read()_ ausgelesen und als String gespeichert wird und dieser String aufgearbeitet wird, dass alle Elemente, die durch ein Semikolon getrennt sind, ein Element in einer Liste werden. +
+
+.Code 21 - Auslesen der vorhandenen Datei
+[source, python]
+----
+def insert (file):
+  datei = open(file,'r')
+  values = datei.read()
+  data = values.split(';')
+----
+
+Die Verfahren zum Einlesen der Input- und Output-Datensätze sind sehr ähnlich. Deshalb wurden die Verfahren zusammen in den Bildern 6 und 7 dargestellt.
+
+.ereignisgesteuerte Prozesskette zur Darstellung des Einlesens von Werten anderer Objekttypen
+image::EPK1.jpg[]
+
+.ereignisgesteuerte Prozesskette zur Darstellung des Einlesens spezieller Merkmale sind
+image::EPK2.jpg[]
+
+Nachdem ein Output-Datensatz in der Tabelle Output angelegt worden ist (Bild 7, Ereignis 2), muss dieser noch, sofern möglich, mit einem Input-Datensatz verknüpft werden. Dies passiert über die Zeitstempel der Datensätze. Sofern es für die Seriennummer nur einen Input-Datensatz gibt, erfolgt eine direkte Verknüpfung, außer die Zeitdifferenz zwischen Output und Input ist negativ. Sollten jedoch mehrere Input-Datensätze zu einer Seriennummer vorhanden sein, muss die Zeitdifferenz zwischen Output und jedem passenden Input berechnet werden. Dabei wird der Output mit dem Input verknüpft zu dem die kleinste nicht negative Differenz besteht. +
+
+
+=== Analysen
+==== Allgemein
+
+Bevor mit der Implementierung der vorgegebenen Analysen begonnen wurde, wurde über Möglichkeiten der Realisierung in Python nachgedacht. Grundsätzlich lassen sich drei Varianten realisieren, welche mit ihren Vor- und Nachteilen, die sich auch auf LessonsLearned des Projekts zurückführen lassen, in der folgenden Tabelle dargestellt sind. +
+
+.Realisierungsmöglichkeiten der Analysen
+[%header, cols="10%,30%a,30%a,30%a"]
+|===
+
+|             
+|(1) kleine Abfragen mit genauen WHERE-Klauseln (bspw. je SNR) 
+|(2) mittlere Abfragen mit Mengen in WHERE-Klauseln (bspw. je FA) 
+|(3) große Abfragen
+
+|Vorteile     
+|* gesamtes Vorgehen einfach nachvollziehbar 
+* geringer Aufwand in Programmiersprache
+* verständlichere SQL-Abfragen                                         
+|* geringere Netzwerklast als bei kleinen häufigen Abfragen
+* Verteilung der Komplexität in Abfragen und Programmiersprache                                           
+|* einmalige Netzwerklast
+
+|Nachteile    
+|* Netzwerklast dauerhaft
+* in Summe höhere Abfragezeiten auf der Datenbank              
+|* dauerhafte Netzwerklast größer als bei großen Abfragen            
+|* Vorgehen schwerer nachvollziehbar
+* höherer Aufwand in Programmiersprache
+* Gruppierungen, die bereits einfach mit SQL gelöst werden können, müssen in der Programmiersprache erledigt werden
+
+|===
+
+Zum Test wurde versucht über jede Variante eine vordefinierte Datenmenge aus der Datenbank abzufragen. Da sich die Zeitergebnisse für diese Datenmenge nur gering unterschieden, wurde entschieden, um die unbekannten Analysen vorerst in kleinen logischen Schritten zu lösen, dass die Variante 1 umgesetzt wird. +
+Nach Fertigstellung der Variante 1 für jede Analyse wurde zum Vergleich Variante 2 für die Analysen 1, 4 und 5 umgesetzt, da dort relativ lange Zeiten auftraten. +
+
+In den folgenden Absätzen werden kurz selbstdefinierte Funktionen gezeigt und das Vorgehen in den Analysen für die verschiedenen Varianten als Pseudocode, zur einfachen Verständlichkeit erläutert. +
+
+Für die Realisierung der Variante 2 wurde die Python-Bibliothek _pandas_ genutzt, welche einfache und flexible Möglichkeiten der Datenanalyse und -manipulation bietet. +
+
+.Code 22 - Installieren der pandas-Bibliothek für Python
+[source, sh]
+----
+pip install pandas
+----
+
+==== Eigene Funktionen
+
+Zur Umsetzung der Implementierungen wurden zwei selbstdefinierte Funktionen genutzt. +
+Zum einen eine Funktion, um Datumswerte, welche in der Struktur als _VARCHAR_ gespeichert sind, in Sekunden für die Zeitdifferenzberechnung umzuwandeln. (siehe Code 23)
+
+.Code 23 - Umwandeln eines Datumsstrings in Sekunden
+[source, python]
+----
+import datetime, time
+
+def convert_from_datestring( TimeString ): 
+  Date = datetime.datetime.strptime(TimeString, "%Y-%m-%dT%H:%M:%S.%f")
+  Second = time.mktime(Date.timetuple())
+  return Second
+----
+
+Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 24)
+
+.Code 24 - Umwandeln eines Sekundenwerts in einen einfach lesabren String
+[source, python]
+----
+def convert_from_s( seconds ): 
+  minutes, seconds = divmod(seconds, 60) 
+  hours, minutes = divmod(minutes, 60) 
+  days, hours = divmod(hours, 24) 
+  string = str(int(days))+"T:"+str(int(hours))+"h:"+str(int(minutes))+"m:"+str(int(seconds))+ "s"
+  return string
+----
+
+==== Analyse 1 - Taktung pro Artikel
+===== Variante 1 - kleine Abfragen
+
+.Code 25 - Pseudocode Analyse 1.1
+[source, Pseudocode]
+----
+Abfrage aller Teilarten;
+
+FOR EACH Teilart der Teilarten {
+  Anzahl gefertigter Teile pro Teiltyp ermitteln;
+  Fertigungsaufträge des Teiltyps abfragen;
+
+  FOR EACH Fertigungsauftrag in Fertigungsaufträgen {
+    Anzahl gefertigter Teile pro Fertigungsauftrag ermitteln;
+    Alle Seriennummern abfragen, die mehr als einen Input in diesem Fertigungsauftrag haben (Auschuss);
+
+    FOR EACH Seriennummer im Ausschuss {
+      Anzahl Inputs für Seriennummer finden;
+    }
+
+    Minimum, Maximum, Durchschnitt des Ausschusses bestimmen;
+    InputID's abfragen, die einen Output haben, zum Fertigungsauftrag gehören und eine Seriennummer haben;
+
+    FOR EACH InputID in InputID's {
+      Input-Zeit abfragen und konvertieren;
+      Alle OutputID's für Input ID abfragen;
+
+      FOR EACH OutputID in OutputID's {
+        Output-Zeit abfragen, konvertieren und Differenz zu Input-Zeit berechnen;
+      }
+
+      Maximum der Differenzen bestimmen;
+    }
+
+    Minimum, Maximum, Durchschnitt aller Differenzen pro Fertigungsauftrag bestimmen;
+    Ausgabe pro Fertigungsauftrag;
+  }
+}
+----
+
+===== Variante 2 - mittlere Abfragen
+
+.Code 26 - Pseudocode Analyse 1.2
+[source, Pseudocode]
+----
+Abfrage aller Teilarten;
+
+FOR EACH Teilart der Teilarten {
+  Anzahl gefertigter Teile pro Teiltyp ermitteln;
+  Fertigungsaufträge des Teiltyps abfragen;
+
+  FOR EACH Fertigungsauftrag in Fertigungsaufträgen {
+    Anzahl gefertigter Teile pro Fertigungsauftrag ermitteln;
+    Alle InputID's mit ihren Input-Zeitstempeln abfragen;
+    Für alle InputID's den maximalen Output-Zeitstempel (über erstellte Verknüpfung) ermitteln; 
+
+    FOR EACH InputID in InputID's {
+      Suche des passenden Outputs in Outputs;
+      Zeitstempel konvertieren und Differenz berechnen;
+    }
+
+    Minimum, Maximum, Durchschnitt aller Differenzen pro Fertigungsauftrag bestimmen;
+    Alle Seriennummern abfragen, die mehr als einen Input in diesem Fertigungsauftrag haben (Auschuss);
+    Anzahl des Ausschusses pro Seriennummer für alle Seriennummern abfragen;
+    Minimum, Maximum, Durchschnitt des Ausschusses bestimmen;
+    Ausgabe pro Fertigungsauftrag;
+  }
+}
+----
+
+==== Analyse 2 - Auftrennung
+
+.Code 27 - Pseudocode Analyse 2
+[source, Pseudocode]
+----
+Abfrage aller Teilarten;
+
+FOR EACH Teilart der Teilarten {
+  Anzahl gefertigter Teile pro Teiltyp ermitteln;
+  Fertigungsaufträge des Teiltyps abfragen;
+
+  FOR EACH Fertigungsauftrag in Fertigungsaufträgen {
+    Anzahl gefertigter Teile pro Fertigungsauftrag ermitteln;
+    Alle Seriennummern abfragen, die mehr als einen Input in diesem Fertigungsauftrag haben (Auschuss);
+
+    FOR EACH Seriennummer im Ausschuss {
+      InputID's und die Zeitstempel ermitteln;
+
+      FOR EACH InputID in InputID's {
+        Output-Zeitstempel der InputID abfragen;
+
+        IF kein Output-Zeitstempel vorhanden {
+          nächste InputID;
+        }
+
+        IF aktuelle InputID nicht die Letzte { 
+          Output-Zeitstempel der InputID konvertieren;
+          Input-Zeitstempel der nächsten InputID konvertieren;
+          Differenz berechnen;
+        }
+      }
+    }
+  }
+  Minimum, Maximum, Durchschnitt aller Differenzen pro Teilart bestimmen;
+  Ausgabe pro Teilart;
+}
+----
+
+==== Analyse 4
+===== Variante 1 - kleine Abfragen
+
+.Code 28 - Pseudocode Analyse 4.1
+[source, Pseudocode]
+----
+Abfrage aller LadungsträgerIn;
+
+FOR EACH Ladungsträger der LadungsträgerIn {
+  Anzahl gefertigter Teile pro Ladungsträger ermitteln;
+  InputID's des aktuelle Ladungsträgers abfragen;
+
+  FOR EACH InputID in InputID's {
+    Input-Zeitstempel abfragen und konvertieren;
+    OutputID's zur aktuellen InputID ermittlen;
+
+    FOR EACH OutputID in OutputID's {
+      Output-Zeitstempel abfragen und konvertieren;
+    }
+  }
+
+  Minimum Input-Zeitstempel bestimmen;
+  Maximum Output-Zeitstempel bestimmen;
+  Differenz berechnen;
+  Ausgabe pro Ladungsträger;
+}
+----
+
+===== Variante 2 - mittlere Abfragen
+
+.Code 29 - Pseudocode Analyse 4.2
+[source, Pseudocode]
+----
+Abfrage aller LadungsträgerIn;
+
+FOR EACH Ladungsträger der LadungsträgerIn {
+  Anzahl gefertigter Teile pro Ladungsträger ermitteln;
+  InputID's des aktuelle Ladungsträgers abfragen;
+  minimalen Input-Zeitstempel der InputID's abfragen;
+  maximalen Output-Zeitstempel der mit den InputID's verknüpften Outputs ermitteln;
+  Differenz berechnen;
+  Ausgabe pro Ladungsträger;
+}
+----
+
+==== Analyse 5
+===== Variante 1 - kleine Abfragen
+
+.Code 30 - Pseudocode Analyse 5.1
+[source, Pseudocode]
+----
+Abfrage aller Teilarten;
+
+FOR EACH Teilart der Teilarten {
+  genutzte LadungsträgerIn für den Teiltyp abfragen;
+
+  FOR EACH Ladungsträger in LadungsträgerIn {
+    Anzahl gefertigter Stücke pro Ladungsträger des Teiltyps ermitteln;
+    InputID's des Teiltypen abrufen, die auf dem aktuellen Ladungsträger gefertigt wurden;
+
+    FOR EACH InputID in InputID's {
+      Input-Zeitstempel abfragen und konvertieren;
+      OutputID's zur InputID abfragen;
+
+      FOR EACH OutputID in OutputID's {
+        Output-Zeitstempel abfragen und konvertieren;
+        Differenz zwischen Output und Input berechnen;
+      }
+      Maximum der Differenzen bestimmen;
+    }
+    Minimum, Maximum, Durchschnitt aller Differenzen pro Ladungsträger bestimmen;
+    Ausgabe pro Ladungsträger;
+  }
+}
+----
+
+===== Variante 2 - mittlere Abfragen
+
+.Code 31 - Pseudocode Analyse 5.2
+[source, Pseudocode]
+----
+Abfrage aller Teilarten;
+
+FOR EACH Teilart der Teilarten {
+  genutzte LadungsträgerIn für den Teiltyp abfragen;
+
+  FOR EACH Ladungsträger in LadungsträgerIn {
+    Anzahl gefertigter Teile pro Ladungsträger des Teiltyps ermitteln;
+    InputID's des Teiltypen abrufen, die auf dem aktuellen Ladungsträger gefertigt wurden;
+    alle InputID's mit ihren Input-Zeitstempeln abfragen;
+    maximale Output-Zeitstempel der mit den InputID's verknüpften Outputs ermitteln;
+    Differenzen berechnen zwischen zusammengehörigen Outputs und Inputs;
+    Minimum, Maximum, Durchschnitt ermitteln;
+    Ausgabe pro Ladungsträger;
+  }
+}
+----
+
+==== Analyse 6
+
+.Code 32 - Pseudocode Analyse 6
+[source, Pseudocode]
+----
+Abfrage aller Linien;
+
+FOR EACH Linie in Linien {
+  Fertigungsaufträge der Linie abfragen;
+
+  FOR EACH Fertigungsauftrag in Fertigungsaufträge {
+    alle Input-Zeitstempel und Teilart des Fertigungsauftrags abfragen;
+    minimalen und maximalen Input-Zeitstempel mit Teilart als ein Element in einer Liste speichern;
+  }
+  Liste nach minimaler Input-Zeit sortieren;
+
+  FOR EACH Element der Liste {
+    maximalen Input-Zeitstempel des aktuellen Elements konvertieren;
+    minimalen Input-Zeitstempel des nächsten Elements konvertieren;
+    Differenz zwischen maximalen Input-Zeitstempel des aktuellen Elements und minimalen Input-Zeitstempel des nächsten Elements bilden;
+    IF Differenz positiv {
+      Wechsel der Teilart mit Differenzzeit notieren;
+    }
+  }
+
+  Minimum, Maximum, Durchschnitt der Wechselzeiten pro Linie berechnen;
+}
+----
+
+==== Auswertung
+
+Nach Messung aller Ausführungszeiten ergab sich eine deutliche Senkung der Datenbankausführungszeiten durch die Umstellung der Analysevorgehen. (siehe Bild 8)
+
+.Vergleich der Analysevorgehen bezüglich der Datenbankausführungszeit
+image::Analysevorgehen.jpg[]
+
+Jedoch zeigte sich auch in der Ausführungszeit der Skripte ein deutliche Zeitverbesserung. (siehe Bild 9)
+
+.Vergleich der Analysevorgehen bezüglich der Skriptausführungszeit
+image::Analysevorgehen2.jpg[]
+
+==== Lessons Learned
+
+Durch eine starke Verschachtelung in FOR-Schleifen der Variante 1 aller Analysen ist es möglich sehr genaue SQL-Statements zu entwerfen und so nur einen kleinen Teil der gebrauchten Daten zu manipulieren, was den Manipulationsaufwand in Python verringert. Jedoch entstehen dadurch sehr großen Analysen mit sehr vielen Abfragen, welche der Datenbank gestellt werden müssen. 
+
+Mit Variante 2 sind weniger Abfragen nötig, jedoch müssen die Daten aufwendiger mittels Python manipuliert werden. Demgegenüber zeigte sich aber, dass dieser Mehraufwand sich deutlich in den Datenbank- und Skriptausführungszeiten widerspiegelt.
+
+Interessant wäre noch ein Vergleich mit Variante 3 gewesen, wofür aber leider die Zeit fehlte.

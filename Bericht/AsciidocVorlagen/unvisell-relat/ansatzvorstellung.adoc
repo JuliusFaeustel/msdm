@@ -5,9 +5,26 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: unvisell-relat/bilder
 endif::main-file[]
 
 
 
 == Datenbankvorstellung
+
+Grundlage dieser Datenstruktur ist, wie bei der proprietären Struktur, ein relationales Datenmodell. Dieses Datenmodell soll die speziellen Daten beliebiger Struktur aufnehmen. +
+Jedoch ist im Vergleich zur proprietären Struktur, ein weiteres Ziel, dass die Struktur beliebig, weitere spezielle Daten aufnehmen kann, ohne dass diese erweitert werden muss. Genauer betrachtet, bedeutet dies, dass zur Aufnahme neuer Daten lediglich Data Manipulation Language (DML), anstatt Data Definition Language (DDL), verwendet werden soll. +
+
+.Code 1 - Beispiel für Data Manipulation Language
+[source, sql]
+----
+INSERT INTO Table1 VALUES('Test', 123);
+----
+
+.Code 2 - Beispiel für Data Definition Language
+[source, sql]
+----
+ALTER TABLE Table1 ADD COLUMN zipCode CHAR(5);
+----
+
+Um bereits jetzt einen Grund für die Umsetzung und gleichzeitig einen Vorteil dieser Struktur zu nennen, ist es wichtig zu verstehen, dass mit Codebeispiel 1 ausschließlich Tupel in eine Relation geschrieben werden, währenddessen im Codebeispiel 2 die Datenstruktur verändert wird, was viele Systemtest und damit einen Aufwand mit sich bringt.  
