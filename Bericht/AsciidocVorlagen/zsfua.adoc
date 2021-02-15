@@ -2,3 +2,11 @@
 :toc:
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
+
+
+== Lessons Learned
+
+Die wichtigste Entscheidung ist welche Daten Zusammenhänge wie gespeichert werden. Wenn diese Zusammenhänge durch die Datenbankstruktur vorgegeben werden sind Abfragen einfach und performant. Wenn diese Beziehungen aber nicht gespeichert werden müssen diese Informationen durch die Abfragen wiederhergestellt werden. So sind Abfragen in der proprietären Struktur mit einfachen SQL-Abfragen möglich, während bei der universellen Struktur Abfrage Ergebnisse zum Teil zwischengespeichert werden müssen um die richtige Analyse zu ermöglichen. Das sollte man berücksichtigen, im besonderen, da Analysen besonders wertvoll sind, wenn diese durch Mitarbeiter der Fachdomäne erstellt werden können.
+
+== Fazit
+Das Projekt hat gezeigt, dass es bei der Datenbank und Datenmodell Auswahl wie bei den meisten Architekturentscheidungen keine allgemeingültige Antwort auf die Frage "Was ist die beste Lösung?" gibt. Dafür ist die Variabilität der Anforderungen zwischen den verschiedenen Anwendungsgebieten zu hoch. Man muss somit von Projekt zu Projekt unterscheiden, was die am besten Umsetzbare Lösung ist. In realen Projekten kommen natürlich auch neben technischen Anforderungen, einschränkende Faktoren wie Kosten, bestehende Datenbankserver und Fähigkeiten des Entwicklerteams kommen hinzu. Damit kann die Arbeit hoffentlich dem Leser vermitteln, welche Lösung der vier in welcher Situation die meisten Vorteile hat.

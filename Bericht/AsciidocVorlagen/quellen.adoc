@@ -12,5 +12,8 @@
 URL: https://datasolut.com/apache-hadoop-einfuehrung/#Unterschied-zwischen-Hadoop-relationalen-Datenbank
 [Letzter Besuch: 5 Feb. 2021].
 |
+Übersicht Über AWS IoT Analytics  Amazon Web Services,
+URL: https://aws.amazon.com/de/iot-analytics/?c=i&sec=srv [Letzter Besuch: 8 Feb. 2021].
+|
 
 |===

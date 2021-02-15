@@ -17,7 +17,7 @@ image::analyse1.png[title="Analyse 1"]
 Diese Analyse beschäftigt sich nur mit Ausschuss Artikeln, also Werkstücke die mehrmals in die Maschine eingelegt worden
 sind, also deren SNR n In-Datensätze besitzt. Dabei wurde zunächst die Differenz zwischen Ende des fehlerhaften Vorgangs
 und Beginn des neuen Vorgangs gemessen. Auch hier wurde wieder Minimun, Maximun und der Durchschnitt berechnet. Aber
-über die Gruppierung Teil. Auch wurde der Anteil an Fehlerhaften Bearbeitungen wurde ermittelt.
+über die Gruppierung Teil. Weiterhin wurde der Anteil an Fehlerhaften Bearbeitungen wurde ermittelt.
 
 
 image::analyse2min.png[title="Minimun"]
@@ -44,13 +44,8 @@ Minimum, Maximum und den Durchschnitt gezeichnet.
 
 image::analyse5minavg.png[title="Minimun und Durschnitt"]
 image::analyse5max.png[title="Maximum"]
+
 == Analyse 6
-Die zunächst vom Themensteller geforderte sechste Analyse hatte sich als obsolet herausgestellt. Denn sie sollte
-die Umrüstzeiten von Teil und Ladungsträger analysieren. Der Informationsgehalt wäre aber gering gewesen, da ein
-Ladungsträger meist nur einmal
-
-
-== Analyse 7
 Die letzte Analyse zeigt die Umrüstzeiten zwischen den Teilen. An der Y-Achse stehen die Teile von denen auf die Teile
 die an der X-Achse umgerüstet wurde. Je heller die Farbe ist, desto höher ist der Wert. Hier wurde Minimun, Maximum
 und der Durchschnitt pro Umrüstvorgang bestimmt.
