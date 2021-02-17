@@ -16,6 +16,52 @@ Alle Implementierungen wurden unter den folgenden Voraussetzungen vorgenommen:
 * Intel Core i7-1065G7
 * 16 GB RAM
 
+== Datenbank
+=== Allgemein
+
+Über ein relationales Datenbankmanagementsystem (RDBMS) kann die proprietäre Datenstruktur realisiert werden. Es wurde über XAMPP, einem kostenlosen Programmpaket von freier Software, welche meiste für ein Apache Webserver verwendet wird, ein MySQL Server 8.0 installiert und konfiguriert. +
+Um das relationale Datenmodell einfach zu realisieren, wurde zusätzlich HeidiSQL installiert, einem freien Client für das Datenbanksystem MySQL. Es wird hierbei die Structured Query Language (SQL) genutzt. +
+ +
+Um dies zu verdeutlichen folgen Quelltextbeispiele. Diese zeigen wie eine Tabelle angelegt, Daten eingetragen, sowie Fremdschlüsselbeziehung erstellt werden.  
+
+.Code 3 - Anlegen der Tabelle Database
+[source, sql]
+----
+CREATE TABLE `Database` 
+(
+  baseID    int NOT NULL AUTO_INCREMENT,
+  SNR 	    varchar(18) NOT NULL,
+  FA	    varchar(12),
+  TEIL	    varchar(12),
+  LINIE     varchar(12),
+  Fehler    varchar(12),
+  Begintime datetime,
+  Endtime   datetime,
+  PRIMARY KEY (baseID)
+);
+----
+
+.Code 4 - Daten in Database eintragen
+[source, sql]
+----
+INSERT INTO `Database` (`SNR`,`FA`,`TEIL`,`LINIE`,`Fehler`,`Begintime`,`Endtime`)
+    VALUES ('1923219423129', '009606', 'A', '1', '0', '2018-01-02T05:47:45', '2018-01-02T05:48:45');
+----
+
+.Code 5 - Fremdschlüsselbeziehung anlegen
+[source, sql]
+----
+ALTER TABLE `Database` ADD CONSTRAINT FKDatabase FOREIGN KEY (`baseID`) REFERENCES `Input` (`baseID`);
+----
+
+Um gezielte Abfragen zu tätigen, die später für die Analyse benötigt werden, bedarf es ein SELECT-STATEMENT mit einer WHERE-CLAUSEL. Dadurch wird eine gute Performance gesichert.
+
+.Code 6 - SELECT-Statement inkl. WHERE-Clausel
+[source, sql]
+----
+SELECT * FROM `Database` WHERE `baseID` = `2`
+----
+
 == Implementierung der Struktur
 == Implementierung der Datenloader
 == Implementierung der Analysen
