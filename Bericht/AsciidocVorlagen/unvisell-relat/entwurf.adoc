@@ -26,7 +26,7 @@ Im Fallbeispiel besitzen nur die Entitäten Input und Output spezielle Eigenscha
 
 Ziel des logischen Entwurfs ist es, das konzeptionelle Datenmodell in ein relationales Datenmodell zu überführen.
 
-.Relationenmodell
+.Relationenmodell +
 image::Relationen.JPG[]
 
 Die Abbildung 2 zeigt, dass abgeleitete Relationenmodell. Die Beziehungen, welche im konzeptionellen Entwurf noch bestanden, wurden gemäß den Ableitungsregeln aufgelöst. Wichtig für die universelle relationale Struktur sind insbesondere die gelb markierten Verbindungsrelationen, die auf Grund einer mc:mc Verbindung im konzeptionellen Entwurf entstanden. Diese Verbindungsrelationen definieren die Merkmale eines Tupels und dessen Ausprägungen und bestehen aus einer eindeutigen ID und zwei Fremdschlüsseln. Da jedoch mit jeder Relation, die spezielle Merkmale hat, zwei neue Verbindungsrelationen entstehen, steigt die Komplexität schnell an. Um die Komplexität zu kontrollieren, kann die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmal und die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmalsausprägung genutzt werden, um diese zu vereinen. +
