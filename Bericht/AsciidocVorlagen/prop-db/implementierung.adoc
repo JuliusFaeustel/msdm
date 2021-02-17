@@ -8,6 +8,13 @@ ifdef::main-file[]
 :imagesdir: document-oriented/bilder
 endif::main-file[]
 
+== Systemvoraussetzungen
+
+Alle Implementierungen wurden unter den folgenden Voraussetzungen vorgenommen:
+
+* Windows 10 Home 64-bit
+* Intel Core i7-1065G7
+* 16 GB RAM
 
 == Implementierung der Struktur
 == Implementierung der Datenloader
