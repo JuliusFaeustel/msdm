@@ -16,9 +16,17 @@ Um dies abstrakt darzustellen wurde ein Entity-Relationship-Models (ERM) modelli
 .Entity-Relationship-Model
 image::Konzeptioneller_entwurf.png[]
 
-Abbildung 1 zeigt eine ERM, bestehend aus grundlegenden Modellelementen. +
+Abbildung 1 zeigt eine ER-Modell, bestehend aus grundlegenden Modellelementen. +
 Die Entitäten werden durch die blauen Rechtecke dargestellt, in diesem Beispiel Input, Output sowie Database. Attribute sind an Entitäten verknüpft und werden hier als blaue Ovale dargestellt. Diese klassifizieren, identifizieren und charakterisieren Entitäten, bei Database sind es hier zum Beispiel SNR (Seriennummer), Begintime und Endtime. +
 Zwischen den Entitäten sind Beziehungen zu erkennen, in diesem Fall erkennt man 1:m Beziehungen. Eine Seriennummer, welche ein Tupel in Database darstellt, kann mehrere In- bzw. Outputs besitzen. Jedoch kann ein Tupel in In- bzw. Output nur ein Tupel in Database besitzen. +
 
 == Logischer Entwurf
 
+Der konzeptionelle Entwurf ist die Basis für ein relationales Datenmodell, in einem logischen Entwurf.
+
+.relationales Datenmodell
+image::Logischer_entwurf.png[]
+
+Das relationale Datenmodell, in Abbildung 2, basiert auf der Grundlage des ER-Modells, in Abbildung 1. Es spiegelt die logische Datenstruktur, Datentabellen, Ansichten und Indizes wider. +
+Die Input- sowie Output-Tabelle enthält in jedem Tupel, eine ID als Primary Key, baseID als Foreign Key und andere Input-/Output Informationen. Jedes Attribut (jede Information) befindet sich in einer eigenen Spalte, wo bei jedem Tupel eine eindeutige ID zugeordnet werden kann. Die Database-Tabelle enthält in jedem Tupel eine ID als Primary Key, eine SNR (Seriennummer), welches das Teil eindeutig identifiziert, sowie andere Attribute. Spezielle Informationen zum Input- bzw. Output-Datensatz werden nicht in der Database-Tabelle gespeichert, sondern direkt in der Input-/ Output-Tabelle. +
+Diese Tabellen sind mit dem Attribut BaseID miteinander verknüpft. Aufgrund diesem kann eine Beziehung zwischen den Tabellen hergestellt werden. Durch eine Abfrage der Seriennummer (SNR) in der Database-Tabelle, erhält man die passende BaseID. Durch diese kann man die Input- und Output-Informationen aus den anderen Tabellen abrufen.
