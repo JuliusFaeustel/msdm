@@ -364,7 +364,7 @@ Dieses zweite Array leert sich nicht für jede "SNR" wieder sondern enthällt al
 Alle obigen Aktionen werden in einer Schleife für jedes "TEIL" durchgeführt. Auch hier kann man Performance verbesserungen
 durchführen in dem man die Anzahl an Abfragen auf die Datenbank reduziert.
 
-==== Analyse 4
+=== Analyse 4
 
 [source, python]
 ----
@@ -411,7 +411,7 @@ Wir ermitteln das minale Startdatum der Nutzung eines Ladungsträgers und das sp
 wir aus den beiden Zeitstempeln in der _$project_ Phase die Nutzungsdauer eines Ladungträgers und sortieren dann unsere
 Ergebnisse aufsteigend nach Ladungsträger.
 
-==== Analyse 5
+=== Analyse 5
 
 [source, python]
 ----
@@ -445,7 +445,7 @@ y = mydb.in_data_embedded.aggregate([
 Die 5. Analyse gleicht fast vollständig der ersten, nur das bei hier nach "LagerIn" also Ladungsträger gruppiert wird und
 nicht nach Fertigungsauftrag.
 
-==== Analyse 6
+=== Analyse 6
 
 [source, python]
 ----
