@@ -14,7 +14,7 @@ Der konzeptionelle Datenbankentwurf umfasst die Datenstruktur, die Semantik sowi
 Um dies abstrakt darzustellen wurde ein Entity-Relationship-Models (ERM) modelliert. (Abbildung 1)
 
 .Entity-Relationship-Model
-image::Konzeptioneller_entwurf.png[] +
+image::Konzeptioneller_entwurf.png[]
 
 
 Abbildung 1 zeigt eine ER-Modell, bestehend aus grundlegenden Modellelementen. +
@@ -26,7 +26,8 @@ Zwischen den Entitäten sind Beziehungen zu erkennen, in diesem Fall erkennt man
 Der konzeptionelle Entwurf ist die Basis für ein relationales Datenmodell, in einem logischen Entwurf.
 
 .relationales Datenmodell
-image::Logischer_entwurf.png[] +
+image::Logischer_entwurf.png[]
+
 
 Das relationale Datenmodell, in Abbildung 2, basiert auf der Grundlage des ER-Modells, in Abbildung 1. Es spiegelt die logische Datenstruktur, Datentabellen, Ansichten und Indizes wider. +
 Die Input- sowie Output-Tabelle enthält in jedem Tupel, eine ID als Primary Key, baseID als Foreign Key und andere Input-/Output Informationen. Jedes Attribut (jede Information) befindet sich in einer eigenen Spalte, wo bei jedem Tupel eine eindeutige ID zugeordnet werden kann. Die Database-Tabelle enthält in jedem Tupel eine ID als Primary Key, eine SNR (Seriennummer), welches das Teil eindeutig identifiziert, sowie andere Attribute. Spezielle Informationen zum Input- bzw. Output-Datensatz werden nicht in der Database-Tabelle gespeichert, sondern direkt in der Input-/ Output-Tabelle. +
