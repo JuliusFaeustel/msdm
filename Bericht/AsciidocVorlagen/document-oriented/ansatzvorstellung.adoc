@@ -11,3 +11,35 @@ endif::main-file[]
 
 
 == Datenbankvorstellung
+=== Dokumentenorientierte Datenbank
+
+.Aufbau einer Dokumentenorientierten Datenbank
+image::db-structure.jpg[]
+
+Dokumentenorientierte Datenbanken zählen zu den No-SQL Datenbanken das bedeutet,
+dass sie im Gegensatz zu SQL Datenbanken keinen relationalen Ansatz verfolgen.
+In einer Dokumentenorientierten Datenbank liegen die Daten in einzelnen "Dokumenten",
+wobei ein Dokument am besten mit einer Tabellenzeile in einer herkömmlichen Datenbank zu vergleichen ist.
+Jedes Dokument verfügt dabei über einen eindeutigen Identifikator, was eine gewisse ähnlichkeit zu Schlüssel-Wert
+Datenbanken hervorruft. Mehrere Dokumente werden wiederum in einer "Collection", welche
+vergleichbar mit einer Tabelle in relationalen Datenbanken ist, zussamengefasst.
+Im Gegensatz zu Tabellen in herkömmlichen relationalen Datenbanken, in welchen die Daten strukturiert vorliegen,
+liegen die Daten in "Collections" unstrukturiert. Lediglich die "Dokumente" besitzen innerhalb ihrer Daten
+eine Struktur. Dies bedeutet ,dass "Dokumente" innerhalb einer "Collection" sich beliebig in Anzahl und Nomenklatur ihrer
+Attribute unterscheiden können. Es hierbei aber zu beachten, dass wenn man auf eine "Collection" Abfragen fahren möchte,
+die Notwendigkeit besteht, dass gleichartige "Dokumente" mit gleichen Attributen denselben "Keys" für
+ihre Attribute wählen.
+
+=== MongoDB als Datenbankmanagementsystem
+
+Bei MongoDB handelt es sich um eines der größten und verbreitetesten Datenbankmanagementsysteme für Dokumentenorientierte Datenbanken.
+Ich möchte einmal darauf eingehen warum ich mich für MongoDB und nicht z.B. für CouchDB entschieden habe.
+
+MongoDB erlaubt es "Queries" im sogenannten BSON Format, welches eine Variante von JSOn ist, bei der Daten im Binär-Format
+gespeichert werden ist, zu speichern. MongoDB über seine eigene "Querie-Language", während bei CouchDB Abfragen über
+eine RESTful-API laufen.
+Außerdem hat MongoDB die Nase im Bereich Performance bei großen Datenmengen klar vorn. Ein weiterer wichtiger Faktor
+war für mich Die Menge an Informationsmaterial (z.B. Dokumentation) im Internet und da MongoDB über eine weitaus größere Userbase
+als andere Dokumentenorientierte Datenbankmanagementsysteme verfügt wodurch man im Internet leichter Informationen
+bzw. Hilfe findet.
+

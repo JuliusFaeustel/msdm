@@ -10,15 +10,444 @@ endif::main-file[]
 
 
 == Implementierung der Struktur
-== Implementierung der Datenloader
-== Implementierung der Analysen
+=== Festlegen von Datentypen
+[source, python]
+----
+    df['DATE'] = pd.to_datetime(df['DATE'])
+    df['Begin'] = pd.to_datetime(df['Begin'])
+    df['FA'] = df['FA'].astype(str)
+    df['SNR'] = df['SNR'].astype(str)
+    df['LINIE'] = df['LINIE'].astype(str)
+    df['E'] = df['E'].astype(str)
+    df['ScanE'] = df['ScanE'].astype(bool)
+    df['MessageE'] = df['MessageE'].astype(bool)
+    df['V2'] = df['V2'].astype(np.float64)
+    df['V1'] = df['V1'].astype(np.float64)
+    df['UseM3'] = df['UseM3'].astype(np.float64)
+    df['UseM2'] = df['UseM2'].astype(np.float64)
+    df['UseM1'] = df['UseM1'].astype(np.float64)
+    df['Delta'] = df['Delta'].astype(np.float64)
+    df['Fehler'] = df['Fehler'].astype(int)
+    df['Span'] = df['Span'].astype(int)
+    df['ChargeM1'] = df['ChargeM1'].astype(str)
+    df['ChargeM2'] = df['ChargeM2'].astype(str)
+    df['ChargeM3'] = df['ChargeM3'].astype(str)
+    df['ScanA'] = df['ScanA'].astype(bool)
+    df['MessungA'] = df['MessungA'].astype(bool)
+    df['LagerIn'] = df['LagerIn'].astype(str)
+    df['LagerOut'] = df['LagerOut'].astype(str)
+----
+Wie bereits Anfangs erwähnt besitzen Dokumentenorientierte Datenbanken kein eigentliches Schema in diesem Sinne.
+So richten sich die initialen Datentypen der Attribute in den "Dokumenten" nach dem Datentyp den sie beim einlesen
+besessen haben. Da aber eine gewisse Konsistenz wichtig ist, gerade da später auch Abfragen auf die Daten gefahren
+werden sollen ist es nötig, dass die Datentypen einheitlich sind. Dies verhindert das es später zu unerwünschten
+Typkonvertierungen oder gar dem Absturz des Programmes kommt.
+
+Dies löse ich sehr einfach in den ich die Daten, nachdem ich sie aus der Textdatei in einen Datenframe eingelesen habe,
+innerhalb dieses Datenframes bearbeite. Also egal welchen Datentyp die Daten in der Textdatei hatten beim Prozess
+des Einlesens findet immer eine Typkonvertierung statt und wenn sie dann in die Datenbank geschrieben werden stimmt
+ihr Typ solange man den Code nicht anfasst immer überein.
+
+=== Herstellen der Relation
+[source, python]
+----
+if (snr == "nan"):
+        mycol_null.insert_many(df.to_dict('records'))
+    else:
+        x = mydb.in_data_embedded.aggregate([
+        {'$match': {'SNR': snr}},
+        {'$project': {'_id':1,
+                      'SNR': 1,
+                      'DATE': 1,
+                      'difference':{'$subtract':[date,'$DATE']}}}
+        ])
+        return_df = pd.DataFrame()
+        for data in x:
+            data_x = pd.DataFrame(data, index=[data.get('_id')])
+            return_df = return_df.append(data_x)
+        if (not return_df.empty):
+            return_df = return_df.drop(return_df[return_df.difference < 0].index)
+            if (not return_df.empty):
+                obj_id = return_df['difference'].idxmin()
+                mydb.in_data_embedded.update_one({'_id': obj_id}, {"$addToSet": {"out": dictionary}})
+----
+Es ist für mich besonders wichtig das die Relation direkt beim speichern der Daten korrekt durchgeführt wird, denn ich
+kann im Nachhinein nicht einfach meine Abfrage welche die Verknüpfung durchführt, einfach noch einmal anpassen. Die Daten
+müssen von Anfang an Korrekt sein da eine spätere Anpassung mit einem immensen Aufwand verbunden wäre.
+
+Bei der Herstellung der Relation spricht der Code nicht für sich selbst.
+Zuerst überprüfe ich, ob die "SNR" des eingelesenen Ausgangsdatensatzes existiert.
+Sollte die "SNR" nicht existieren ist das "Dokument" für mich unbrauchbar und ich speichere es der Vollständigkeit halber
+in einer extra "Collection". Gibt es die "SNR" suche ich in der Datenbank nach Eingangsdatensätzen und speichere
+diese zusammen mit ihrer zeitlichen Differenz zum Ausgangsdatensatz in einem Datenframe.
+Da Eingangsdaten immer vor den Ausgangsdaten erstellt werden kann dieser Datenframe eigentlich nie leer sein aber um zu
+verhindern das mein Programm bei fehlerhaften Daten abstürzt prüfe ich ob der Datenframe leer ist.
+Ist dies nicht der Fall entferne ich Datensätze bei denen die zeitliche Differenz kleiner null ist, da diese
+Datensätze nach dem betrachteten Output in die Datenbank eingespeist wurden. Nun prüfe ich erneut ob der Datenframe leer ist.
+ist dies nach wie vor nicht der Fall lasse ich mir die eindeutige Objekt-ID des Datensatzes mit der geringsten
+zeitlichen Differenz geben und speichere den Ausgangsdatensatz in den Attributsschlüssel "out" des Eingangsdatensatzes.
+
+Die Suche innerhalb der Datenbank nach einem passenden Input zum aktuellen Output stellt den einzige Flaschenhals
+beim Schreiben der Daten in die Datenbank dar.
+Ich habe hierfür einmal einen Vergleich durchgeführt zwischen dem suchen mit einem Index für die "SNR" und einmal
+ohne Index.
+Einen aufsteigenden Index kann man in Python mithilfe von Pymongo durch folgende Codezeile erstellen.
 
 [source, python]
 ----
-@app.route('/')
-def home():
-    return render_template("inline.html")
+mydb.in_data_embedded.create_index([ ("SNR", 1) ])
 ----
 
-== Evolution des Datenmodells
+Um zu vergleichen wie lange die Suche mit Index und ohne Index dauert, habe ich den MongoDB Profiler verwendet.
+Hierfür muss man nur über die MongoShell eine bestimmte "Collection" erstellen. Und einstellen welche Aktionen
+alles gespeichert werden sollen. Profiling-Level 2 sorgt dafür dass jede aktion gespeichert wird.
 
+[source,commandline]
+----
+use projekt
+db.createCollection( "system.profile", { capped: true, size:4000000 })
+db.setProfilingLevel(2)
+----
+
+Durch diesen Vergleich bin ich zu folgenden Ergebnissen gekommen.
+
+.Ohne Index auf "SNR", x-Achse=Anzahl Eingangsdatensätze in der "Collection", y-Achse=Verarbeitungszeit in Millisekunden
+image::Performance_noindex.PNG[]
+
+Wie man auf obigem Bild ganz klar erkennen kann, zeichnet sich hier ein sehr unschöner Trend ab. Je mehr Eingangsdatensätze
+sich in der "Collection" befinden desto länger dauert die Suche nach einer "SNR" und dies fast in einem konstant linearen Anstieg.
+Bei der Menge an Datensätzen, die wir haben mag dies aktuell vll. noch kein großes Problem darstellen aber das kann sich in Zukunft schnell ändern.
+
+.Mit Index auf "SNR", x-Achse=Anzahl Eingangsdatensätze, y-Achse=Verarbeitungsdauer in Millisekunden
+image::Performance_index.PNG[]
+
+Auf dem zweiten Bild wird eindeutig welche Wirkung das Anlegen eines Indexes hatte. Zum einen fällt auf das es zu keinem
+linearen Anstieg der Verarbeitungszeit mehr kommt, zum anderen hat sich die Verarbeitungszeit insgesamt sehr stark reduziert.
+Vorher starteten die Zeiten bei 100 Millisekunden jetzt hat selbst das Maximum bei einem vorhandenen Index nur einen Wert
+von ca. 17 Millisekunden.
+
+== Implementierung der Datenloader
+
+Zu den Datenloadern lässt sich bei mir nicht viel weiteres erwähnen. Ich bekomme durch den Watchdog einen Pfad zu einer Datei
+über den Pfad wird dabei auch identifiziert ob es sich um einen Eingangs- oder Ausgangsdatensatz handelt und dann die
+zugehörige Funktion mit diesem Pfad als Übergabeparameter aufgerufen.
+
+== Implementierung der Analysen
+
+Für die Analysen habe ich erneut Python als Programmiersprache genutzt. Ich möchte in diesem Teil vorallem auf die Abfragen
+in MongoDBs Abfragesprache eingehen.
+
+
+
+=== Analyse 1
+
+[source, python]
+----
+x = mydb.in_data_embedded.aggregate(
+[{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+ {"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "difference":{"$subtract":["$output.Date","$Begin"]}}},
+ {"$match": {
+            "difference": {"$lt": 3600000},
+            "SNR": { "$ne": "nan" },
+            "TEIL": teil}},
+ {"$group" : {
+            "_id":{
+                "teil":"$TEIL",
+                "fa":"$FA"},
+            "teile_count": {"$sum":1},
+            "maxFert": {"$max": "$difference"},
+            "minFert": {"$min": "$difference"},
+            "avgFert": {"$avg": "$difference"}}}])
+
+----
+
+Mithilfe von der obigen Abfrage lass ich mir zuallen Fertigungsaufträgen eines einzelnen Teils die Menge an Produkten die gefertigt
+wurden, sowie die maximale minimale und durschnittliche Fertigungsdauer die dafür benötigt wurde.
+In der ersten _$project_ Phase wähle ich die Attribute welche ich betrachten möchte. Die eingebaute Funktion
+_$arrayElemAt_ kann ich mir das Element eines Arrays über den Index geben lassen. An dieser Stelle lasse ich mir durch -1
+das letzte Element in dem Array der Ausgangsdatensätze eines Eingangsdatensatzes geben. Innerhalb der zweiten _$project_
+Phase rechne ich durch _$subtract_ die Differenz zwischen dem Zeitstempel des Eingangsdatensatzes und dem Ausgangsdatensatzes
+aus. In der _$match_ Phase lege ich fest das ich nur Daten möchte welche speziellen Bedingungen entsprechen. Ich lege fest das die Differenz
+durch _$lt_ kleiner als 3600000 Millisekunden sein soll was einer Stunde entspricht. Außerdem sage ich das ich nur Datensätze
+möchte welche eine SNR haben und als Teil dem Wert der Variable _teil_ entsprechen. In der letzten Phase der _$group_ Phase
+führe ich ein Group By durch nach Fertigungsauftrag durch und berechne durch _$sum_ die Menge an Produkten sowie die maximale, minimale
+und durschnittliche Fertigungsdauer. Durch die Variable _teil_ kann ich durch ein Array aus den Teilen iterieren und dies für
+jedes Teil wiederholen.
+
+[source, python]
+----
+y = mydb.in_data_embedded.aggregate(
+[{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "difference":{'$subtract':['$output.Date','$Begin']}}},
+{"$match": {
+            "difference": {"$lt": 3600000},
+            "SNR": { "$ne": "nan" },
+            "FA": fa }},
+{"$group": {
+            "_id": {
+                "SNR":"$SNR",
+                "TEIL": "$TEIL",
+                "FA": "$FA"},
+            "count": {"$sum":1}}},
+{"$group": {
+            "_id": {
+                "teil":"$_id.TEIL",
+                "fa":"$_id.FA"},
+            "max_o":{"$max": "$count"},
+            "min_o":{"$min": "$count"},
+            "avg_o":{"$avg": "$count"}}},
+{"$sort": {"_id.fa":1}}])
+----
+
+Aus der ersten Abfrage bekomme ich eine Menge an Fertigungsaufträgen mit Daten zu diesen nun möchte ich noch wissen
+wie viel Ausschuss bei diesen Fertigungsaufträgen entstanden ist. Dafür sind die ersten 3 Phasen gleich wie in der
+vorrangegangenen Abfrage. Nur in der _$match_ Phase ändert sich etwas, wir möchten nun Datensätze welche einem gewissen
+Fertigungsauftrag entsprechen.  In der ersten _$group_ Phase gruppieren wir nach "SNR", "TEIL" und "FA". Durch das
+gruppieren nach SNR entfernen wie Dopplungen gleichzeitig zählen wir aber auch wie oft eine "SNR" aufgetaucht ist.
+Dieser gezählte Wert wiederrum spiegelt dann wenn er >1 ist die Menge an Ausschuss wieder. in der letzten _$group_ Phase
+gruppiere ich nach Teil und Fertigungsauftrag und ermittle für die Fertigungsaufträge das Maximum an Ausschuss sowie das
+Minimum und den Durchschnitt. Sortiert wird das Ergebnis aufsteigend nach Fertigungsauftrag.
+Da bei dieser Abfrage mehrere Abfragen in einer Schleife durchgeführt werden, dauert sie relativ lange hier kann durch
+Verbesserungen/Anpassungen sicher noch Performance gut machen.
+
+=== Analyse 2
+
+[source, python]
+----
+z = mydb.in_data_embedded.aggregate([
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1, "difference":{"$subtract":["$output.Date","$Begin"]}}},
+{"$match": {
+            "difference": {"$lt": 3600000},
+            "SNR": { "$ne": "nan" },
+            "TEIL": teil}},
+{"$group" : {
+            "_id":{
+                "teil":"$TEIL",
+                "fa":"$FA"},
+            "teile_count": {"$sum":1}}},
+{"$group":{
+            "_id": "$_id.teil",
+            "count": {"$sum":"$teile_count"}}}])
+----
+
+Nachdem nun durch die Erklärung der ersten Analyse klar sein sollte wie eine MongoDB Abfrage funktioniert möchte ich
+aufgrund des Umganges der Abfragen nicht übermäßig ins Detail gehen.
+In der obigen Abfrage lassen wir uns die Gesamtfertigungsmenge jedes einzelnen Teils ausgeben, dabei berücksichtigen wir
+nur Datensätze mit einer Fertigungsdauer unter einer Stunde und einer vorhandenen "SNR". Diese Gesamtfertigungsmenge brauchen
+wir um später die Fehlerrate auszurechnen.
+
+[source, python]
+----
+y = mydb.in_data_embedded.aggregate([
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "out": {"$ifNull": [ "$out", [{"Date":"undefined"}]]}}},
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "out":{"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "FA":1,
+            "Begin":1,
+            "SNR":1,
+            "output_date":"$out.Date"}},
+{"$match": {
+            "SNR": { "$ne": "nan" },
+            "TEIL": teil}},
+{"$group" : {
+            "_id": "$SNR",
+            "count": {"$sum":1},
+            "starts":{
+                "$push":{
+                    "Begin":"$Begin",
+                    "Out":"$output_date"}}}},
+{"$match": {"count":{"$gt":1}}}])
+----
+
+Bei dieser Abfrage gibt es einige Besonderheiten auf die ich gerne eingehen möchte.
+Zum einen ändern wir die erste _$project_ Phase um sicherzugehen das wir auch Datensätze bekommen die keinen Ausgangsdatensatz haben.
+Dies ist wichtig da wir um die Zeiten bei der Auftrennung zu berechnen den Zeitstempel eines Ausgangsdatensatzes
+von dem Zeitstempel des nachfolgenden Eingangsdatensatzes mit derselben "SNR" subtrahieren und hierfür ist es wichtig das auch Eingangsdatensätze
+zu denen noch kein Ausgangsdatensatz existiert berücksichtigt werden. An der zweiten und dritten _project_ Phase sowie der _$match_ Phase ändert sich nichts.
+Interessant wird es in der _$group_ Phase hier gruppieren wir nach "SNR" dabei wird zusätzlich die Menge gezählt wie oft eine "SNR" aufgetaucht ist,
+aber das eigentlich wichtige ist das in dieser Phase während gruppiert wird jeweils zu jedem Datensatz der Zeitstempel
+des Eingangsdatensatzes und des Ausgangsdatensatzes in ein Array gespeichert wird. Schlussendlich legen wir noch fest ,dass
+wir nur Datensätze wollen bei denen auch Ausschuss entstanden ist.
+
+Da diese Abfrage zu den Komplexesten zählt möchte ich an dieser Stelle auch auf den Python Code eingehen der die Abfrage
+schließlich verarbeitet.
+
+[source, python]
+----
+    for data in y:
+        x = 1
+        amount += data.get("count")-1
+        differences = []
+        data_sorted = sorted(data.get('starts'), key = lambda i: i['Begin'])
+        while x < len(data.get('starts')):
+            value_1 = data_sorted[x].get('Begin')
+            value_2 = data_sorted[x-1].get('Out')
+            if(value_2 != 'undefined'):
+                value = value_1 - value_2
+                if (value > datetime.timedelta()):
+                    value = value.total_seconds()
+                    differences.append(value)
+                    avg_val.append(value)
+            x += 1
+        if len(differences)>0:
+            max_val.append(max(differences))
+            min_val.append(min(differences))
+    maximum = max(max_val)
+    minimum = min(min_val)
+    avg = sum(avg_val)/len(avg_val)
+----
+
+Wir iterieren durch den Coursor welchen wir durch die MongoDB Abfrage bekommen haben.
+Wir errechnen den Ausschuss in dem wir den Wert der Datenbank minus eins rechnen da es sich bei einem Datensatz ja um einen
+erfolgreichen handelt. Wir legen ein Array an, um die Zeitdifferenzen abzuspeichern.
+Außerdem sortieren wir das Array welches wir zu jeder "SNR" bekommen haben und welches die Zeitstempel enthält.
+Wir sortieren aufsteigend nach dem Zeitstempel des Eingangsdatensatzes. Zum verständniss es handelt sich
+um ein Array aus Objekten, wobei jedes Objekt zwei Attribute enthält den Zeitstempel des Eingangsdatensatzes sowie den Zeitstempel
+des dazugehörigen Ausgangsdatensatzes. Durch dieses Array gehen wir nun in einer Schleife hindurch
+und subtrahieren den Zeitstempel des Ausgangsdatensatzes vom Zeitstempel des nachfolgenden Eingangsdatensatzes.
+Dabei überprüfen wir ob auch alle Werte existieren und schließlich ob die errechnete Differenz > null ist.
+Trifft beides zu wandeln wir die errechnete Differenz in Sekunden um und speichern sie in einem Array. Es gibt hierbei zwei Arrays
+eins enthält alle Zeitdiffferenzen zu einer "SNR" aus diesem ermitteln wir später den maximalen und minimalen Wert und speichern diesen
+wiederum in einem Array. Das zweite Array benötigen wir um später den Durschnitt an Zeitdifferenzen über alle "SNRs" aus zu rechnen.
+Dieses zweite Array leert sich nicht für jede "SNR" wieder sondern enthällt alle Zeitdiffferenzen.
+
+Alle obigen Aktionen werden in einer Schleife für jedes "TEIL" durchgeführt. Auch hier kann man Performance verbesserungen
+durchführen in dem man die Anzahl an Abfragen auf die Datenbank reduziert.
+
+==== Analyse 4
+
+[source, python]
+----
+x = mydb.in_data_embedded.aggregate([
+{"$project": {
+            "_id":1,
+            "LagerIn":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "LagerIn":1,
+            "Begin":1,
+            "SNR":1,
+            "end":"$output.Date"}},
+{"$match": {
+            "SNR": { "$ne": "nan" }}},
+{"$group" : {
+            "_id":{
+                "SNR":"$SNR",
+                "LagerIn":"$LagerIn"},
+            "start": {"$min": "$Begin"},
+            "end": {"$max": "$end"}}},
+{"$group": {"_id":"$_id.LagerIn",
+            "anz":{"$sum":1},
+            "start":{"$min": "$start"},
+            "end":{"$max": "$end"}}},
+{"$project":{
+            "_id":1,
+            "anz":1,
+            "start":1,
+            "end":1,
+            "duration":{'$subtract':['$end','$start']}}},
+{"$sort":{"_id": 1}}])
+----
+
+Bei Analyse 4 handelt es sich um eine der simpleren Analysen hier kann alles mit einer einzelnen Query gelöst werden.
+Die ersten drei Phasen sind wieder die Auswahl der Felder sowie das aussortieren von Datensätzen ohne "SNR".
+In der ersten _$group_ Phase gruppieren wir nach "SNR" und "LagerIn" um Dopplungen bei den "SNR" loszuwerden.
+An dieser Stelle wird außerdem der minimale Beginn bei mehreren gleichen "SNRs" festgestellt sowie das späteste Ende.
+Weiterführend gruppieren wir in der zweiten _$group_ Phase gruppieren wir nach "LagerIn" und zählen die gefertigten Produkte.
+Wir ermitteln das minale Startdatum der Nutzung eines Ladungsträgers und das späteste Enddatum. Schlussendlich berechnen
+wir aus den beiden Zeitstempeln in der _$project_ Phase die Nutzungsdauer eines Ladungträgers und sortieren dann unsere
+Ergebnisse aufsteigend nach Ladungsträger.
+
+==== Analyse 5
+
+[source, python]
+----
+y = mydb.in_data_embedded.aggregate([
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "LagerIn":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "TEIL":1,
+            "LagerIn":1,
+            "Begin":1,
+            "SNR":1,
+            "difference":{'$subtract':['$output.Date','$Begin']}}},
+{'$match': {"SNR": { "$ne": "nan" }}},
+{"$group": {
+            "_id":{
+                "LagerIn":"$LagerIn",
+                "Teil":"$TEIL"},
+            "anz":{"$sum":1},
+            "min":{"$min": "$difference"},
+            "max":{"$max": "$difference"},
+            "avg":{"$avg":"$difference"}}},
+{"$sort":{"_id": 1}}])
+----
+
+Die 5. Analyse gleicht fast vollständig der ersten, nur das bei hier nach "LagerIn" also Ladungsträger gruppiert wird und
+nicht nach Fertigungsauftrag.
+
+==== Analyse 6
+
+[source, python]
+----
+
+----
