@@ -62,6 +62,64 @@ Um gezielte Abfragen zu tätigen, die später für die Analyse benötigt werden,
 SELECT * FROM `Database` WHERE `baseID` = `2`
 ----
 
+== Anwendungen
+=== Programmiersprache
+
+Die Implementierung der Anwendungen wurde mit der Programmiersprache Python vorgenommen. Als Entwicklungsumgebung, innerhalb des Projektes, wurde Notepad ++ genutzt.  Für die Implementierung wurde die Python-Version 3.7.3 genutzt. +
+Die Ausführung des Python-Programmes wurde über die Kommandozentrale (CMD), von Windows 10, vorgenommen. +
+Dies wird in im Codebeispiel 7 verdeutlicht. 
+
+.Code 7 - Ausführung des Python-Programmes über CMD
+[source, sh]
+----
+>python analyse.py 
+----
+
+=== Kommunikation zwischen Anwendung und Datenbank
+
+Durch die Python-Bibliothek mysql-connector-python wurde eine Verbindung zwischen Anwendung und MySQL-Datenbankserver hergestellt. +
+Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 8 beschrieben.
+
+.Code 7 - Installation Python-Bibliothek über CMD
+[source, sh]
+----
+>pip install mysql-connector-python
+----
+
+Die installierte Bibliothek wird nun in die Anwendung eingebunden, um eine Verbindung zur Datenbank herstellen zu können. Dazu müssen folgende Parameter gesetzt werden um einen Zugriff zu erhalten: host, database, user und password.
+
+.Code 8 - Herstellung der Verbindung zwischen Anwender und Datenbank
+[source, python]
+----
+import mysql.connector
+
+connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "1234", database = "test")
+----
+
+Nach dem Aufbau der Verbindung zur Datenbank, wird ein Cursor gesetzt. Diesem wird per Cursor-Funktion execute eine SELECT-Abfrage übergeben. Zusätzlich dazu bietet der Cursor Varianten an, um die Ergebnismenge bereitzustellen. Zum Beispiel:
+
+* _fetchall()_, welcher die gesamte Ergebnismenge wieder gibt
+* _fetchone()_, welcher nur die erste Zeile der Ergebnismenge wieder gibt
+
+.Code 9 - Erstellung eines Cursor's sowie einer SELECT-Abfrage
+[source, python]
+----
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM `Database`")
+result = cursor.fetchall()
+----
+
+Um die execute auszuführen, bedarf es ein Commit, welches die Anweisung ausführt.  Nach dem Ausführen, wird der Cursor, sowie die Connection per close() Funktion geschlossen.
+
+.Code 10 - Commit und Close der Connection
+[source, python]
+----
+connection.commit()
+
+connection.close()
+cursor.close()
+----
+
 == Implementierung der Struktur
 == Implementierung der Datenloader
 == Implementierung der Analysen
