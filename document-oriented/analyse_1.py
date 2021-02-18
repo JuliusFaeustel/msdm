@@ -35,7 +35,7 @@ for teil in d:
         y = mydb.in_data_embedded.aggregate([{"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "output": {"$arrayElemAt": ["$out", -1]}}},
                                         {"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "difference":{'$subtract':['$output.Date','$Begin']}}},
                                         {"$match": {"difference": {"$lt": 3600000},"SNR": { "$ne": "nan" },"FA": fa }},
-                                        {"$group" : {"_id": {"SNR":"$SNR", "TEIL": "$TEIL", "FA": "$FA"}, "count": {"$sum":1}}},
+                                        {"$group": {"_id": {"SNR":"$SNR", "TEIL": "$TEIL", "FA": "$FA"}, "count": {"$sum":1}}},
                                         {"$group": {"_id": {"teil":"$_id.TEIL", "fa":"$_id.FA"},"max_o":{"$max": "$count"},"min_o":{"$min": "$count"},"avg_o":{"$avg": "$count"}}},
                                         {"$sort": {"_id.fa":1}}])
         for values in y:
@@ -43,7 +43,7 @@ for teil in d:
             min_o = values.get("min_o")
             max_o = values.get("max_o")
             avg_o = values.get("avg_o")
-    
+
         text_file.write("{};{};{};{};{};{:.2f};{};{};{:.2f}\n".format(teil, fa, amount, min_t, max_t, avg_t, min_o, max_o, avg_o))
         print(i)
         i += 1

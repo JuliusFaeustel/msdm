@@ -8,6 +8,56 @@ ifdef::main-file[]
 :imagesdir: document-oriented/bilder
 endif::main-file[]
 
+== Daten-Schema
 
-== Erstes Datenmodell
+Wie bereits erwähnt verzichten Dokumentenorientierte Datenbanken auf ein ausgiebiges Schema.
+Dies hat sowohl Vor- als auch Nachteile. Ein großer Vorteil ist das sich die Strucktur der einzulesenden Daten ändern
+kann, ohne das man änderung an der Datenbank durchführen muss. Es ist so z.B. der Datenbank völlig egal ob sich nun
+der Datentyp eines Feldes in der Datenbank von dem eines neu zu speichernden Datensatzes unterscheidet.
+Es kann auch ohne Probleme ein weiteres Attribut in den neuen Daten hinzukommen welches es in den alten Daten
+noch nicht gibt. Dies ist gleichzeitig aber auch ein Problem denn wo z.B. ein relationales Datenbankmanagementssystem das
+Speichern gar nicht zulassen würde akzeptiert ein Dokumentenorientiertes dies erst einmal.
+Es besteht aber die Möglichkeit dies zu verhindern und Datenüberprüfungen festzulegen.
+Dies ist aber vergleichsweise aufwendiger und schränkt den größten Vorteil der Dokumentenorientierten Datenbank ein.
+Ich habe die Datentypen und Attributsbezeichnung innerhalb des Programmes festgelegt welche die Daten in die Datenbank
+schreibt, um so eine gewisse Konsistenz zu gewährleisten, ohne die Komplexität unnötig aufzublähen aber dazu später mehr.
+
+Auch in Dokumentenorientierten Datenbanken besteht die Möglichkeit Relationen zwischen "Dokumenten"
+herzustellen. Es gibt dabei 3 Varianten, welche man verfolgen kann.
+
+==== One-To-One Embedded
+.Beispiel eines "Dokuments" mit einem "Embedded Document"
+image::Schema-Beispiel.PNG[]
+
+Hierbei speichert man zusammengehörige "Dokumente" in einem.
+Das bedeutet man legt ein weiteres Attribut an welches ein weiteres Dokument enthällt (Siehe Bild).
+Diese Methode eignet sich vorallem wenn ein Dokument immer nur in Relation zu einem anderen steht
+also bei 1-1 Beziehungen. Es besteht dadurch der Vorteil das keine Joins durchgeführt werden müssen
+da alle Daten an einer Stelle liegen.
+
+==== One-To-Many Embedded
+
+.Beispiel eines Dokuments mit einem Array aus "Embedded Documents"
+image::Schema_One-to_many.PNG[]
+
+Es handelt sich bei dieser Methode um eine Erweiterung der vorhergegangenen. Man speichert Dabei nicht nur
+ein "Dokument" in ein anderes, sondern ein Array aus "Dokumenten". Diese Methode macht vorallem bei 1-n Beziehungen Sinn.
+Es handelt sich hierbei auch um das für meine Anwendung geeigneste Schema. Da eine Menge von Ausgangsdatensätzen immer
+eindeutig einem Eingangsdatensatz zugeordnet werden kann. Einzelne Elemente des Arrays lassen sich bei Abfragen sogar
+über den Index ansteuern.
+
+==== Many-To-Many Reference
+
+Dieses Schema möchte ich hierbei nur am Rande erwähnen. Es handelt sich hierbei um eine Methode welche sehr
+der Foreign Key Methode in relationalen Datenbanken entspricht. Hierbei muss es in beiden "Dokumenten"
+in verschiedenen "Collections" ein Attribut mit dem selben Schlüssel geben. Bei einer Abfrage kann dann soweit
+auch die Ausprägung des Attributes übereinstimmt eine Verknüpfung duchgeführt werden.
+Dies dauert aber länger bei Abfragen als die anderen Methoden da erst ein Join durchgeführt werden muss und eignet sich daher wirklich nur, wenn
+eine m-n Relation vorliegt.
+
+
+
+
+
+
 
