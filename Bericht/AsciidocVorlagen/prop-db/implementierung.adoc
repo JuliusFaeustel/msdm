@@ -120,16 +120,28 @@ connection.close()
 cursor.close()
 ----
 
-== Implementierung der Struktur
-== Implementierung der Datenloader
-== Implementierung der Analysen
+== Datenloader
 
+Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 1 virtualisiert. +
+
+Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über einen Insert-Statement in die Datenbank zu speichern.
+
+.Code 11 - Daten auslesen
 [source, python]
 ----
-@app.route('/')
-def home():
-    return render_template("inline.html")
+datei   = open(filename, 'r')
+val     = dati.read() 
+dat     = val.split(';')
 ----
 
-== Evolution des Datenmodells
+.Einlese-Algorithmus
+image::einlesen.png[]
+
+Zunächst wird eine Textdatei eingelesen, in einen String verpackt und auf Vollständigkeit geprüft. Wenn die Vollständigkeit der Daten nicht gewährt ist, wird der Datensatz mit einem Fehlercode vermerkt und in der Input- bzw. Output- Tabelle gespeichert. Nachdem die Überprüfung positiv abgelaufen ist, vergleicht der Algorithmus nun ob die Seriennummer (SNR) in der Database-Tabelle vorhanden ist. +
+
+Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, das eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes das Startzeitpunkt. Wenn diese kleiner ist als das bisherige Datum, wird es ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
+
+
+== Analysen
+
 
