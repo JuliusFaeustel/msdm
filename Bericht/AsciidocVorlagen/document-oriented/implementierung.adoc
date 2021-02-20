@@ -121,6 +121,7 @@ Bei der Menge an Datensätzen, die wir haben mag dies aktuell vll. noch kein gro
 .Mit Index auf "SNR", x-Achse=Anzahl Eingangsdatensätze, y-Achse=Verarbeitungsdauer in Millisekunden
 image::Performance_index.PNG[]
 
+
 Auf dem zweiten Bild wird eindeutig welche Wirkung das Anlegen eines Indexes hatte. Zum einen fällt auf das es zu keinem
 linearen Anstieg der Verarbeitungszeit mehr kommt, zum anderen hat sich die Verarbeitungszeit insgesamt sehr stark reduziert.
 Vorher starteten die Zeiten bei 100 Millisekunden jetzt hat selbst das Maximum bei einem vorhandenen Index nur einen Wert
@@ -449,5 +450,87 @@ nicht nach Fertigungsauftrag.
 
 [source, python]
 ----
-
+x = mydb.in_data_embedded.aggregate([
+{"$project": {
+            "_id":1,
+            "LINIE":1,
+            "FA":1,
+            "TEIL":1,
+            "Begin":1,
+            "SNR":1,
+            "output": {"$arrayElemAt": ["$out", -1]}}},
+{"$project": {
+            "_id":1,
+            "LINIE":1,
+            "FA":1,
+            "TEIL":1,
+            "Begin":1,
+            "SNR":1,
+            "end":"$output.Date"}},
+{"$match": {
+            "SNR": { "$ne": "nan" },
+            "LINIE":line}},
+{"$group": {
+            "_id":{
+                "FA": "$FA",
+                "TEIL": "$TEIL"},
+            "start":{"$min": "$Begin"},
+            "end":{"$max": "$Begin"}}},
+{"$sort":{"start": 1}}])
 ----
+
+In Analyse 7 mache ich innerhalb einer Schleife Abfragen zu jeder Linie, dabei wähle ich mir in den ersten beiden _$project_
+Phasen die Attribute aus die ich betrachten möchte und lasse mir den Zeitstempel des Outputs geben. Weiterführend wähle
+ich der _$match_ Phase nur Elemente welche eine "SNR" haben und welche als "LINIE" den Wert der Variablen Linie haben.
+Zum Schluss gruppiere ich nach Fertigungsauftrag und Teil. Außerdem lasse ich mir zu jeder Gruppe den frühesten Startzeitpunkt
+und spätesten Endzeitpunkt geben. Eine aufsteigende Sortierung nach den Startzeitpunkten bringt die Datensätze schließlich in die
+richtige Reihenfolge.
+
+[source, python]
+----
+    teil_value = pd.DataFrame()
+    i=0
+    list = []
+    for data in x:
+        if i == 0:
+            teil_1 = data.get("_id").get('TEIL')
+            time_1 = data.get("end")
+            i=1
+
+        if i==2:
+            teil_2 = data.get("_id").get('TEIL')
+            time_2 = data.get("start")
+            end = data.get("end")
+            difference = time_2 - time_1
+            seconds = difference.total_seconds()
+            if seconds > 0:
+                data = {"FROM_TO": teil_1 + " zu " + teil_2, "Dauer": seconds }
+                list.append(data)
+            else:
+                print(teil_1,teil_2)
+            teil_1 = teil_2
+            time_1 = end
+            i=2
+        else:
+            i += 1
+    teil_values = pd.DataFrame(list)
+    distinct_values = teil_values["FROM_TO"].unique()
+    for value in distinct_values:
+        helper_list = teil_values.loc[teil_values['FROM_TO'] == value]["Dauer"]
+        maximum = helper_list.max()
+        minimum = helper_list.min()
+        avg = sum(helper_list)/len(helper_list)
+----
+
+Ich gehe nun in einer Schleife durch die Ergebnisse meiner Query, dabei betrachte ich immer ein paar aus Datensätzen
+Für den ersten Datensatz speichere ich das Teil um das es sich handelt sowie den Zeitstempel des Endes.
+Für den zweiten Datensatz speichere ich auch das Teil um welches es sich handelt sowie den Zeitstempel des Starts und den des Endes.
+Schließlich berechne die ich die Differenz der Zeitstempel also den Start des zweiten subtrahiert vom Ende des ersten.
+Diese Zeitdifferenz wandel ich in Sekunden um und Speichere sie als Dictionary in einer Liste zusammen mit einem String der den
+Wechsel der Teile repräsentiert. Ich sätze nun sowohl die Zeit als auch das Teil vom ersten Teil auf die Werte
+des zweiten und lasse die Schleife erneut laufen. Wenn die Schleife fertig ist wandel ich die Liste in einen Datenframe um
+um die pandas eigene Funktion _.unique()_ anzuwenden welche mir jeden Wert welcher in der Spalte FROM_TO steht und die Teil wechsel repräsentiert
+zurückgibt und Dopplungen ignoriert. Zum Schluss iteriere ich durch diese eindeutigen Werte durch und lasse mir immer eine Hilfliste erstellen
+in welcher alle Zeitdifferenzen zu einem Teil-Wechsel stehen, aus dieser List kann ich nun wiederrum das Maximum, Minimum und
+den Durschnitt ermitteln.
+
