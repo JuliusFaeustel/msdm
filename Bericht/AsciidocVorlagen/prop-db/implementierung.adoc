@@ -20,8 +20,15 @@ Alle Implementierungen wurden unter den folgenden Voraussetzungen vorgenommen:
 === Allgemein
 
 Über ein relationales Datenbankmanagementsystem (RDBMS) kann die proprietäre Datenstruktur realisiert werden. Es wurde über XAMPP, einem kostenlosen Programmpaket von freier Software, welche meiste für ein Apache Webserver verwendet wird, ein MySQL Server 8.0 installiert und konfiguriert. +
+
+.XAMPP
+image::xampp.png[width=50%]
+
 Um das relationale Datenmodell einfach zu realisieren, wurde zusätzlich HeidiSQL installiert, einem freien Client für das Datenbanksystem MySQL. Es wird hierbei die Structured Query Language (SQL) genutzt. +
- +
+ 
+.HeidiSQL
+image::heidisql.png[width=80%]
+
 Um dies zu verdeutlichen folgen Quelltextbeispiele. Diese zeigen wie eine Tabelle angelegt, Daten eingetragen, sowie Fremdschlüsselbeziehung erstellt werden.  
 
 .Code 3 - Anlegen der Tabelle Database
@@ -60,6 +67,16 @@ Um gezielte Abfragen zu tätigen, die später für die Analyse benötigt werden,
 [source, sql]
 ----
 SELECT * FROM `Database` WHERE `baseID` = `2`
+----
+
+=== Messung der Ausführungszeit
+
+Um einen Vergleich der Abfragezeit zu gewährleisten ist es nötig die Zeit zu messen welche die Datenbank braucht, um eine Abfrage durchzuführen. Dies ist über den folgenden Befehl zu realisieren.
+
+.Code 7 - Abfragezeit messen
+[source, sql]
+----
+SET STATISTICS TIME ON
 ----
 
 == Anwendungen
@@ -144,4 +161,106 @@ Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Inpu
 
 == Analysen
 
+=== Allgemein
 
+Zunächst wurde über die Möglichkeiten der Implementierung der Analysen diskutiert. Dafür gab es im Allgemeinen drei Möglichkeiten. +
+
+Die erste Möglichkeit sah vor, alle Analysen in SQL zu schreiben und über HeidiSQL auszuführen. Die gewonnen Daten hätten man in MS Excel importieren können, um diese darin auszuwerten und grafisch dazustellen. Diese Möglichkeit wurde zu nächst in Betracht gezogen, eine zuverlässige Umsetzung wurde mit dieser Methode generiert. Allerdings war diese auch durch den Wechsel zwischen HeidiSQL und MS Excel zeitaufwendig. +
+Um dieses Problem zu lösen, wurde Möglichkeit zwei eingeführt. Mit Devart, einem freiverfügbaren Data Integration Tool, konnte eine Abfrage direkt in Excel ausgeführt werden. Mit der Methode konnte eine Zeitersparnis festgestellt werden, die durch das Wegfallen von HeidiSQL zustande gekommen ist. Das Problem hierbei war die Datenintegration mit den anderen Datenstrukturen. +
+Möglichkeit drei ist die Abfrage der Daten mit Python, wie es in der Anwendung beschrieben ist. Die erfolgreiche Analyse wurde in einer CSV-Datei gespeichert. Mit dieser konnte die Analyse erfolgreich durchgeführt und mit den anderen Datenstrukturen verglichen werden. +
+
+Im Allgemeinen hat die Vorarbeit mit Möglichkeit eins und zwei die Entwicklung der finalen Lösung beschleunigt. Um dies zu verdeutlichen befinden sich im Nachfolgendem die Analyseabfragen mit Pseudocode.  
+
+
+=== Analyse 1 
+
+.Code 12 - Taktung pro Artikel
+[source, sql]
+----
+SELECT teil, fa, COUNT(baseid) AS COUNT, 
+  MIN(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime)) AS MIN, 
+  MAX(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime)) AS MAX,  
+  AVG(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime))AS avg 
+  FROM basedata 
+  WHERE endtime is not null  
+  GROUP BY FA 
+  ORDER BY teil, fa
+----
+
+=== Analyse 2 
+
+.Code 13 - Auftrennung
+[source, sql]
+----
+SELECT `TEIL`, 
+  COUNT(snrid) AS Anzahl, 
+  min(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS MinFertigungszeit, 
+  max(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS MaxFertigungszeit, 
+  avg(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS AVGFertigungszeit 
+  FROM `basedata` 
+  WHERE endtime IS NOT NULL  
+  GROUP BY `TEIL`
+----
+
+=== Analyse 4 
+
+.Code 14 - Analyse 4
+[source, sql]
+----
+SELECT a.Lagerin, 
+  max(unix_timestamp(b.endtime))-MIN(unix_timestamp(a.Begintime)) AS Dauer, 
+  min(a.Begintime) AS Start, 
+  max(b.endtime) AS Ende, 
+  COUNT(b.baseID) 
+  FROM basedatain2 AS a JOIN basedata AS b ON a.baseID = b.baseID 
+  where a.lagerout > 0 
+  GROUP BY a.Lagerin
+----
+
+=== Analyse 5
+
+.Code 15 - Analyse 5
+[source, sql]
+----
+SELECT a.TEIL, a.Lagerin, 
+  count(b.baseid), 
+  (min(unix_timestamp(b.endtime)-unix_timestamp(b.begintime))) AS MinFertigungszeit, 
+  (max(unix_timestamp(b.endtime)-unix_timestamp(b.begintime))) AS MaxFertigungszeit, 
+  (avg(unix_timestamp(b.endtime)-unix_timestamp(b.begintime))) AS AVGFertigungszeit 
+  FROM `basedatain2` as a Join basedata as b on a.baseid=b.baseid 
+  WHERE b.endtime IS NOT NULL  AND a.Lagerout > 0  
+  GROUP BY a.lagerin 
+  ORDER BY a.TEIL
+----
+
+=== Analyse 6
+
+.Code 16 - Analyse 6 - Pseudocode
+[source, sql]
+----
+Select `LINIE` from basedatain2 group by LINIE ORDER BY linie asc
+
+Linies in row umwandeln
+
+SELECT fa, teil, min(unix_timestamp(begintime)), Max(unix_timestamp(begintime)) from basedatain2 WHERE LINIE = '"+row[0]+"' group by FA order by begintime asc
+
+diff = dauer
+if str(diff) >= str(0):           
+    if index == -1:
+          * aktuelle Länge der Ergebnisliste berechnen
+          * neues Element am Ende der Ergebnisliste einfügen 
+    else:
+          * vorhandene Werte aus Liste auslesen
+          * Prüfen, ob min/max verändert werden müssen
+          * Dauer zur AVG Berechnung hinzufügen
+          * Dauer zurück in Liste schreiben
+else:
+    break
+----
+
+=== Messung der Ausführungszeit
+
+== Auswertung
+=== Allgemein
+
+=== Lessons Learned
