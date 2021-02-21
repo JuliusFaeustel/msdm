@@ -236,13 +236,15 @@ SELECT a.TEIL, a.Lagerin,
 === Analyse 6
 
 .Code 16 - Analyse 6 - Pseudocode
-[source, sql]
+[source, python]
 ----
 Select `LINIE` from basedatain2 group by LINIE ORDER BY linie asc
 
 Linies in row umwandeln
 
-SELECT fa, teil, min(unix_timestamp(begintime)), Max(unix_timestamp(begintime)) from basedatain2 WHERE LINIE = '"+row[0]+"' group by FA order by begintime asc
+SELECT fa, teil, min(unix_timestamp(begintime)), 
+Max(unix_timestamp(begintime)) 
+from basedatain2 WHERE LINIE = '"+row[0]+"' group by FA order by begintime asc
 
 diff = dauer
 if str(diff) >= str(0):           
@@ -260,7 +262,31 @@ else:
 
 === Messung der Ausführungszeit
 
+Um die Messung der Ausführungszeit der Analysen in Python zu realisieren, wurde die Zeit vor und nach der Ausführung gemessen. Die Differenz zwischen Start und Ende ergibt die Ausführungszeit und wird in Sekunden zurück gegeben. 
+
+.Code 16 - Ausführungszeit messen
+[source, sql]
+----
+import time
+
+start = time.time()
+#Ausführen der Analyse
+ende = time.time()
+
+print('{:5.3f}s'.format(ende-start))
+----
+
 == Auswertung
 === Allgemein
 
+
+Nach der Auswertung der Analysezeiten (Prozesszeiten) bzw. der Antwortzeiten von MySQL, wurde in diesem Zusammenhang eine Grafik in MS Excel erstellt. Diese zeigt deutlich, dass die Antwortzeiten in MySQL kürzer sind als die Prozesszeiten in Python. Grund dafür ist Datenverarbeitung nach der Abfrage in Python, dies kostet zusätzlich mehr Zeit.
+
+.Prozesszeiten
+image::prozesszeiten.png[]
+
 === Lessons Learned
+
+Schlussendlich erhält man mit der proprietären Datenstruktur eine schnelle und zuverlässige Auswertung der eingelesenen Daten. Jedoch erkennt man bei dieser Struktur, dass eine Weiterentwicklung mit mehr Zeitaufwand nur möglich ist. +
+
+Für eine individuelle und schnelle Lösung ist dieses Modell gut geeignet.
