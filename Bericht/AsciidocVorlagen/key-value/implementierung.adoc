@@ -5,13 +5,40 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: key-value/bilder
 endif::main-file[]
+:source-highlighter: rouge
 
 
 == Implementierung der Struktur
+
+Aufgrund der Eigenschaften einer Schlüssel-Werte-Datenbank, insbesondere der Flexibilität von Datenstrukturen, wird die Struktur mit dem Laden der Daten aufgebaut. Damit ist sichergestellt, dass nur tatsächlich benötigte Strukturen gespeichert werden. Die Implementierung der Struktur erolgt somit während der Laufzeit im Datenloader, die Grundstruktur ist eine leere Redis-Instanz.
+
 == Implementierung der Datenloader
+
+Es gibt 2 verschiedene Datenloader, einen für Input- und einen für Output-Datensätze. Diese bekommen vom Watchdog den Pfad mit der Datei, in dem der jeweiligen Datensatz steht, im Funktionsaufruf übergeben. Anschließend wird die Datei als csv-Datei mit Trennzeichen ";" behandelt. Besitzt der Datensatz keine Seriennummer, so wird der Datensatz als "defekter" Datensatz gespeichert (siehe Entwurf "Rohdatensätze ohne Seriennummer" und "Liste aller Rohdatensätze ohne Seriennummer"). Besitzt er eine Seriennummer, so wird je nach Typ (Input/Output) unterschieden.
+
+=== Input-Datensatz
+
+Zuerst wird der Rohdatensatz als Hash mit entspechenden Feld-Werte-Paaren abgespeichert. Anschließend wird der Schlüssel dieses Hash an die Liste der zugehörigen SNR angehängt, um den Datensatz für den Output verknüpfbar zu machen. Danach wird die Verknüpfung für diesen In-Datensatz als Liste angelegt, wobei als Zeitstempel 2 mal das Datum in Sekunden genommen wird und der Wert der Schlüssel des Rohdatensatzes ist. Diese Verknüpfung wird an die Liste aller Verknüpfungen angehangen. Nun wird jede vorgegebene Eigenschaft durchgegangen. Falls die Eigenschaft noch nicht oder noch nicht in dieser Ausprägung vorhanden ist, wird sie angelegt. Das 1-Bit wird in den entsprechenden Datensätzen an der entsprechenden Position angelegt. Der Zeitstempel des Rohdatensatz wird in die Zeitverknüpfung als erstes Element der Liste eingetragen und der Zähler (inCounter) inkrementiert.
+
+.Einlesealgorithmus Input-Datensatz
+[#img-readIn]
+image::pap-in.png[readIn,400,200]
+
+=== Output-Datensatz
+
+.Einlesealgorithmus Output-Datensatz
+[#img-readOut]
+image::pap-out.png[readOut,400,200]
+
 == Implementierung der Analysen
+
+Legende:
+
+* FA: Fertigungsauftrag
+* SNR: Seriennummer
+* LA: Ladungsträger
 
 [source, python]
 ----
@@ -20,5 +47,124 @@ def home():
     return render_template("inline.html")
 ----
 
-== Evolution des Datenmodells
+Analyse 1:
+----
+FOR EACH Teil in alleTeile {
+    FOR EACH FA in alleFA {
+        Verknüpfungen ermitteln, welche dieses Teil und diesen FA haben
 
+        IF Verknüpfung(en) exisieren {
+            FOR EACH Verknüpfung {
+                IF Verknüpfung besitzt Ouput {
+                    Zeitdifferenz Input/Output berechnen
+                    IF Differenz <= 1 Stunde {
+                        Differenz auf Minimum/Maximum prüfen
+                        Differenz auf Gesamtzeit addieren
+                        Ausschuss für diese SNR inkrementieren
+                    }
+                }
+            }
+
+            Menge an SNR ermitteln
+            Maximum, Minimum und Druchschnitt Ausschuss berechnen
+            Maximum, Minimum und Druchschnitt Zeiten berechnen
+            In Ausgabedatei schreiben
+        }
+    }
+}
+----
+
+Analyse 2:
+----
+FOR EACH Teil in alleTeile {
+    Verknüpfungen ermitteln, welche dieses Teil haben
+
+    FOR EACH Verknüpfung {
+        Verbinde die Input/Output Zeitstempel mit der jeweiligen SNR
+    }
+
+    FOR EACH SNR in SNR-Zeitstempel-Verbindungen {
+        Ausschuss berechnen
+        Verbindungen nach Input-Zeitstempel sortieren
+
+        IF Anzahl Verbindung > 1 {
+            FOR EACH Verbindung {
+                Berechne Zeitdifferenz letzter Output bis aktueller Input
+                Differenz auf Maximum / Minimum prüfen
+                Differenz auf Gesamtzeit addieren
+            }
+        }
+    }
+
+    Durchschnitte berechnen
+    In Ausgabedatei schreiben
+}
+----
+
+Analyse 4:
+----
+FOR EACH LA in alleLA {
+    Verknüpfungen ermitteln, welche diesen LA haben
+
+    FOR EACH Verknüpfung {
+        Zeitstempel auf Maximum / Minimum prüfen
+    }
+
+    Differenz von Maximum und Minimun berechnen
+    In Ausgabedatei schreiben
+}
+----
+
+Analyse 5:
+----
+FOR EACH Teil in alleTeile {
+    FOR EACH LA in alleLA {
+        Verknüpfungen ermitteln, welche dieses Teil und diesen FA haben
+
+        IF Verknüpfung(en) exisieren {
+            FOR EACH Verknüpfung {
+                SNR in Set aller SNR hinzufügen
+
+                IF Verknüpfung besitzt Ouput {
+                    Zeitdifferenz Input/Output berechnen
+                    Differenz auf Gesamtzeit addieren
+                    Differenz auf Minimum/Maximum prüfen
+                }
+            }
+
+            Menge an SNR ermitteln
+            Maximum, Minimum und Druchschnitt Zeiten berechnen
+            In Ausgabedatei schreiben
+        }
+    }
+}
+----
+
+Analyse 6:
+----
+FOR EACH Linie in alleLinien {
+    FOR EACH FA in alleFA {
+        Verknüpfungen ermitteln, welche diese Linie und diesen FA haben
+
+        FOR EACH Verknüpfung {
+            Zeitstempel auf Maximum / Minimum prüfen
+
+            IF Maximum {
+                FA Maximum zuordnen
+            }
+            IF Minimum {
+                FA Minimum zuordnen
+            }
+        }        
+    }
+    
+    FA-Zeit-Verbindungen nach Zeitstempel des Input aufsteigend sortieren
+
+    FOR EACH FA-Zeit-Verbindung {
+        Zeitdifferenz letzter Input / aktueller Input berechnen
+        Differenz auf Maximum / Minimum für diese Teilkombination prüfen
+    }
+
+    In Ausgabedatei schreiben
+}
+----

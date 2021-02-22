@@ -5,9 +5,28 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: key-value/bilder
 endif::main-file[]
 
+== Quellen
 
+http://wi-wiki.de/doku.php?id=bigdata:keyvaluedb
+https://www.ionos.de/digitalguide/hosting/hosting-technik/key-value-store/
+https://en.wikipedia.org/wiki/Key%E2%80%93value_database
+https://db-engines.com/en/ranking/key-value+store
 
 == Datenbankvorstellung
+
+=== Allgemein
+
+Die Schlüssel-Werte-Datenbank, englisch Key-Value-Store, ist ein auf dem Schlüssel-Werte-Datenmodell basierendes Datenbankmodell. Sie gehört zu den ältesten NoSQL Datenbanken, verfolgt also einen nicht-relationalen Ansatz. Das Prinzip einer solchen Datenbank stellt die Verknüpfung eines Schlüssels mit einem Wert dar, welche einen Datensatz ergibt. Die einzige Restriktion besteht darin, dass jeder Schlüssel eindeutig sein muss. Der Wert ist aus Sicht des Datenbankmodells lediglich eine Bitfolge.
+
+Aus dieser einfachen Struktur ergeben sich in der Anwendung diverse Vorteile. Zum einen entsteht ein Vorteil dadurch, dass man direkt über den Schlüssel auf den Wert zugreift. Dies ermöglicht sehr schnelle Zugriffe. Ein weiterer Vorteil ist, dass alleine die Eindeutigkeit des Schlüssels als Restriktion für einen Datensatz vorliegt. Das bedeutet, dass die Schlüssel und Werte beliebige Strukturen aufweisen können. So kann ich einem Schlüssel als Wert eine einfache 0, einem anderen Schlüssel beispielsweise eine Liste aus 100.000 Elementen zuweisen. Dies führt dazu, dass man sich nicht an strukturelle Regeln halten muss und somit auch im laufenden Betrieb beliebig bestehende Strukturen anpassen und Neue einführen kann. Diese einzige Limitierung führt außerdem dazu, dass die Datensätze auf dem Datenträger einfach hintereinander weg geschrieben werden können.
+
+Die einfache Struktur des Datenbankmodells führt allerdings auch zu Herausforderungen, welchen begegnet werden muss. Dabei ist vor allem hervorzuheben, dass Werte nicht durchsucht werden können. Dies führt insbesondere dazu, dass komplexe Abfragen weitestgehend selbst ermöglicht werden müssen - die Datenbank übernimmt nur Abfragen über den Schlüssel. Außerdem ist es nicht möglich den Inhalt des Wertes zu filtern, da dieser aus Sicht des Modells einfach nur eine Bitfolge ist. So wird bei einem read immer der ganze Wert zurückgegeben und bei einem update der ganze Wert neu geschrieben.
+
+=== Redis
+
+In unserem Anwendungsfall haben wir uns für Redis als Implementierung einer Schlüssel-Werte-Datenbank entschieden. Gründe für die Entscheidung waren, dass Redis open-source ist und als verbreiteste Schlüssel-Werte-Datenbank und Datenbankmanagementsystem gut dokumentiert ist. Von der Community erstellte Bibliotheken bieten Schnittstellen für die Kommunikation zwischen Programm und Datenbank, wodurch wir alle für uns relevanten Datenbankoperationen einfach in Python abbilden konnten. Redis arbeitet standardmäßig In-Memory, wodurch Zugriffe auf andere Datenträger wegfallen. Persistenz wird dabei auch ermöglicht und ist individuell anpassbar. Untertützt werden in Redis als Datentypen nicht nur Strings, sondern auch z.B. Lists, Sets, Hashes und Bitmaps.
+
+Eine Herausforderungen bezüglich Redis bestand für uns darin, dass Windows weder offiziell noch durch Implementierungen der Community unterstützt wird. Wir haben zwei Lösungsansätze probiert, zum einen die Installation auf dem offziellen Linux Subsystem von Windows und zum anderen die Installation auf einer virtuellen Maschine. Dabei haben die ersten Implementierungen bereits gezeigt dass auf dem Linux Subsystem die Performance von Datenbankoperationen deutlich niedriger ist als auf der virtuellen Maschine. Die Implementierungen für unseren Anwendungsfall erfolgten deshalb im "VMware Workstation 16 Player" mit Ubuntu 20.04 LTS 64 bit.

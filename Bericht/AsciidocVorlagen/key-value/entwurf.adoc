@@ -5,9 +5,90 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: key-value/bilder
 endif::main-file[]
 
 
 == Erstes Datenmodell
 
+Das erste Datenmodell war ein einfaches Modell, welches sich die Vorteile einer Schlüssel-Werte-Datenbank eher weniger zunutze gemacht hat. Das bedeutet insbesondere, dass die Abwesenheit der Möglichkeit komplexer Abfragen in Redis zur Verschiebung dieser Aufgabe in die eigene Python-Programmierung geführt hat. Außerdem wurden lediglich Listen und Hashes als Datentypen verwendet, welche zwar ausreichend, für die Performance aber negativ zuträglich waren. Analysen haben aufgrund der sehr großen Anzahl an Abfragen an die Datenbank und Vergleichsoperationen zwischen Listen in diesem Modell zwischen 4 und 8 Minuten gedauert.
+
+== Finales Datenmodell
+
+Das neue Datenmodell wurde aufgrund der schlechten Performance der Implementierung des ersten Entwurfs initiiert. Die Anforderungen an das neue Modell waren zum einen die Reduzierung der Anzahl der Abfragen an die Datenbank insgesamt und zum anderen schneller die richtigen Datensätze zu laden und auszuwerten, also insbesondere Datensätze mit gleichen Eigenschaften (z.B. Maschine 2 und Teil B) performant zu finden und auszuwerten. Die Reduzierung der Abfragen wurde dadurch gelöst, in die Schlüssel der Verknüpfungen direkt zugehörige, für die Analysen notwendige Informationen, also Anfangs-/Enddatum und Seriennummer, zu speichern. So muss nicht mehr noch eine ebene Tiefer in die Rohdaten gegangen werden. Das performante Auffinden der richtigen Datensätze wird durch Bitmaps realisiert. Dadurch können Übereinstimmungen direkt serverseitig festgestellt werden und es ist nicht mehr nötig Listen mit einer bis zu sechstelligen Anzahl an Elementen zu übertragen und selbst auszuwerten. Daneben wurde noch die Wahl der Datentypen angepasst um eine höhere Performance zu erreichen.
+
+Das Datenmodell ergibt sich aus mehreren Komponenten. In der Bildungsvorschrift _kursiv_ geschriebene Begriffe sind dynamisch, variieren also je nach Datensatz dieser Komponente. Die Begrifflichkeiten sind in der Legende im letzten Anstrich erläutert:
+
+* Rohdaten
+** Abbildung der Datensätze wie sie kommen
+** Datentyp Hash -> Werte Sind Field-Value Paare (Strings)
+** Bildungsvorschrift Schlüssel: "in:__inCounter__ bzw. out:__outCounter__"
+** Beispiel:
+** Erklärung: Alle Rohdatensätze müssen gespeichert werden. Die Speicherung als Hash ermöglicht es, nur bestimmte Felder abzufragen. Für die im Projekt geforderten Analysen haben die abgespeicherten Rohdatensätze keine Bedeutung mehr.
+* Zähler
+** Abbildung des aktuellen Standes von inCounter bzw. outCounter
+** Datentyp String -> Inkrementiert für jeden neuen In- bzw. Out-Datensatz
+** Bildungsvorschrift Schlüssel: "inCounter" bzw. "outCounter"
+** Beispiel:
+** Erklärung: Um die Eindeutigkeit der Schlüssel zu wahren, werden inCounter und outCounter in der Datenbank selbst persistiert, um für den nächsten Rohdatensatz den richtigen Zähler bereistellen zu können.
+* Seriennummern
+** Abbildung der zu einer Seriennummer gehörenden Input-Datensätze
+** Datentyp Liste -> Minimal 1 Element
+** Bildungsvorschrift Schlüssel: "_SNR_"
+** Beispiel:
+** Erklärung: Ein Output-Datensatz gehört zu einem Input-Datensatz. Als zugehörige Input-Datensätze kommen nur solche mit entsprechender Seriennummer in Frage. Um den richtigen Input-Datensatz zu finden, muss nur die Liste mit entsprechender Seriennummer durchgegangen werden.
+* Zeitverknüpfung
+** Abbildung des Zeitstempels des Input-Datensatzes und des höchsten Zeitstempels der mit dem Input verknüpften Out-Datensätze
+** Datentyp Liste -> Minimal 1, maximal 2 Elemente
+** Bildungsvorschrift Schlüssel: "_inCounter_"
+** Beispiel:
+** Erklärung: Da in einer Schlüssel-Werte-Datenbank nicht über Werte gesucht werden kann und die Verknüpfungen im Schlüssel Zeitstempelinformationen enthalten (die vom Input und die des spätesten Output), braucht es zum Zugriff auf den Schlüssel der entsprechenden Verknüpfung die richtigen Zeitstempel. Diese können hier geladen und eingetragen werden.
+* Verknüpfungen
+** Abbildung der Verknüpfungen eines Input-Datenastzes mit zugehörigen Output-Datensätzen
+** Datentyp Liste -> Erstes Element ist die Referenz auf den Input-Datensatz, ab zweitem Element Referenz auf Output-Datensatz
+** Bildungsvorschrift Schlüssel: "__inDat__:__inCounter__:__outDat__:__SNR__"
+** Beispiel:
+** Erklärung: Verknüpfungen sind das zentrale Element des Modells. Dabei ist vor allem der Schlüssel mit den Informationen von Zeitstempel (der vom Input und des spätesten Output) und Seriennummer wichtig. Auf die Elemente der Listen wird in den geforderten Analysen nicht zugegriffen.
+* Verknüpfungsliste
+** Abbildung aller Verknüpfungen
+** Datentyp Liste -> Elemente sind Schlüssel der Verknüpfungen
+** Bildungsvorschrift Schlüssel: "con"
+** Beispiel:
+** Erklärung: Diese Liste enthält alle Verknüpfungen. Die 1-Positionen, die aus der AND-Verknüpfungen der Bitmaps der Eigenschaften entstehen, können als Indices dieser Liste betrachtet werden. 
+* Eigenschaften
+** Abbildung der Verknüpfungen, welche diese Eigenschaft besitzen
+** Datentyp Bitmap -> Folge von 0 und 1 
+** Bildungsvorschrift Schlüssel: "__Eigenschaftsname__:__Eigenschaftsausprägung__"
+** Beispiel:
+** Erklärung: Für jede Verknüpfung wird im Wert angegeben, ob diese die Eigenschaft besitzt (1) oder nicht (0).
+* Ausprägungen der Eigenschaft
+** Abbildung der Ausprägungen der Eigenschaften, welche in den Datensätzen vorgekommen sind
+** Datentyp Set -> Unsortierte Menge der Ausprägungen
+** Bildungsvorschrift Schlüssel: "_Eigenschaftsname_"
+** Beispiel:
+** Erklärung: Die Ausprägungen der Eigenschaften werden gespeichert, damit bei Abfragen über alle Ausprägungen alle entsprechenden Schlüssel der Eigenschaften (Name+Ausprägung) bekannt sind.
+* Rohdatensätze ohne Seriennummer
+** Abbildung der Rohdatensätze ohne Seriennummer
+** Datentyp Hash -> Werte Sind Field-Value Paare (Strings)
+** Bildungsvorschrift Schlüssel:
+** Beispiel:
+** Erklärung: Datensätze ohne Seriennummer besitzen für die Analysen keine Relevanz. Aufgrund der Anforderungen werdne sie trotzdem gespeichert.
+* Liste der Rohdatensätze ohne Seriennummer
+** Abbildung aller Rohdatensätze ohne Seriennummer
+** Datentyp Set -> Schneller Zugriff auf alle Elemente
+** Bildungsvorschrift Schlüssel:
+** Beispiel:
+** Erklärung: Damit alle Datensätze ohne Seriennummer schnell gefunden werden können, werden deren Schlüssel in diesem Set gespeichert.
+* Bitpositionen
+** Abbildund des Ergebnisses der bitweisen AND Operation 
+** Bildungsvorschrift Schlüssel: "opCon"
+** Beispiel:
+** Das Ergebnis einer bitweisen AND Operation kann nicht direkt zurückgegeben werden, sondern wird selbst in der Datenbank gespeichert.
+* Legende:
+** inCounter: Zähler, der für jeden eingelesenen Input-Datensatz inkrementiert
+** outCounter: Zähler, der für jeden eingelesenen Output-Datensatz inkrementiert
+** inDat: Zeitstempel des Input-Datensatz
+** outDat: Zeitstempel des Output-Datensatz
+** SNR: Seriennummer
+** Eigenschaftsname: Titel der Eigenschaft, z.B. "LINIE" oder "TEIL"
+** Eigenschaftsausprägung: Äuspragung der Eigenschaft mit dem zugehörigen Eigenschaftstitel, z.B. "005757" für den Fertigungsauftrag Nr. 005757
