@@ -139,7 +139,7 @@ cursor.close()
 
 == Datenloader
 
-Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 1 virtualisiert. +
+Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 14 virtualisiert. +
 
 Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über einen Insert-Statement in die Datenbank zu speichern.
 
