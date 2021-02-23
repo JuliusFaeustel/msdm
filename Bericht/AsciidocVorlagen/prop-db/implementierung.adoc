@@ -86,7 +86,7 @@ Die Implementierung der Anwendungen wurde mit der Programmiersprache Python vorg
 Die Ausführung des Python-Programmes wurde über die Kommandozentrale (CMD), von Windows 10, vorgenommen. +
 Dies wird in im Codebeispiel 7 verdeutlicht. 
 
-.Code 7 - Ausführung des Python-Programmes über CMD
+.Code 8 - Ausführung des Python-Programmes über CMD
 [source, sh]
 ----
 >python analyse.py 
@@ -97,7 +97,7 @@ Dies wird in im Codebeispiel 7 verdeutlicht.
 Durch die Python-Bibliothek mysql-connector-python wurde eine Verbindung zwischen Anwendung und MySQL-Datenbankserver hergestellt. +
 Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 8 beschrieben.
 
-.Code 7 - Installation Python-Bibliothek über CMD
+.Code 9 - Installation Python-Bibliothek über CMD
 [source, sh]
 ----
 >pip install mysql-connector-python
@@ -105,7 +105,7 @@ Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 8 bes
 
 Die installierte Bibliothek wird nun in die Anwendung eingebunden, um eine Verbindung zur Datenbank herstellen zu können. Dazu müssen folgende Parameter gesetzt werden um einen Zugriff zu erhalten: host, database, user und password.
 
-.Code 8 - Herstellung der Verbindung zwischen Anwender und Datenbank
+.Code 10 - Herstellung der Verbindung zwischen Anwender und Datenbank
 [source, python]
 ----
 import mysql.connector
@@ -118,7 +118,7 @@ Nach dem Aufbau der Verbindung zur Datenbank, wird ein Cursor gesetzt. Diesem wi
 * _fetchall()_, welcher die gesamte Ergebnismenge wieder gibt
 * _fetchone()_, welcher nur die erste Zeile der Ergebnismenge wieder gibt
 
-.Code 9 - Erstellung eines Cursor's sowie einer SELECT-Abfrage
+.Code 11 - Erstellung eines Cursor's sowie einer SELECT-Abfrage
 [source, python]
 ----
 cursor = connection.cursor()
@@ -128,7 +128,7 @@ result = cursor.fetchall()
 
 Um die execute auszuführen, bedarf es ein Commit, welches die Anweisung ausführt.  Nach dem Ausführen, wird der Cursor, sowie die Connection per close() Funktion geschlossen.
 
-.Code 10 - Commit und Close der Connection
+.Code 12 - Commit und Close der Connection
 [source, python]
 ----
 connection.commit()
@@ -143,7 +143,7 @@ Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informati
 
 Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über einen Insert-Statement in die Datenbank zu speichern.
 
-.Code 11 - Daten auslesen
+.Code 13 - Daten auslesen
 [source, python]
 ----
 datei   = open(filename, 'r')
@@ -174,7 +174,7 @@ Im Allgemeinen hat die Vorarbeit mit Möglichkeit eins und zwei die Entwicklung 
 
 === Analyse 1 
 
-.Code 12 - Taktung pro Artikel
+.Code 14 - Taktung pro Artikel
 [source, sql]
 ----
 SELECT teil, fa, COUNT(baseid) AS COUNT, 
@@ -189,7 +189,7 @@ SELECT teil, fa, COUNT(baseid) AS COUNT,
 
 === Analyse 2 
 
-.Code 13 - Auftrennung
+.Code 15 - Auftrennung
 [source, sql]
 ----
 SELECT `TEIL`, 
@@ -204,7 +204,7 @@ SELECT `TEIL`,
 
 === Analyse 4 
 
-.Code 14 - Analyse 4
+.Code 16 - Analyse 4
 [source, sql]
 ----
 SELECT a.Lagerin, 
@@ -219,7 +219,7 @@ SELECT a.Lagerin,
 
 === Analyse 5
 
-.Code 15 - Analyse 5
+.Code 17 - Analyse 5
 [source, sql]
 ----
 SELECT a.TEIL, a.Lagerin, 
@@ -235,7 +235,7 @@ SELECT a.TEIL, a.Lagerin,
 
 === Analyse 6
 
-.Code 16 - Analyse 6 - Pseudocode
+.Code 18 - Analyse 6 - Pseudocode
 [source, python]
 ----
 Select `LINIE` from basedatain2 group by LINIE ORDER BY linie asc
@@ -264,7 +264,7 @@ else:
 
 Um die Messung der Ausführungszeit der Analysen in Python zu realisieren, wurde die Zeit vor und nach der Ausführung gemessen. Die Differenz zwischen Start und Ende ergibt die Ausführungszeit und wird in Sekunden zurück gegeben. 
 
-.Code 16 - Ausführungszeit messen
+.Code 19 - Ausführungszeit messen
 [source, sql]
 ----
 import time
