@@ -15,5 +15,5 @@ URL: https://datasolut.com/apache-hadoop-einfuehrung/#Unterschied-zwischen-Hadoo
 Übersicht Über AWS IoT Analytics  Amazon Web Services,
 URL: https://aws.amazon.com/de/iot-analytics/?c=i&sec=srv [Letzter Besuch: 8 Feb. 2021].
 |
-
+Kudraß, Thomas (2015): Taschenbuch Datenbanken, München, Deutschland: Carl Hanser Verlag.
 |===

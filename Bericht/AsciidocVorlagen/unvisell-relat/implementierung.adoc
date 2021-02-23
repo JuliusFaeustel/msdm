@@ -44,7 +44,7 @@ CREATE TABLE Input (
 ALTER TABLE Input ADD CONSTRAINT FKInput_TEIL FOREIGN KEY (TEIL) REFERENCES TEIL (TEIL);
 ----
 
-Da bei den Analysen, deren Implementierung später noch beschrieben wird, große Datenmengen der Tabellen abgefragt und teilweise über JOINS miteinander verbunden werden, spielen Indizes eine wichtige Rolle, um die Datenabfragen performant zu gestalten. Durch Indizes wird, vereinfacht beschrieben, das vollständige Durchsuchen einer Menge von Tupeln (FullTableScan) vermieden, da bestimmte Attributwerte in einem B-Baum gespeichert werden, was die Laufzeit verringert.
+Da bei den Analysen, deren Implementierung später noch beschrieben wird, große Datenmengen der Tabellen abgefragt und teilweise über JOINS miteinander verbunden werden, spielen Indizes eine wichtige Rolle, um die Datenabfragen performant zu gestalten. Durch Indizes wird, vereinfacht beschrieben, das vollständige Durchsuchen einer Menge von Tupeln (FullTableScan) vermieden, da mittels Index eine neue Datenstruktur (häufig B*-Bäume) erstellt wird, welche auf Tabellendaten verweist, was die Laufzeit verringert.
 
 .Code 5 - Anlegen von Indizes für die Tabelle Input
 [source, sql]
@@ -296,7 +296,7 @@ Bevor mit der Implementierung der vorgegebenen Analysen begonnen wurde, wurde ü
 |             
 |(1) kleine Abfragen mit genauen WHERE-Klauseln (bspw. je SNR) 
 |(2) mittlere Abfragen mit Mengen in WHERE-Klauseln (bspw. je FA) 
-|(3) große Abfragen
+|(3) große Abfragen ohne Selektion in SQL
 
 |Vorteile     
 |* gesamtes Vorgehen einfach nachvollziehbar 
@@ -345,9 +345,9 @@ def convert_from_datestring( TimeString ):
   return Second
 ----
 
-Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 24)
+Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 24)
 
-.Code 24 - Umwandeln eines Sekundenwerts in einen einfach lesabren String
+.Code 24 - Umwandeln eines Sekundenwerts in einen einfach lesbaren String
 [source, python]
 ----
 def convert_from_s( seconds ): 
