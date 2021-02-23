@@ -17,6 +17,9 @@
 :main-file: true
 :imagesdir: bilder
 
+= Multisource Datamangement
+Clemens Kujus, Paul Kristian Picht, Lukas Siegert, Cornelius Liepelt, Julius Fäustel
+
 include::einleitung.adoc[leveloffset=+1]
 include::problemstellung.adoc[leveloffset=+1]
 include::stateoftart.adoc[leveloffset=+1]

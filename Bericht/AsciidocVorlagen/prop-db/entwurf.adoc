@@ -5,7 +5,7 @@ ifndef::main-file[]
 :imagesdir: bilder
 endif::main-file[]
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: prop-db/bilder
 endif::main-file[]
 
 
