@@ -274,11 +274,12 @@ def insert (file):
 
 Die Verfahren zum Einlesen der Input- und Output-Datensätze sind sehr ähnlich. Deshalb wurden die Verfahren zusammen in den Bildern 6 und 7 dargestellt.
 
+
 .ereignisgesteuerte Prozesskette zur Darstellung des Einlesens von Werten anderer Objekttypen
-image::EPK1.jpg[]
+image::EPK1.jpg[width=350, align = center]
 
 .ereignisgesteuerte Prozesskette zur Darstellung des Einlesens spezieller Merkmale sind
-image::EPK2.jpg[]
+image::EPK2.jpg[width=600, align = center]
 
 Nachdem ein Output-Datensatz in der Tabelle Output angelegt worden ist (Bild 7, Ereignis 2), muss dieser noch, sofern möglich, mit einem Input-Datensatz verknüpft werden. Dies passiert über die Zeitstempel der Datensätze. Sofern es für die Seriennummer nur einen Input-Datensatz gibt, erfolgt eine direkte Verknüpfung, außer die Zeitdifferenz zwischen Output und Input ist negativ. Sollten jedoch mehrere Input-Datensätze zu einer Seriennummer vorhanden sein, muss die Zeitdifferenz zwischen Output und jedem passenden Input berechnet werden. Dabei wird der Output mit dem Input verknüpft zu dem die kleinste nicht negative Differenz besteht. +
 

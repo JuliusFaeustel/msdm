@@ -3,7 +3,7 @@
 :toc-title: Inhaltsverzeichnis
 :imagesdir: bilder
 ifdef::main-file[]
-:imagesdir: document-oriented/bilder
+:imagesdir: prop-db/bilder
 endif::main-file[]
 
 
