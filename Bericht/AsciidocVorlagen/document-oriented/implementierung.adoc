@@ -479,7 +479,7 @@ x = mydb.in_data_embedded.aggregate([
 {"$sort":{"start": 1}}])
 ----
 
-In Analyse 7 mache ich innerhalb einer Schleife Abfragen zu jeder Linie, dabei wähle ich mir in den ersten beiden _$project_
+In Analyse 6 mache ich innerhalb einer Schleife Abfragen zu jeder Linie, dabei wähle ich mir in den ersten beiden _$project_
 Phasen die Attribute aus die ich betrachten möchte und lasse mir den Zeitstempel des Outputs geben. Weiterführend wähle
 ich der _$match_ Phase nur Elemente welche eine "SNR" haben und welche als "LINIE" den Wert der Variablen Linie haben.
 Zum Schluss gruppiere ich nach Fertigungsauftrag und Teil. Außerdem lasse ich mir zu jeder Gruppe den frühesten Startzeitpunkt
