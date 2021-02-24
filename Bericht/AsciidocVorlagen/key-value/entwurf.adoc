@@ -27,7 +27,7 @@ Das Datenmodell ergibt sich aus mehreren Komponenten. In der Bildungsvorschrift 
 +
 .Rohdatensatz
 [#img-rohdatensatz]
-image::kv-rohdatensatz.png[rohdatensatz]
+image::kv-rohdatensatz.PNG[rohdatensatz]
 
 ** Erklärung: Alle Rohdatensätze müssen gespeichert werden. Die Speicherung als Hash ermöglicht es, nur bestimmte Felder abzufragen. Für die im Projekt geforderten Analysen haben die abgespeicherten Rohdatensätze keine Bedeutung mehr.
 * Zähler
@@ -38,7 +38,7 @@ image::kv-rohdatensatz.png[rohdatensatz]
 +
 .Zähler
 [#img-zaehler]
-image::kv-zaehler.png[zaehler]
+image::kv-zaehler.PNG[zaehler]
 
 ** Erklärung: Um die Eindeutigkeit der Schlüssel zu wahren, werden inCounter und outCounter in der Datenbank selbst persistiert, um für den nächsten Rohdatensatz den richtigen Zähler bereistellen zu können.
 * Seriennummern
@@ -49,7 +49,7 @@ image::kv-zaehler.png[zaehler]
 +
 .Seriennummern
 [#img-snr]
-image::kv-snr.png[snr]
+image::kv-snr.PNG[snr]
 
 ** Erklärung: Ein Output-Datensatz gehört zu einem Input-Datensatz. Als zugehörige Input-Datensätze kommen nur solche mit entsprechender Seriennummer in Frage. Um den richtigen Input-Datensatz zu finden, muss nur die Liste mit entsprechender Seriennummer durchgegangen werden.
 * Zeitverknüpfung
@@ -60,7 +60,7 @@ image::kv-snr.png[snr]
 +
 .Zeitverknüpfung
 [#img-zeitverknuepfung]
-image::kv-zeitverknuepfung.png[zeitverknuepfung]
+image::kv-zeitverknuepfung.PNG[zeitverknuepfung]
 
 ** Erklärung: Da in einer Schlüssel-Werte-Datenbank nicht über Werte gesucht werden kann und die Verknüpfungen im Schlüssel Zeitstempelinformationen enthalten (die vom Input und die des spätesten Output), braucht es zum Zugriff auf den Schlüssel der entsprechenden Verknüpfung die richtigen Zeitstempel. Diese können hier geladen und eingetragen werden.
 * Verknüpfungen
@@ -71,7 +71,7 @@ image::kv-zeitverknuepfung.png[zeitverknuepfung]
 +
 .Verknüpfungen
 [#img-verknuepfung]
-image::kv-verknuepfung.png[verknuepfung]
+image::kv-verknuepfung.PNG[verknuepfung]
 
 ** Erklärung: Verknüpfungen sind das zentrale Element des Modells. Dabei ist vor allem der Schlüssel mit den Informationen von Zeitstempel (der vom Input und des spätesten Output) und Seriennummer wichtig. Auf die Elemente der Listen wird in den geforderten Analysen nicht zugegriffen.
 * Verknüpfungsliste
@@ -82,7 +82,7 @@ image::kv-verknuepfung.png[verknuepfung]
 +
 .Verknüpfungsliste
 [#img-con]
-image::kv-con.png[con]
+image::kv-con.PNG[con]
 
 ** Erklärung: Diese Liste enthält alle Verknüpfungen. Die 1-Positionen, die aus der AND-Verknüpfungen der Bitmaps der Eigenschaften entstehen, können als Indices dieser Liste betrachtet werden. 
 * Eigenschaften
@@ -93,7 +93,7 @@ image::kv-con.png[con]
 +
 .Eigenschaften
 [#img-eigenschaften]
-image::kv-eigenschaften.png[eigenschaften]
+image::kv-eigenschaften.PNG[eigenschaften]
 
 ** Erklärung: Für jede Verknüpfung wird im Wert angegeben, ob diese die Eigenschaft besitzt (1) oder nicht (0).
 * Ausprägungen der Eigenschaft
@@ -104,7 +104,7 @@ image::kv-eigenschaften.png[eigenschaften]
 +
 .Ausprägungen der Eigenschaften
 [#img-auspraegungen]
-image::kv-auspraegungen_eigenschaften.png[auspraegungen]
+image::kv-auspraegungen_eigenschaften.PNG[auspraegungen]
 
 ** Erklärung: Die Ausprägungen der Eigenschaften werden gespeichert, damit bei Abfragen über alle Ausprägungen alle entsprechenden Schlüssel der Eigenschaften (Name+Ausprägung) bekannt sind.
 * Rohdatensätze ohne Seriennummer
