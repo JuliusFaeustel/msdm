@@ -9,10 +9,18 @@ ifdef::main-file[]
 endif::main-file[]
 :source-highlighter: rouge
 
+== Verwendete Tools
+Für die Implementierung wurden mehrere Tools verwendet.
+
+* VMware Workstation 16 Player mit Ubuntu 20.04 LTS 64 Bit
+* Redis 5.0.7
+* Python 3.8.5
+* redis-py (Python-Bibliothek für Redis)
+* redis-commander (Web-UI für Redis Server)
 
 == Implementierung der Struktur
 
-Aufgrund der Eigenschaften einer Schlüssel-Werte-Datenbank, insbesondere der Flexibilität von Datenstrukturen, wird die Struktur mit dem Laden der Daten aufgebaut. Damit ist sichergestellt, dass nur tatsächlich benötigte Strukturen gespeichert werden. Die Implementierung der Struktur erolgt somit während der Laufzeit im Datenloader, die Grundstruktur ist eine leere Redis-Instanz.
+Aufgrund der Eigenschaften einer Schlüssel-Werte-Datenbank, insbesondere der Flexibilität von Datenstrukturen, wird die Struktur mit dem Laden der Daten aufgebaut. Damit ist sichergestellt, dass nur tatsächlich benötigte Strukturen gespeichert werden. Die Implementierung der Struktur erfolgt somit während der Laufzeit im Datenloader, die Grundstruktur ist eine leere Redis-Instanz.
 
 == Implementierung der Datenloader
 
@@ -24,28 +32,94 @@ Zuerst wird der Rohdatensatz als Hash mit entspechenden Feld-Werte-Paaren abgesp
 
 .Einlesealgorithmus Input-Datensatz
 [#img-readIn]
-image::pap-in.png[readIn,400,200]
+image::pap-in.png[readIn]
 
 === Output-Datensatz
 
 .Einlesealgorithmus Output-Datensatz
 [#img-readOut]
-image::pap-out.png[readOut,400,200]
+image::pap-out.png[readOut]
 
 == Implementierung der Analysen
+
+=== Vorgehensweise
+
+Die Analysen folgen einem Grundgerüst, welches sich zwar in der Ausprägung, nicht aber in der Struktur, unterscheidet. Am Anfang werden die Listen mit den benötigten Daten geladen. Diese sind zum einen die Liste mit allen Verknüpfungen, die Verknüpfungsliste, und die Sets der gefragten Eigenschaften mit den Ausprägungen als Elemente dieser. 
+
+.Laden der benötigten Daten
+[source, python]
+----
+import redis
+r = redis.Redis(decode_responses=True)
+
+allCons = r.lrange("con",0,-1)
+allConLen = len(allCons)
+allTeil = r.smembers("TEIL")
+allFa = r.smembers("FA")
+----
+
+Danach wird die Ausgabedatei vorbereitet.
+
+.Ausgabedatei vorbereiten
+[source, python]
+----
+writer = ""
+diffFile = open("takt1.txt", "w")
+diffFile.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
+----
+
+Anschließend wird ein Lua-Skript vorbereitet und in Redis eingebunden. Das Skript ist notwendig, da es in Redis keine Funktionalität dafür gibt die 1-Positionen einer Bitmap sinnvoll auszulesen. In unserem Fall brauchen wir die 1-Positionen der Bitmap "opCon", welche das Ergebnis der bitweisen AND Operation speichert. Redis ermöglicht es Lua-Skripte einzubinden und diese serverseitig auszuführen. Das Skript ist in den Quelltexten der Analysen aufgeführt, im folgenden Beispiel durch drei Punkte ersetzt.
+
+.Lua-Skript einbinden und ausführen
+[source, python]
+----
+lua = """ ... """
+myLua = r.register_script(lua)
+----
+
+Nun erfolgt die eigentliche Analyse. Dabei wird immer mit den Bitmaps der Eigenschaften gearbeitet, da diese angeben welche Verknüpfungen diese Eigenschaft besitzen. Zur Veranschaulichung dient folgendes Beispiel:
+
+* Gesucht: Alle Verknüpfungen mit den Eigenschaften "TEIL:B" und "FA:005830"
+* Bitmap "TEIL:B" ->    [0101010]
+* Bitmap "FA:005830" -> [1100110]
+
+Die 1-Bits einer Bitmap bedeuten, dass die Verknüpfung mit der Nummer "Index des 1-Bit" diese Eigenschaft besitzt (Erster Index einer Bitmap ist Index Nr. 1). In dem Beispiel besitzen also die Verknüpfungen 2,4 und 6 die Eigenschaft "TEIL:B" und Verknüpfungen 1,2,5,6 die Eigenschaft "FA:005830". Um nun diejenigen Verknüpfungen zu finden, welche beide Eigenschaften besitzen, müssen nur beide Bitmaps bitweise AND verknüpft werden. Das Ergebnis dieser Operation ist wieder eine Bitmap, welche unter dem Schlüssel "opCon" gespeichert wird.
+
+* Bitmap "opCon" -> [0100010]
+
+Es besitzten also Verknüpfung Nummer 2 und 6 beide Eigenschaften. Das eingebundene Lua-Skript gibt nun alle 1-Positionen von "opCon" als Liste zurück, in dem Fall also "(2,6)". Diese Liste kann nun auf die Liste aller Verknüpfungen angewendet werden, wodurch ich nur Verknüpfungen mit diesen bestimmten Eigenschaften betrachte. Im folgenden noch das Codebeispiel.
+
+.Bitmap Operationen
+[source, python]
+----
+#Bitweise AND für dieses Teil und diesen Fertigungsauftrag
+r.bitop("AND","opCon",teil,fa)
+#Lua-Skript auf 'opCon' anwenden
+#So viele Bits auf 1en prüfen wie die Liste aller Verknüpfungen lang ist
+result = myLua(keys=['opCon'],args=[1,allConLen])
+#Für jede 1-Position die passende Verknüpfung aus Liste holen
+for res in result:
+    con = allCons[res-1]
+    #...
+----
+
+Am Ende jeder Analyse wird das Ergebnis in einer entprechenden Ausgabedatei festgehalten.
+
+.Ausgabedatei schreiben
+[source, python]
+----
+writer = teilSplit+";"+faSplit+";"+str(menge)+";"+str(minDiff)
+            +";"+str(maxDiff)+";"+str(round(avgGesTime,2))+"\n"
+diffFile.write(writer)
+----
+
+=== Darstellung der Analysen in Pseudo-Code
 
 Legende:
 
 * FA: Fertigungsauftrag
 * SNR: Seriennummer
 * LA: Ladungsträger
-
-[source, python]
-----
-@app.route('/')
-def home():
-    return render_template("inline.html")
-----
 
 Analyse 1:
 ----
@@ -168,3 +242,21 @@ FOR EACH Linie in alleLinien {
     In Ausgabedatei schreiben
 }
 ----
+
+== Messung der Performance
+
+Für die Performancemessung kommen 2 Kennzahlen zum Einsatz, zum einen die Zeitdauer der Ausführung des Pythonskripts und zum anderen die Zeitdauer der Ausführungen der Operationen in Redis.
+
+Für Python wurde die Zeit in Nanosekunden mithilfe der Funktion porcess_time_ns() des Moduls time gemessen. Diese misst nur die reine Prozesszeit des Programms. Der Timer startet direkt nach dem Einbinden der Bibliotheken und endet als vorletzte Funktion des Programms. Die letzte Funktion ist nur noch die Ausgabe dieser Zeit in der Konsole.
+
+.Messung der Prozesszeit des Python Programms
+[source, python]
+----
+from time import process_time_ns
+start = process_time_ns()
+#...
+stop = process_time_ns()
+print(str((stop-start)/10**9))
+----
+
+Die Ausführungszeiten der Redis Operationen wurden mit der built-in Funktion SLOWLOG gemessen. Es wurden alle Operationen gemessen (slowlog-slower-than 0). 
