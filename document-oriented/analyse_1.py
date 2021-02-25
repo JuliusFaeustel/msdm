@@ -1,10 +1,4 @@
 import pymongo
-import pandas as pd
-import numpy as np
-import glob
-import json
-import bson
-import matplotlib.pyplot as plt
 from time import process_time
 
 start = process_time()

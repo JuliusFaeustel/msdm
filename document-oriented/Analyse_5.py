@@ -1,10 +1,4 @@
 import pymongo
-import pandas as pd
-import numpy as np
-import glob
-import json
-import bson
-import matplotlib.pyplot as plt
 from time import process_time
 
 start = process_time()
@@ -16,7 +10,7 @@ mydb = myclient["projekttest"]
 
 mycol = mydb["out_data_embedded"]
 
-# Analyse 5   
+# Analyse 5
 y = mydb.in_data_embedded.aggregate([{"$project": {"_id":1, "TEIL":1,"LagerIn":1, "Begin":1,"SNR":1, "output": {"$arrayElemAt": ["$out", -1]}}},
                                     {"$project": {"_id":1, "TEIL":1,"LagerIn":1, "Begin":1,"SNR":1, "difference":{'$subtract':['$output.Date','$Begin']}}},
                                     {'$match': {"SNR": { "$ne": "nan" }}},

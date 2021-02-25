@@ -1,13 +1,5 @@
 import pymongo
 import pandas as pd
-import numpy as np
-import glob
-import json
-import bson
-import matplotlib.pyplot as plt
-import statistics
-import datetime
-import time
 from time import process_time
 
 start = process_time()
@@ -38,7 +30,7 @@ for line in x:
             teil_1 = data.get("_id").get('TEIL')
             time_1 = data.get("end")
             i=1
-            
+
         if i==2:
             teil_2 = data.get("_id").get('TEIL')
             time_2 = data.get("start")

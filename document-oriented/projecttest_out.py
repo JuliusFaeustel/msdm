@@ -1,9 +1,6 @@
 import pymongo
 import pandas as pd
-import numpy as np
 import glob
-import json
-import bson
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -14,13 +11,13 @@ mycol_null = mydb["empty_out"]
 files = glob.glob("C:/Users/liepe/Desktop/Projektseminar/htw/out/*.txt")
 
 
-def convert_from_ms( milliseconds ): 
-	seconds, milliseconds = divmod(milliseconds,1000) 
-	minutes, seconds = divmod(seconds, 60) 
-	hours, minutes = divmod(minutes, 60) 
-	days, hours = divmod(hours, 24) 
-	seconds = seconds + milliseconds/1000 
-	return days, hours, minutes, seconds 
+def convert_from_ms( milliseconds ):
+	seconds, milliseconds = divmod(milliseconds,1000)
+	minutes, seconds = divmod(seconds, 60)
+	hours, minutes = divmod(minutes, 60)
+	days, hours = divmod(hours, 24)
+	seconds = seconds + milliseconds/1000
+	return days, hours, minutes, seconds
 
 def loadOutput(filename):
     snr = None
@@ -49,7 +46,7 @@ def loadOutput(filename):
     LINIE = df.iloc[0]['LINIE']
     date = df.iloc[0]['Date']
 
-    
+
     dictionary = {
         "SNR": snr,
         "LINIE": LINIE,
@@ -78,8 +75,8 @@ def loadOutput(filename):
         for data in x:
             data_x = pd.DataFrame(data, index=[data.get('_id')])
             return_df = return_df.append(data_x)
-        if (not return_df.empty):        
+        if (not return_df.empty):
             return_df = return_df.drop(return_df[return_df.difference < 0].index)
-            if (not return_df.empty):  
-                obj_id = return_df['difference'].idxmin() 
+            if (not return_df.empty):
+                obj_id = return_df['difference'].idxmin()
                 mydb.in_data_embedded.update_one({'_id': obj_id}, {"$addToSet": {"out": dictionary}})

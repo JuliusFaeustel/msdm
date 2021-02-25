@@ -1,10 +1,4 @@
 import pymongo
-import pandas as pd
-import numpy as np
-import glob
-import json
-import bson
-import matplotlib.pyplot as plt
 import datetime
 from time import process_time
 
@@ -32,7 +26,7 @@ for teil in x:
                                       {"$group" : {"_id":{"teil":"$TEIL","fa":"$FA"}, "teile_count": {"$sum":1}}},
                                       {"$group":{"_id": "$_id.teil", "count": {"$sum":"$teile_count"}}}])
     for value in z:
-        total_amount = value.get("count") 
+        total_amount = value.get("count")
 
     y = mydb.in_data_embedded.aggregate([{"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "out": {"$ifNull": [ "$out", [{"Date":"undefined"}]]}}},
                                             {"$project": {"_id":1, "TEIL":1,"FA":1, "Begin":1,"SNR":1, "out":{"$arrayElemAt": ["$out", -1]}}},
@@ -41,7 +35,7 @@ for teil in x:
                                             {"$sort": {"_id":1}},
                                             {"$group" : {"_id": "$SNR", "count": {"$sum":1},"starts":{"$push":{"Begin":"$Begin","Out":"$output_date"}}}},
                                             {"$match": {"count":{"$gt":1}}}])
-    
+
     for data in y:
         i = 1
         amount += data.get("count")-1
