@@ -89,7 +89,7 @@ INSERT INTO ObjektTyp VALUES ('Output', 'Output Datensätze');
 
 Im folgenden Absatz und Codebeispiel 9 ist das einfache Abfragen von Daten für ein Merkmal dargestellt.
 
-.Code 9 - einfache Beispielfrage für ein Merkmal auf die Datenbank
+.Code 9 - einfache Datenabfrage für ein Merkmal
 [source, sql]
 ----
 SELECT MA.Ausprägung FROM Input   
