@@ -8,11 +8,43 @@ ifdef::main-file[]
 :imagesdir: document-oriented/bilder
 endif::main-file[]
 
+== Entwicklungsumgebung
+
+=== Verwendete Python-Bibliotheken
+
+|===
+|Python-Bibliothek |Verwendung / Nutzen
+
+|pandas
+|Datenstrukturen wie Datenframes zur leichteren Manipulierung großer Datenmengen
+
+|pymongo
+|Verbindung des Python Programmes mit der Datenbank zum Speichern und Abfragen von Daten
+
+|time
+|Hier speziell die Funktion process_time um die Performance meines Python-Programmes zu messen.
+|===
+
+=== Verbindung mit der Datenbank
+
+.Code 1 - Verbinden mit der Datenbank
+[source, python]
+----
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+
+mydb = myclient["projekttest"]
+
+mycol = mydb["out_data_embedded"]
+----
+
+Wie in Codebeispiel 1 sichtbar legt man verschiedene Objekte an. Ein Objekt für den
+Datenbankserver (hier MongoClient). Weitergehen legt man fest welche Datenbank man verwendet (mydb).
+Zum Schluss besteht die Möglichkeit optional auch direkt die Collection festzulegen (mycol), dies ist aber nicht zwangsläufig nötig.
 
 == Implementierung der Struktur
 === Festlegen von Datentypen
 
-.Code 1 - Datentypfestlegung
+.Code 2 - Datentypfestlegung
 [source, python]
 ----
     df['DATE'] = pd.to_datetime(df['DATE'])
@@ -46,14 +78,14 @@ besessen haben. Da aber eine gewisse Konsistenz wichtig ist, gerade da später a
 werden sollen ist es nötig, dass die Datentypen einheitlich sind. Dies verhindert das es später zu unerwünschten
 Typkonvertierungen oder gar dem Absturz des Programmes kommt.
 
-Dies löse ich sehr einfach wie in Codebeispiel 1 zu sehen in den ich die Daten, nachdem ich sie aus der Textdatei in einen Datenframe eingelesen habe,
+Dies löse ich sehr einfach wie in Codebeispiel 2 zu sehen in den ich die Daten, nachdem ich sie aus der Textdatei in einen Datenframe eingelesen habe,
 innerhalb dieses Datenframes bearbeite. Also egal welchen Datentyp die Daten in der Textdatei hatten beim Prozess
 des Einlesens findet immer eine Typkonvertierung statt und wenn sie dann in die Datenbank geschrieben werden stimmt
 ihr Typ solange man den Code nicht anfasst immer überein.
 
 === Herstellen der Relation
 
-.Code 2 - Herstellung der Relation
+.Code 3 - Herstellung der Relation
 [source, python]
 ----
 if (snr == "nan"):
@@ -80,7 +112,7 @@ Es ist für mich besonders wichtig das die Relation direkt beim speichern der Da
 kann im Nachhinein nicht einfach meine Abfrage welche die Verknüpfung durchführt, einfach noch einmal anpassen. Die Daten
 müssen von Anfang an Korrekt sein da eine spätere Anpassung mit einem immensen Aufwand verbunden wäre.
 
-Bei der Herstellung der Relation spricht der Code in Codebeispiel 2 nicht für sich selbst, daher wird er hier etwas näher erklärt.
+Bei der Herstellung der Relation spricht der Code in Codebeispiel 3 nicht für sich selbst, daher wird er hier etwas näher erklärt.
 Zuerst überprüfe ich, ob die "SNR" des eingelesenen Ausgangsdatensatzes existiert.
 Sollte die "SNR" nicht existieren ist das "Dokument" für mich unbrauchbar und ich speichere es der Vollständigkeit halber
 in einer extra "Collection". Gibt es die "SNR" suche ich in der Datenbank nach Eingangsdatensätzen und speichere
@@ -96,9 +128,9 @@ Die Suche innerhalb der Datenbank nach einem passenden Input zum aktuellen Outpu
 beim Schreiben der Daten in die Datenbank dar.
 Ich habe hierfür einmal einen Vergleich durchgeführt zwischen dem suchen mit einem Index für die "SNR" und einmal
 ohne Index.
-Einen aufsteigenden Index kann man in Python mithilfe von Pymongo durch den Code in Codebeispiel 3 erstellen.
+Einen aufsteigenden Index kann man in Python mithilfe von Pymongo durch den Code in Codebeispiel 4 erstellen.
 
-.Code 3 - Anlegen eines Indexes
+.Code 4 - Anlegen eines Indexes
 [source, python]
 ----
 mydb.in_data_embedded.create_index([ ("SNR", 1) ])
@@ -108,7 +140,7 @@ Um zu vergleichen wie lange die Suche mit Index und ohne Index dauert, habe ich 
 Hierfür muss man nur über die MongoShell wie in Codebeispiel 4 eine bestimmte "Collection" erstellen. Und einstellen welche Aktionen
 alles gespeichert werden sollen. Profiling-Level 2 sorgt dafür dass jede aktion gespeichert wird.
 
-.Code 4 - Festlegen des Profilings
+.Code 5 - Festlegen des Profilings
 [source,commandline]
 ----
 use projekt
@@ -121,7 +153,7 @@ Durch diesen Vergleich bin ich zu folgenden Ergebnissen gekommen.
 .Ohne Index auf "SNR", x-Achse=Anzahl Eingangsdatensätze in der "Collection", y-Achse=Verarbeitungszeit in Millisekunden
 image::Performance_noindex.PNG[]
 
-Wie man auf Abbildung 1 ganz klar erkennen kann, zeichnet sich hier ein sehr unschöner Trend ab. Je mehr Eingangsdatensätze
+Wie man auf Abbildung 4 ganz klar erkennen kann, zeichnet sich hier ein sehr unschöner Trend ab. Je mehr Eingangsdatensätze
 sich in der "Collection" befinden desto länger dauert die Suche nach einer "SNR" und dies fast in einem konstant linearen Anstieg.
 Bei der Menge an Datensätzen, die wir haben mag dies aktuell vll. noch kein großes Problem darstellen aber das kann sich in Zukunft schnell ändern.
 
@@ -129,7 +161,7 @@ Bei der Menge an Datensätzen, die wir haben mag dies aktuell vll. noch kein gro
 image::Performance_index.PNG[]
 
 
-Auf der Abbildung 2 wird eindeutig, welche Wirkung das Anlegen eines Indexes hatte. Zum einen fällt auf das es zu keinem
+Auf der Abbildung 5 wird eindeutig, welche Wirkung das Anlegen eines Indexes hatte. Zum einen fällt auf das es zu keinem
 linearen Anstieg der Verarbeitungszeit mehr kommt, zum anderen hat sich die Verarbeitungszeit insgesamt sehr stark reduziert.
 Vorher starteten die Zeiten bei 100 Millisekunden, jetzt hat selbst das Maximum bei einem vorhandenen Index nur einen Wert
 von ca. 17 Millisekunden.
@@ -149,7 +181,7 @@ in MongoDBs Abfragesprache eingehen.
 
 === Analyse 1
 
-.Code 5 - Query 1 zu Analyse 1
+.Code 6 - Query 1 zu Analyse 1
 [source, python]
 ----
 x = mydb.in_data_embedded.aggregate(
@@ -182,7 +214,7 @@ x = mydb.in_data_embedded.aggregate(
 
 ----
 
-Mithilfe von der Abfrage im Codebeispiel 5 lass ich mir zu allen Fertigungsaufträgen eines einzelnen Teils die Menge an Produkten die gefertigt
+Mithilfe von der Abfrage im Codebeispiel 6 lass ich mir zu allen Fertigungsaufträgen eines einzelnen Teils die Menge an Produkten die gefertigt
 wurden, sowie die maximale minimale und durchschnittliche Fertigungsdauer die dafür benötigt wurde.
 In der ersten _$project_ Phase wähle ich die Attribute welche ich betrachten möchte. Die eingebaute Funktion
 _$arrayElemAt_ kann ich mir das Element eines Arrays über den Index geben lassen. An dieser Stelle lasse ich mir durch -1
@@ -195,7 +227,7 @@ führe ich ein Group By durch nach Fertigungsauftrag durch und berechne durch _$
 und durchschnittliche Fertigungsdauer. Durch die Variable _teil_ kann ich durch ein Array aus den Teilen iterieren und dies für
 jedes Teil wiederholen.
 
-.Code 6 - Query 2 zu Analyse 1
+.Code 7 - Query 2 zu Analyse 1
 [source, python]
 ----
 y = mydb.in_data_embedded.aggregate(
@@ -233,9 +265,9 @@ y = mydb.in_data_embedded.aggregate(
 {"$sort": {"_id.fa":1}}])
 ----
 
-Aus der Abfrage im Codebeispiel 5 bekomme ich eine Menge an Fertigungsaufträgen, mit Daten zu diesen nun möchte ich noch wissen
+Aus der Abfrage im Codebeispiel 6 bekomme ich eine Menge an Fertigungsaufträgen, mit Daten zu diesen nun möchte ich noch wissen
 wie viel Ausschuss bei diesen Fertigungsaufträgen entstanden ist. Dafür sind die ersten 3 Phasen gleich wie in der
-vorrangegangenen Abfrage aus Codebeispiel 5. Nur in der _$match_ Phase wie in Codebeispiel 6 zusehen ändert sich etwas, wir möchten nun Datensätze welche einem gewissen
+vorrangegangenen Abfrage aus Codebeispiel 5. Nur in der _$match_ Phase wie in Codebeispiel 7 zusehen ändert sich etwas, wir möchten nun Datensätze welche einem gewissen
 Fertigungsauftrag entsprechen.  In der ersten _$group_ Phase gruppieren wir nach "SNR", "TEIL" und "FA". Durch das
 gruppieren nach SNR entfernen wie Dopplungen gleichzeitig zählen wir aber auch wie oft eine "SNR" aufgetaucht ist.
 Dieser gezählte Wert wiederrum spiegelt dann wenn er >1 ist die Menge an Ausschuss wieder. in der letzten _$group_ Phase
@@ -246,7 +278,7 @@ Verbesserungen/Anpassungen sicher noch Performance gut machen.
 
 === Analyse 2
 
-.Code 7 - Query 1 Analyse 2
+.Code 8 - Query 1 Analyse 2
 [source, python]
 ----
 z = mydb.in_data_embedded.aggregate([
@@ -279,11 +311,11 @@ z = mydb.in_data_embedded.aggregate([
 
 Nachdem nun durch die Erklärung der ersten Analyse klar sein sollte wie eine MongoDB Abfrage funktioniert möchte ich
 aufgrund des Umganges der Abfragen nicht übermäßig ins Detail gehen.
-In der Abfrage aus Codebeispiel 7 lassen wir uns die Gesamtfertigungsmenge jedes einzelnen Teils ausgeben, dabei berücksichtigen wir
+In der Abfrage aus Codebeispiel 8 lassen wir uns die Gesamtfertigungsmenge jedes einzelnen Teils ausgeben, dabei berücksichtigen wir
 nur Datensätze mit einer Fertigungsdauer unter einer Stunde und einer vorhandenen "SNR". Diese Gesamtfertigungsmenge brauchen
 wir um später die Fehlerrate auszurechnen.
 
-.Code 8 - Query 2 Analyse 2
+.Code 9 - Query 2 Analyse 2
 [source, python]
 ----
 y = mydb.in_data_embedded.aggregate([
@@ -321,7 +353,7 @@ y = mydb.in_data_embedded.aggregate([
 {"$match": {"count":{"$gt":1}}}])
 ----
 
-Bei der Abfrage in Codebeispiel 8 gibt es einige Besonderheiten auf die ich gerne eingehen möchte.
+Bei der Abfrage in Codebeispiel 9 gibt es einige Besonderheiten auf die ich gerne eingehen möchte.
 Zum einen ändern wir die erste _$project_ Phase um sicherzugehen das wir auch Datensätze bekommen die keinen Ausgangsdatensatz haben.
 Dies ist wichtig da wir um die Zeiten bei der Auftrennung zu berechnen den Zeitstempel eines Ausgangsdatensatzes
 von dem Zeitstempel des nachfolgenden Eingangsdatensatzes mit derselben "SNR" subtrahieren und hierfür ist es wichtig das auch Eingangsdatensätze
@@ -334,7 +366,7 @@ wir nur Datensätze wollen bei denen auch Ausschuss entstanden ist.
 Da diese Abfrage in Codebeispiel 9 zu den Komplexesten zählt, möchte ich an dieser Stelle auch auf den Python Code eingehen der die Abfrage
 schließlich verarbeitet.
 
-.Code 9 - Pythoncode Analyse 2
+.Code 10 - Pythoncode Analyse 2
 [source, python]
 ----
     for data in y:
@@ -360,7 +392,7 @@ schließlich verarbeitet.
     avg = sum(avg_val)/len(avg_val)
 ----
 
-Wir iterieren in Codebeispiel 9 durch den Coursor welchen wir durch die MongoDB Abfrage aus Codebeispiel 8 bekommen haben.
+Wir iterieren in Codebeispiel 10 durch den Coursor welchen wir durch die MongoDB Abfrage aus Codebeispiel 9 bekommen haben.
 Wir errechnen den Ausschuss in dem wir den Wert der Datenbank minus eins rechnen da es sich bei einem Datensatz ja um einen
 erfolgreichen handelt. Wir legen ein Array an, um die Zeitdifferenzen abzuspeichern.
 Außerdem sortieren wir das Array welches wir zu jeder "SNR" bekommen haben und welches die Zeitstempel enthält.
@@ -379,7 +411,7 @@ durchführen in dem man die Anzahl an Abfragen auf die Datenbank reduziert.
 
 === Analyse 4
 
-.Code 10 Query 1 Analyse 4
+.Code 11 Query 1 Analyse 4
 [source, python]
 ----
 x = mydb.in_data_embedded.aggregate([
@@ -427,7 +459,7 @@ Ergebnisse aufsteigend nach Ladungsträger.
 
 === Analyse 5
 
-.Code 11 Query 1 Analyse 5
+.Code 12 Query 1 Analyse 5
 [source, python]
 ----
 y = mydb.in_data_embedded.aggregate([
@@ -457,12 +489,12 @@ y = mydb.in_data_embedded.aggregate([
 {"$sort":{"_id": 1}}])
 ----
 
-Die 5. Analyse gleicht fast vollständig der ersten (zu sehen in Codebeispiel 5 und 6), nur das bei hier nach "LagerIn" also Ladungsträger gruppiert wird und
+Die 5. Analyse gleicht fast vollständig der ersten (zu sehen in Codebeispiel 6 und 7), nur das bei hier nach "LagerIn" also Ladungsträger gruppiert wird und
 nicht nach Fertigungsauftrag.
 
 === Analyse 6
 
-.Code 12 Query 1 Analyse 6
+.Code 13 Query 1 Analyse 6
 [source, python]
 ----
 x = mydb.in_data_embedded.aggregate([
@@ -494,14 +526,14 @@ x = mydb.in_data_embedded.aggregate([
 {"$sort":{"start": 1}}])
 ----
 
-In Analyse 6 mache ich innerhalb einer Schleife Abfragen zu jeder Linie, dabei wähle ich mir wie in Codebeispiel 12 zu sehen in den ersten beiden _$project_
+In Analyse 6 mache ich innerhalb einer Schleife Abfragen zu jeder Linie, dabei wähle ich mir wie in Codebeispiel 13 zu sehen in den ersten beiden _$project_
 Phasen die Attribute aus die ich betrachten möchte und lasse mir den Zeitstempel des Outputs geben. Weiterführend wähle
 ich der _$match_ Phase nur Elemente welche eine "SNR" haben und welche als "LINIE" den Wert der Variablen Linie haben.
 Zum Schluss gruppiere ich nach Fertigungsauftrag und Teil. Außerdem lasse ich mir zu jeder Gruppe den frühesten Startzeitpunkt
 und spätesten Endzeitpunkt geben. Eine aufsteigende Sortierung nach den Startzeitpunkten bringt die Datensätze schließlich in die
 richtige Reihenfolge.
 
-.Code 13 Pythoncode 1 Analyse 6
+.Code 14 Pythoncode 1 Analyse 6
 [source, python]
 ----
     teil_value = pd.DataFrame()
@@ -538,7 +570,7 @@ richtige Reihenfolge.
         avg = sum(helper_list)/len(helper_list)
 ----
 
-Ich gehe nun wie in Codebeispiel 13 in einer Schleife durch die Ergebnisse meiner Query aus Codebeispiel 12, dabei betrachte ich immer ein paar aus Datensätzen
+Ich gehe nun wie in Codebeispiel 14 in einer Schleife durch die Ergebnisse meiner Query aus Codebeispiel 12, dabei betrachte ich immer ein paar aus Datensätzen
 Für den ersten Datensatz speichere ich das Teil um das es sich handelt sowie den Zeitstempel des Endes.
 Für den zweiten Datensatz speichere ich auch das Teil um welches es sich handelt sowie den Zeitstempel des Starts und den des Endes.
 Schließlich berechne die ich die Differenz der Zeitstempel also den Start des zweiten subtrahiert vom Ende des ersten.
@@ -549,4 +581,46 @@ um die pandas eigene Funktion _.unique()_ anzuwenden welche mir jeden Wert welch
 zurückgibt und Dopplungen ignoriert. Zum Schluss iteriere ich durch diese eindeutigen Werte durch und lasse mir immer eine Hilfliste erstellen
 in welcher alle Zeitdifferenzen zu einem Teil-Wechsel stehen, aus dieser List kann ich nun wiederrum das Maximum, Minimum und
 den Durschnitt ermitteln.
+
+=== Performance-Messung der Analysen
+
+Die Performance meiner Abfragen messe ich an zwei Stellen zum einen mit dem Datenbank-Profiler von MongoDB und
+zum anderen in dem ich die Prozesszeit des Python-Programmes messe.
+
+.Codebeispiel 15 - Prozesszeiten-Messung
+[source, python]
+----
+start = process_time()
+
+# eigentliches Programm
+
+end = process_time()
+
+print(end - start)
+----
+
+Wie in Codebeispiel 15 zu sehen nutze ich dafür die Funktion _process_time()_ und erstelle mir zu Beginn des Programmes sowie
+zum Ende des Programmes einen Zeitstempel, welche ich dann voneinander subtrahiere.
+
+Dadurch komme ich zu folgenden Performance Ergebnissen bei denen Prozesszeiten und Datenbankzeit kummuliert sind.
+
+
+|===
+|Analyse | Performance
+
+|Analyse 1
+|18.87 Sekunden
+
+|Analyse 2
+|20.51 Sekunden
+
+|Analyse 4
+|4.99 Sekunden
+
+|Analyse 5
+|3.24 Sekunden
+
+|Analyse 6
+|6.91 Sekunden
+|===
 
