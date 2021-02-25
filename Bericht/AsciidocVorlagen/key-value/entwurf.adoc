@@ -15,9 +15,15 @@ Das erste Datenmodell war ein einfaches Modell, welches sich die Vorteile einer 
 
 == Finales Datenmodell
 
-Das neue Datenmodell wurde aufgrund der schlechten Performance der Implementierung des ersten Entwurfs initiiert. Die Anforderungen an das neue Modell waren zum einen die Reduzierung der Anzahl der Abfragen an die Datenbank insgesamt und zum anderen schneller die richtigen Datensätze zu laden und auszuwerten, also insbesondere Datensätze mit gleichen Eigenschaften (z.B. Maschine 2 und Teil B) performant zu finden und auszuwerten. Die Reduzierung der Abfragen wurde dadurch gelöst, in die Schlüssel der Verknüpfungen direkt zugehörige, für die Analysen notwendige Informationen, also Anfangs-/Enddatum und Seriennummer, zu speichern. So muss nicht mehr noch eine ebene Tiefer in die Rohdaten gegangen werden. Das performante Auffinden der richtigen Datensätze wird durch Bitmaps realisiert. Dadurch können Übereinstimmungen direkt serverseitig festgestellt werden und es ist nicht mehr nötig Listen mit einer bis zu sechstelligen Anzahl an Elementen zu übertragen und selbst auszuwerten. Daneben wurde noch die Wahl der Datentypen angepasst um eine höhere Performance zu erreichen.
+Das neue Datenmodell wurde aufgrund der schlechten Performance der Implementierung des ersten Entwurfs initiiert. Die Anforderungen an das neue Modell waren zum einen die Reduzierung der Anzahl der Abfragen an die Datenbank insgesamt und zum anderen schneller die richtigen Datensätze zu laden und auszuwerten, also insbesondere Datensätze mit gleichen Eigenschaften (z.B. Maschine 2 und Teil B) performant zu finden und auszuwerten. Die Reduzierung der Abfragen wurde dadurch gelöst, in die Schlüssel der Verknüpfungen direkt zugehörige, für die Analysen notwendige Informationen, also Anfangs-/Enddatum und Seriennummer, zu speichern. So muss nicht mehr noch eine ebene tiefer in die Rohdaten gegangen werden. Das performante Auffinden der richtigen Datensätze wird durch Bitmaps realisiert. Dadurch können Übereinstimmungen direkt serverseitig festgestellt werden und es ist nicht mehr nötig Listen mit einer bis zu sechsstelligen Anzahl an Elementen zu übertragen und selbst auszuwerten. Daneben wurde noch die Wahl der Datentypen angepasst um eine höhere Performance zu erreichen.
 
-Das Datenmodell ergibt sich aus mehreren Komponenten. In der Bildungsvorschrift _kursiv_ geschriebene Begriffe sind dynamisch, variieren also je nach Datensatz dieser Komponente. Die Begrifflichkeiten sind in der Legende im letzten Anstrich erläutert:
+Der Kern des Datenmodells ist in folgender Abbildung dargestellt. Im Zentrum stehen die Verknüpfungen, welche für die Analysen wichtige Informationen enthalten. Sie verweisen auf die Rohdatensätze, die diesen Informationen zugrunde liegen. Die Eigenschaften geben mit den Bitmaps an, in welchen Verknüpfungen sie vorkommen.
+
+.Datenmodell
+[#img-datenmodell]
+image::kv-datenmodell.PNG[datenmodell]
+
+Zusätzlich zu den dargestellten ergibt sich das Datenmodell aus mehreren Komponenten, welche genutzt werden um neue Daten einzufügen und aus den vorhandenen Daten ordentlich zu lesen. In der Bildungsvorschrift _kursiv_ geschriebene Begriffe sind dynamisch, variieren also je nach Datensatz dieser Komponente. Die von uns vergebenen Begrifflichkeiten sind in der Legende im letzten Anstrich erläutert:
 
 * Rohdaten
 ** Abbildung der Datensätze wie sie kommen
@@ -40,7 +46,7 @@ image::kv-rohdatensatz.PNG[rohdatensatz]
 [#img-zaehler]
 image::kv-zaehler.PNG[zaehler]
 
-** Erklärung: Um die Eindeutigkeit der Schlüssel zu wahren, werden inCounter und outCounter in der Datenbank selbst persistiert, um für den nächsten Rohdatensatz den richtigen Zähler bereistellen zu können.
+** Erklärung: Um die Eindeutigkeit der Schlüssel zu wahren, werden inCounter und outCounter in der Datenbank selbst persistiert, um für den nächsten Rohdatensatz den richtigen Zähler bereitstellen zu können.
 * Seriennummern
 ** Abbildung der zu einer Seriennummer gehörenden Input-Datensätze
 ** Datentyp Liste -> Minimal 1 Element
@@ -64,7 +70,7 @@ image::kv-zeitverknuepfung.PNG[zeitverknuepfung]
 
 ** Erklärung: Da in einer Schlüssel-Werte-Datenbank nicht über Werte gesucht werden kann und die Verknüpfungen im Schlüssel Zeitstempelinformationen enthalten (die vom Input und die des spätesten Output), braucht es zum Zugriff auf den Schlüssel der entsprechenden Verknüpfung die richtigen Zeitstempel. Diese können hier geladen und eingetragen werden.
 * Verknüpfungen
-** Abbildung der Verknüpfungen eines Input-Datenastzes mit zugehörigen Output-Datensätzen
+** Abbildung der Verknüpfungen eines Input-Datensatzes mit zugehörigen Output-Datensätzen
 ** Datentyp Liste -> Erstes Element ist die Referenz auf den Input-Datensatz, ab zweitem Element Referenz auf Output-Datensatz
 ** Bildungsvorschrift Schlüssel: "__inDat__:__inCounter__:__outDat__:__SNR__"
 ** Beispiel:
@@ -110,19 +116,34 @@ image::kv-auspraegungen_eigenschaften.PNG[auspraegungen]
 * Rohdatensätze ohne Seriennummer
 ** Abbildung der Rohdatensätze ohne Seriennummer
 ** Datentyp Hash -> Werte Sind Field-Value Paare (Strings)
-** Bildungsvorschrift Schlüssel:
+** Bildungsvorschrift Schlüssel: "defect:raw:in:__inCounter__" bzw. "defect:raw:out:__outCounter__"
 ** Beispiel:
-** Erklärung: Datensätze ohne Seriennummer besitzen für die Analysen keine Relevanz. Aufgrund der Anforderungen werdne sie trotzdem gespeichert.
++
+.Rohdatensatz ohne Seriennummer
+[#img-rohdaten_ohne_snr]
+image::kv-rohdatensatz_defekt.PNG[rohdaten_ohne_snr]
+
+** Erklärung: Datensätze ohne Seriennummer besitzen für die Analysen keine Relevanz. Aufgrund der Anforderungen werden sie trotzdem gespeichert.
 * Liste der Rohdatensätze ohne Seriennummer
 ** Abbildung aller Rohdatensätze ohne Seriennummer
 ** Datentyp Set -> Schneller Zugriff auf alle Elemente
-** Bildungsvorschrift Schlüssel:
+** Bildungsvorschrift Schlüssel: "defect:list:in" bzw. "defect:list:out"
 ** Beispiel:
++
+.Liste Rohdatensätze ohne Seriennummer
+[#img-liste_ohne_snr]
+image::kv-liste_defekt.PNG[liste_ohne_snr]
+
 ** Erklärung: Damit alle Datensätze ohne Seriennummer schnell gefunden werden können, werden deren Schlüssel in diesem Set gespeichert.
 * Bitpositionen
-** Abbildund des Ergebnisses der bitweisen AND Operation 
+** Abbildung des Ergebnisses der bitweisen AND Operation 
 ** Bildungsvorschrift Schlüssel: "opCon"
 ** Beispiel:
++
+.Bitpositionen AND-Operation
+[#img-bitpositionen]
+image::kv-opCon.PNG[bitpositionen]
+
 ** Das Ergebnis einer bitweisen AND Operation kann nicht direkt zurückgegeben werden, sondern wird selbst in der Datenbank gespeichert.
 * Legende:
 ** inCounter: Zähler, der für jeden eingelesenen Input-Datensatz inkrementiert
@@ -131,4 +152,4 @@ image::kv-auspraegungen_eigenschaften.PNG[auspraegungen]
 ** outDat: Zeitstempel des Output-Datensatz
 ** SNR: Seriennummer
 ** Eigenschaftsname: Titel der Eigenschaft, z.B. "LINIE" oder "TEIL"
-** Eigenschaftsausprägung: Äuspragung der Eigenschaft mit dem zugehörigen Eigenschaftstitel, z.B. "005757" für den Fertigungsauftrag Nr. 005757
+** Eigenschaftsausprägung: Ausprägung der Eigenschaft mit dem zugehörigen Eigenschaftstitel, z.B. "005757" für den Fertigungsauftrag Nr. 005757

@@ -12,11 +12,12 @@ endif::main-file[]
 == Verwendete Tools
 Für die Implementierung wurden mehrere Tools verwendet.
 
-* VMware Workstation 16 Player mit Ubuntu 20.04 LTS 64 Bit
+* VMware Workstation 16 Player mit Ubuntu 20.04 LTS 64 bit
 * Redis 5.0.7
 * Python 3.8.5
 * redis-py (Python-Bibliothek für Redis)
 * redis-commander (Web-UI für Redis Server)
+* RedisInsight (Web-UI für Redis Server)
 
 == Implementierung der Struktur
 
@@ -24,17 +25,19 @@ Aufgrund der Eigenschaften einer Schlüssel-Werte-Datenbank, insbesondere der Fl
 
 == Implementierung der Datenloader
 
-Es gibt 2 verschiedene Datenloader, einen für Input- und einen für Output-Datensätze. Diese bekommen vom Watchdog den Pfad mit der Datei, in dem der jeweiligen Datensatz steht, im Funktionsaufruf übergeben. Anschließend wird die Datei als csv-Datei mit Trennzeichen ";" behandelt. Besitzt der Datensatz keine Seriennummer, so wird der Datensatz als "defekter" Datensatz gespeichert (siehe Entwurf "Rohdatensätze ohne Seriennummer" und "Liste aller Rohdatensätze ohne Seriennummer"). Besitzt er eine Seriennummer, so wird je nach Typ (Input/Output) unterschieden.
+Es gibt 2 verschiedene Datenloader, einen für Input- und einen für Output-Datensätze. Diese bekommen vom Watchdog den Pfad mit der Datei, in dem der jeweiligen Datensatz steht, im Funktionsaufruf übergeben. Anschließend wird die Datei als csv-Datei mit Trennzeichen ";" behandelt. Besitzt der Datensatz keine Seriennummer, so wird der Datensatz als "defekter" Datensatz gespeichert (siehe Entwurf "Rohdatensätze ohne Seriennummer" und "Liste aller Rohdatensätze ohne Seriennummer"). Besitzt er eine Seriennummer, so wird je nach Typ (Input/Output) unterschieden. In den folgenden Vorgehensweisen wird von ordentlichen Rohdatensätzen ausgegangen.
 
 === Input-Datensatz
 
-Zuerst wird der Rohdatensatz als Hash mit entspechenden Feld-Werte-Paaren abgespeichert. Anschließend wird der Schlüssel dieses Hash an die Liste der zugehörigen SNR angehängt, um den Datensatz für den Output verknüpfbar zu machen. Danach wird die Verknüpfung für diesen In-Datensatz als Liste angelegt, wobei als Zeitstempel 2 mal das Datum in Sekunden genommen wird und der Wert der Schlüssel des Rohdatensatzes ist. Diese Verknüpfung wird an die Liste aller Verknüpfungen angehangen. Nun wird jede vorgegebene Eigenschaft durchgegangen. Falls die Eigenschaft noch nicht oder noch nicht in dieser Ausprägung vorhanden ist, wird sie angelegt. Das 1-Bit wird in den entsprechenden Datensätzen an der entsprechenden Position angelegt. Der Zeitstempel des Rohdatensatz wird in die Zeitverknüpfung als erstes Element der Liste eingetragen und der Zähler (inCounter) inkrementiert.
+Zuerst wird der Rohdatensatz als Hash mit entsprechenden Feld-Werte-Paaren abgespeichert. Besitzt er keine Seriennummer, so wird er als defekter Datensatz abgelegt. Anschließend wird der Schlüssel dieses Hash an die Liste der zugehörigen SNR angehängt, um den Datensatz für den Output verknüpfbar zu machen. Danach wird die Verknüpfung für diesen In-Datensatz als Liste angelegt, wobei als Zeitstempel 2-mal das Datum in Sekunden genommen wird und der Wert der Schlüssel des Rohdatensatzes ist. Diese Verknüpfung wird an die Liste aller Verknüpfungen angehangen. Nun wird jede vorgegebene Eigenschaft durchgegangen. Falls die Eigenschaft noch nicht oder noch nicht in dieser Ausprägung vorhanden ist, wird sie angelegt. Das 1-Bit wird in den entsprechenden Datensätzen an der entsprechenden Position angelegt. Der Zeitstempel des Rohdatensatz wird in die Zeitverknüpfung als erstes Element der Liste eingetragen und der Zähler (inCounter) inkrementiert.
 
 .Einlesealgorithmus Input-Datensatz
 [#img-readIn]
 image::pap-in.png[readIn]
 
 === Output-Datensatz
+
+Der Rohdatensatz wird analog zu den Input-Datensätzen als Hash abgespeichert. Im nächsten Schritt werden alle Input-Datensätze aus der Liste der Seriennummer des Out-Datensatzes durchgegangen und die Zeitdifferenzen des Input und Output berechnet. Der Output-Datensatz wird dem Input mit der kleinsten positiven Zeitdifferenz zugeordnet. Im Anschluss wird die Zeitverknüpfung dieses Input-Datensatzes als Liste geladen. Gibt es in dieser Liste nur 1 Element, so wurde dem Input noch kein Output zugeordnet und der Zeitstempel des Output-Datensatzes wird angehangen. Ist der Zeitstempel des Outputs größer als der des bisherig größten Outputs in der Zeitverknüpfung, so wird dieser Zeitstempel mit dem des neuen ersetzt. Entsprechend wird der Schlüssel der Verknüpfung mit diesem neuen Zeitstempel versehen. Anschließend wird der Schlüssel des Output-Rohdatensatzes als Element in die Verknüpfung aufgenommen und der Schlüssel der Verknüpfung in der Liste aller Verknüpfungen entsprechend mit dem aktuellen Schlüssel ersetzt.
 
 .Einlesealgorithmus Output-Datensatz
 [#img-readOut]
@@ -44,7 +47,7 @@ image::pap-out.png[readOut]
 
 === Vorgehensweise
 
-Die Analysen folgen einem Grundgerüst, welches sich zwar in der Ausprägung, nicht aber in der Struktur, unterscheidet. Am Anfang werden die Listen mit den benötigten Daten geladen. Diese sind zum einen die Liste mit allen Verknüpfungen, die Verknüpfungsliste, und die Sets der gefragten Eigenschaften mit den Ausprägungen als Elemente dieser. 
+Die Analysen folgen einem Grundgerüst, welches sich zwar in der Ausprägung, nicht aber in der Struktur unterscheidet. Am Anfang werden die Listen mit den benötigten Daten geladen. Diese sind zum einen die Liste mit allen Verknüpfungen, die Verknüpfungsliste, und die Sets der gefragten Eigenschaften mit den Ausprägungen als Elemente dieser. 
 
 .Laden der benötigten Daten
 [source, python]
@@ -70,7 +73,7 @@ diffFile.write("TEIL;FA;COUNT;MIN;MAX;AVG\n")
 
 Anschließend wird ein Lua-Skript vorbereitet und in Redis eingebunden. Das Skript ist notwendig, da es in Redis keine Funktionalität dafür gibt die 1-Positionen einer Bitmap sinnvoll auszulesen. In unserem Fall brauchen wir die 1-Positionen der Bitmap "opCon", welche das Ergebnis der bitweisen AND Operation speichert. Redis ermöglicht es Lua-Skripte einzubinden und diese serverseitig auszuführen. Das Skript ist in den Quelltexten der Analysen aufgeführt, im folgenden Beispiel durch drei Punkte ersetzt.
 
-.Lua-Skript einbinden und ausführen
+.Lua-Skript einbinden
 [source, python]
 ----
 lua = """ ... """
@@ -87,7 +90,7 @@ Die 1-Bits einer Bitmap bedeuten, dass die Verknüpfung mit der Nummer "Index de
 
 * Bitmap "opCon" -> [0100010]
 
-Es besitzten also Verknüpfung Nummer 2 und 6 beide Eigenschaften. Das eingebundene Lua-Skript gibt nun alle 1-Positionen von "opCon" als Liste zurück, in dem Fall also "(2,6)". Diese Liste kann nun auf die Liste aller Verknüpfungen angewendet werden, wodurch ich nur Verknüpfungen mit diesen bestimmten Eigenschaften betrachte. Im folgenden noch das Codebeispiel.
+Es besitzen also Verknüpfung Nummer 2 und 6 beide Eigenschaften. Das eingebundene Lua-Skript gibt nun alle 1-Positionen von "opCon" als Liste zurück, in dem Fall also "(2,6)". Diese Liste kann nun auf die Liste aller Verknüpfungen angewendet werden, wodurch nur Verknüpfungen mit diesen bestimmten Eigenschaften betrachtet werden. Im Folgenden noch das Codebeispiel.
 
 .Bitmap Operationen
 [source, python]
@@ -103,7 +106,7 @@ for res in result:
     #...
 ----
 
-Am Ende jeder Analyse wird das Ergebnis in einer entprechenden Ausgabedatei festgehalten.
+Am Ende jeder Analyse wird das Ergebnis in einer entsprechenden Ausgabedatei festgehalten.
 
 .Ausgabedatei schreiben
 [source, python]
@@ -114,6 +117,8 @@ diffFile.write(writer)
 ----
 
 === Darstellung der Analysen in Pseudo-Code
+
+Da Redis aufgrund der Eigenschaften einer Schlüssel-Werte-Datenbank selbst keine Möglichkeit für komplexe Abfragen bietet, muss die Abfragelogik zum großen Teil in Python geschehen. Das führt dazu, dass der Quellcode für die Analysen recht lang ist. Daher ist im Folgenden nur Pseudo-Code dargestellt, welcher die wichtigsten Schritte jeder Analyse vorgibt.  
 
 Legende:
 
@@ -140,8 +145,8 @@ FOR EACH Teil in alleTeile {
             }
 
             Menge an SNR ermitteln
-            Maximum, Minimum und Druchschnitt Ausschuss berechnen
-            Maximum, Minimum und Druchschnitt Zeiten berechnen
+            Maximum, Minimum und Durchschnitt Ausschuss berechnen
+            Maximum, Minimum und Durchschnitt Zeiten berechnen
             In Ausgabedatei schreiben
         }
     }
@@ -184,7 +189,7 @@ FOR EACH LA in alleLA {
         Zeitstempel auf Maximum / Minimum prüfen
     }
 
-    Differenz von Maximum und Minimun berechnen
+    Differenz von Maximum und Minimum berechnen
     In Ausgabedatei schreiben
 }
 ----
@@ -195,7 +200,7 @@ FOR EACH Teil in alleTeile {
     FOR EACH LA in alleLA {
         Verknüpfungen ermitteln, welche dieses Teil und diesen FA haben
 
-        IF Verknüpfung(en) exisieren {
+        IF Verknüpfung(en) existieren {
             FOR EACH Verknüpfung {
                 SNR in Set aller SNR hinzufügen
 
@@ -207,7 +212,7 @@ FOR EACH Teil in alleTeile {
             }
 
             Menge an SNR ermitteln
-            Maximum, Minimum und Druchschnitt Zeiten berechnen
+            Maximum, Minimum und Durchschnitt Zeiten berechnen
             In Ausgabedatei schreiben
         }
     }
@@ -245,9 +250,9 @@ FOR EACH Linie in alleLinien {
 
 == Messung der Performance
 
-Für die Performancemessung kommen 2 Kennzahlen zum Einsatz, zum einen die Zeitdauer der Ausführung des Pythonskripts und zum anderen die Zeitdauer der Ausführungen der Operationen in Redis.
+Für die Performancemessung kommen 2 Kennzahlen zum Einsatz, zum einen die Zeitdauer der Ausführung des Python-Skripts und zum anderen die Zeitdauer der Ausführungen der Operationen in Redis.
 
-Für Python wurde die Zeit in Nanosekunden mithilfe der Funktion porcess_time_ns() des Moduls time gemessen. Diese misst nur die reine Prozesszeit des Programms. Der Timer startet direkt nach dem Einbinden der Bibliotheken und endet als vorletzte Funktion des Programms. Die letzte Funktion ist nur noch die Ausgabe dieser Zeit in der Konsole.
+Für Python wurde die Zeit in Nanosekunden mithilfe der Funktion process_time_ns() des Moduls time gemessen. Diese misst nur die reine Prozesszeit des Programms. Der Timer startet direkt nach dem Einbinden der Bibliotheken und endet nach der letzten für die Analyse relevanten Operation.
 
 .Messung der Prozesszeit des Python Programms
 [source, python]
@@ -259,4 +264,14 @@ stop = process_time_ns()
 print(str((stop-start)/10**9))
 ----
 
-Die Ausführungszeiten der Redis Operationen wurden mit der built-in Funktion SLOWLOG gemessen. Es wurden alle Operationen gemessen (slowlog-slower-than 0). 
+Die Ausführungszeiten der Redis Operationen wurden mit der built-in Funktionalität SLOWLOG gemessen. Dieses System ermöglicht es, die Ausführungszeiten von Operationen zu messen welche eine bestimmte Dauer überschreiten. Um alle Operationen zu messen wurde die Schranke auf 0 Mikrosekunden gesetzt ("slowlog-log-slower-than 0"). Da sich in der Praxis allerdings gezeigt hat, dass dieser Log für eine große Anzahl an Operationen nicht zuverlässig funktioniert (ab mehreren tausend Einträgen wurden alle Einträge gelöscht), wurden die Operationszeiten für jeden Durchlauf (z.B. ein Input-Datensatz wird vollständig eingelesen) gemessen und der SLOWLOG im Anschluss mittels "SLOWLOG RESET" bereinigt. Im Folgenden ist ein Beispiel für die Messung der Operationszeit beim einlesen eines Input-Datensatzes aufgeführt. Dabei ist anzumerken, dass "SLOWLOG RESET" und "SLOWLOG LEN" (Anzahl Einträge im Log) selbst gemessen werden und damit das Ergebnis verfälschen würden, weshalb diese in der if-Anweisung ausgeklammert werden.
+
+.Messung der Prozesszeit von Redis
+[source, python]
+----
+timeLog = r.slowlog_get(r.slowlog_len())
+for time in timeLog:
+    if time['command'] != 'SLOWLOG RESET' and time['command'] != 'SLOWLOG LEN':
+        timeFile.write(str(time['command'])+str(time['duration'])+'\n')
+r.slowlog_reset()
+----
