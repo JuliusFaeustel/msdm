@@ -85,35 +85,68 @@ INSERT INTO ObjektTyp VALUES ('Input', 'Input Datensätze');
 INSERT INTO ObjektTyp VALUES ('Output', 'Output Datensätze');
 ----
 
+=== Abfrage von Daten
+
+Im folgenden Absatz und Codebeispiel 9 ist das einfache Abfragen von Daten für ein Merkmal dargestellt.
+
+.Code 9 - einfache Beispielfrage für ein Merkmal auf die Datenbank
+[source, sql]
+----
+SELECT MA.Ausprägung FROM Input   
+  -- JOIN 1 
+  JOIN Objekt2Merkmalsausprägung AS O2MA ON (O2MA.ObjektID = Input.ID AND O2MA.DiskriminatorID = 1)
+  -- JOIN 2
+  JOIN Merkmalsausprägung AS MA ON MA.ID = O2MA.MerkmalsausprägungID
+  -- JOIN 3
+  JOIN Objekt2Merkmal AS O2M ON (O2M.ObjektID = Input.ID AND O2M.DiskriminatorID = 1)
+  -- JOIN 4
+  JOIN Merkmal AS M ON (M.ID = O2M.MerkmalID AND M.ID = MA.MerkmalID)
+
+  WHERE M.Bezeichnung = "DateIn" AND Input.SNR = "3790034478914";
+----
+
+Ziel dieser Abfrage ist es, alle Inputzeiten für ein bestimmtes Werkstück zu erhalten. +
+Über die WHERE-Klausel wird eingegrenzt, dass das Abfrageergebnis das Merkmal "DateIn", also den Input-Zeitstempel, für alle Datensätze, die die Seriennummer 3790034478914 haben. darstellt. +
+Um das korrekte Ergebnis zu erhalten, ist es notwendig die Verbindungsrelationen mit den weiteren Relationen über JOINS zu verbinden. +
+
+Ausgehend von der Tabelle Input wird mittels dem JOIN 3 die Tabelle Objekt2Merkmal verbunden und im JOIN 4 durch den Ausdruck _M.ID = O2M.MerkmalID_ die Tabelle Merkmal herangezogen. Wichtig im dritten JOIN ist der Ausdruck _O2M.DiskriminatorID = 1_, denn dadurch bezieht sich die erste Ergebnismenge nur auf den Objekttypen 1, in diesem Fall Input-Objekten und alle Tupel mit anderen Objekttypen werden nicht beachtet. +
+Die erste Ergebnismenge (Menge 1) würde nun die Tupel des Objekttyps Input-Datensatz mit der Seriennummer 3790034478914 enthalten, für die das Merkmal "DateIn" definiert ist. +
+
+Durch den zweiten Ausdruck im JOIN 4 (_M.ID = MA.MerkmalID_) sind die Tabellen Merkmal und Merkmalsausprägung verbunden und es werden nur die Merkmalsausprägungen angezeigt, die für das angegebene Merkmal ("DateIn") definiert sind. Durch die Verbindung von Merkmalsausprägung zur Verbindungsrelation Objekt2Merkmalsausprägung im JOIN 2, enthält die Ergebnismenge (Menge 2) nur die Tupel, die eine dieser Ausprägungen enthalten. +
+Durch den JOIN 1 werden nun die Ergebnismenge 1 und 2 verbunden, wodurch die Menge ensteht, die das korrekte Abfrageergebnis darstellt. Auch hier ist die Angabe des Objekttypen in der JOIN-Bedingung des JOINS 1 elementar, um nur Tupel für den richtigen Objekttypen zu erhalten. +
+
+Das Vorgehen mit den Mengen 1 und 2 entspricht nicht dem Vorgehen der Datenbank, sondern soll nur der Veranschaulichung dienen.
+
+
 === Messung der Datenbankausführungszeiten der Analysen
 ==== MySQL
 
-Der MySQL-Server stellt standardmäßig die Status der 100 zuletzt ausgeführten Queries in der Systemtabelle _INFORMATION_SCHEMA.PROFILING_ mit bestimmten Merkmalen bereit, sofern das Profiling aktiviert wurde (siehe Code 9).
+Der MySQL-Server stellt standardmäßig die Status der 100 zuletzt ausgeführten Queries in der Systemtabelle _INFORMATION_SCHEMA.PROFILING_ mit bestimmten Merkmalen bereit, sofern das Profiling aktiviert wurde (siehe Code 10).
 
-.Code 9 - Aktivieren des Profilings im MySQL-Server
+.Code 10 - Aktivieren des Profilings im MySQL-Server
 [source, sql]
 ----
 SET @@profiling = 1;
 ----
 
-Normalerweise verfügt diese Variante über die Möglichkeit, die Größe der Historie (auch _profiling_history_size_) zu bestimmen (siehe Code 10). Jedoch funktionierte dies im Projekt unzuverlässig, weshalb immer der Standardwert von 100 genutzt wurde, um die Zeiten zuverlässig zu messen und die ausgeführten Queries zu zählen (siehe Code 11). 
+Normalerweise verfügt diese Variante über die Möglichkeit, die Größe der Historie (auch _profiling_history_size_) zu bestimmen (siehe Code 11). Jedoch funktionierte dies im Projekt unzuverlässig, weshalb immer der Standardwert von 100 genutzt wurde, um die Zeiten zuverlässig zu messen und die ausgeführten Queries zu zählen (siehe Code 12). 
 
-.Code 10 - Setzen der Query-Historie auf 500
+.Code 11 - Setzen der Query-Historie auf 500
 [source, sql]
 ----
 SET @@profiling_history_size = 500;
 ----
 
-.Code 11 - Messen der Ausführungszeiten und Zählen der ausgeführten Queries
+.Code 12 - Messen der Ausführungszeiten und Zählen der ausgeführten Queries
 [source, sql]
 ----
 SELECT SUM(DURATION) FROM INFORMATION_SCHEMA.PROFILING;
 SELECT COUNT(Query_ID) FROM INFORMATION_SCHEMA.PROFILING WHERE STATE = 'end';
 ----
 
-Das Zurücksetzen der Historie kann einfach über die folgende Befehlsfolge im Codeabschnitt 12 erfolgen.
+Das Zurücksetzen der Historie kann einfach über die folgende Befehlsfolge im Codeabschnitt 13 erfolgen.
 
-.Code 12 - Initialisieren der Systemtabelle
+.Code 13 - Initialisieren der Systemtabelle
 [source, sql]
 ----
 SET @@profiling = 0;
@@ -164,17 +197,17 @@ Für die Implementierung wurde die Python-Version 3.7.3 genutzt.
 === Verwendete Bibliotheken zur Kommunikation zwischen Anwendung und Datenbank
 ==== MySQL
 
-Zur Verbindung zwischen Anwendung und MySQL-Datenbankserver wurde die Python-Bibliothek _mysql-connector-python_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 13 dargestellten Code installiert werden. +
+Zur Verbindung zwischen Anwendung und MySQL-Datenbankserver wurde die Python-Bibliothek _mysql-connector-python_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 14 dargestellten Code installiert werden. +
 
-.Code 13 - Installieren der MySQL-Bibliothek für Python
+.Code 14 - Installieren der MySQL-Bibliothek für Python
 [source, sh]
 ----
 pip install mysql-connector-python
 ----
 
-Damit die Anwendung eine Verbindung zur Datenbank herstellt, muss die Bibliothek eingebunden und die Parameter _user_, _password_, _host_ und _database_ übergeben werden. Um Operationen ausführen zu können, muss ein Cursor genutzt werden. (siehe Code 14)
+Damit die Anwendung eine Verbindung zur Datenbank herstellt, muss die Bibliothek eingebunden und die Parameter _user_, _password_, _host_ und _database_ übergeben werden. Um Operationen ausführen zu können, muss ein Cursor genutzt werden. (siehe Code 15)
 
-.Code 14 - Herstellen der Verbindung und Erstellen eines Cursors
+.Code 15 - Herstellen der Verbindung und Erstellen eines Cursors
 [source, python]
 ----
 import mysql.connector
@@ -189,7 +222,7 @@ Für SELECT-Abfragen muss nun lediglich ein Statement der Cursor-Funktion _execu
 * _fetchone()_ für die erste Zeile der Ergebnismenge
 * _fetchmany(size = x )_ für die ersten x Zeilen der Ergebnismenge
 
-.Code 15 - Ausführen einer Abfrage und Fetch der kompletten Ergebnismenge
+.Code 16 - Ausführen einer Abfrage und Fetch der kompletten Ergebnismenge
 [source, python]
 ----
 statement = "SELECT Input.FA FROM Input WHERE TEIL = 'A' GROUP BY Input.FA ORDER BY Input.FA;"
@@ -197,9 +230,9 @@ statement = "SELECT Input.FA FROM Input WHERE TEIL = 'A' GROUP BY Input.FA ORDER
   FA_List = cursor.fetchall()
 ----
 
-Sofern ein Insert, Update oder Delete durchgeführt wurde, muss nach der Ausführung mittels _execute()_ ein Commit erfolgen, um die Änderungen zu übernehmen. (siehe Code 16)
+Sofern ein Insert, Update oder Delete durchgeführt wurde, muss nach der Ausführung mittels _execute()_ ein Commit erfolgen, um die Änderungen zu übernehmen. (siehe Code 17)
 
-.Code 16 - Verbindungscommit nach Insert-Anweisung
+.Code 17 - Verbindungscommit nach Insert-Anweisung
 [source, python]
 ----
 statement = "INSERT INTO LINIE VALUES (1);"
@@ -207,9 +240,9 @@ statement = "INSERT INTO LINIE VALUES (1);"
   connection.commit()
 ----
 
-Am Ende der Anwendung können der Cursor und die Verbindung einfach über die Funktion _close()_ geschlossen werden. (siehe Code 17)
+Am Ende der Anwendung können der Cursor und die Verbindung einfach über die Funktion _close()_ geschlossen werden. (siehe Code 18)
 
-.Code 17 - Schließen des Cursors und Abbau der Verbindung
+.Code 18 - Schließen des Cursors und Abbau der Verbindung
 [source, python]
 ----
 cursor.close()
@@ -219,17 +252,17 @@ connection.close()
 Genauere Ausführungen und weitere Informationen sind in der link:https://dev.mysql.com/doc/connector-python/en/[MySQL-Dokumentation] verfügbar.
 
 ==== MSSQL
-Zur Verbindung zwischen Anwendung und MSSQL-Datenbankserver wurde die Python-Bibliothek _pyodbc_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 18 dargestellten Code installiert werden. Außerdem muss der "Microsoft ODBC Driver for SQL Server", welcher in der Microsoft Dokumentation zu finden ist (link:https://docs.microsoft.com/de-de/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver15#download-for-windows[ODBC Driver]), installiert werden. +
+Zur Verbindung zwischen Anwendung und MSSQL-Datenbankserver wurde die Python-Bibliothek _pyodbc_ genutzt. Diese kann in Visual Studio Code über die Konsole durch den im Beispiel 19 dargestellten Code installiert werden. Außerdem muss der "Microsoft ODBC Driver for SQL Server", welcher in der Microsoft Dokumentation zu finden ist (link:https://docs.microsoft.com/de-de/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver15#download-for-windows[ODBC Driver]), installiert werden. +
 
-.Code 18 - Installieren der pyodbc-Bibliothek für Python
+.Code 19 - Installieren der pyodbc-Bibliothek für Python
 [source, sh]
 ----
 pip install pyodbc
 ----
 
-Im Unterschied zu MySQL muss zum Verbindungsaufbau noch der weitere Parameter _DRIVER_ übergeben werden. Um Operationen ausführen zu können, muss auch hier ein Cursor genutzt werden. (siehe Code 19)
+Im Unterschied zu MySQL muss zum Verbindungsaufbau noch der weitere Parameter _DRIVER_ übergeben werden. Um Operationen ausführen zu können, muss auch hier ein Cursor genutzt werden. (siehe Code 20)
 
-.Code 19 - Herstellen der Verbindung und Erstellen eines Cursors
+.Code 20 - Herstellen der Verbindung und Erstellen eines Cursors
 [source, python]
 ----
 import pyodbc
@@ -244,7 +277,7 @@ Alle weiteren im MySQL-Teil ausgeführten Befehle gelten unter pyodbc ebenfalls 
 
 Zur Messung der Skriptausführungszeiten wurde von der Python-Bibliothek _time_ die Methode _process_time_ns()_ geladen, mit der die Summe der System- und Benutzer-CPU-Zeit des aktuellen Prozesses in Nanosekunden berechnet werden kann. Diese Methode schließt die während des Ruhezustands verstrichene Zeit nicht ein. +
 
-.Code 20 - Messen der Skriptausführungszeit
+.Code 21 - Messen der Skriptausführungszeit
 [source, python]
 ----
 from time import process_time_ns()
@@ -261,9 +294,9 @@ duration = stop - start
 Die Datenloader, über die Datensätze in die Struktur geladen werden, unterscheiden sich auf Grund der unterschiedlichen SQL-Dialekte. Jedoch ist das allgemeine Vorgehen, welches hier erläutert wird, gleich. Ein kleiner Unterschied liegt nur in der Verknüpfung des Outputs mit dem Input, was später erläutert wird. +
 Voraussetzung, bevor Datensätze eingelesen werden können, ist wie bereits erwähnt, dass Merkmale und Objekttypen bereits in der Struktur definiert wurden. +
 
-Aus dem bereits erläuterten Watchdog, erhält die Anwendung den Pfad des Textdokuments, welches ausgelesen werden muss. Im Codebeispiel 21 ist dargestellt, wie eine Datei mit Leserechten geöffnet wird, der Inhalt mittels _read()_ ausgelesen und als String gespeichert wird und dieser String aufgearbeitet wird, dass alle Elemente, die durch ein Semikolon getrennt sind, ein Element in einer Liste werden. +
+Aus dem bereits erläuterten Watchdog, erhält die Anwendung den Pfad des Textdokuments, welches ausgelesen werden muss. Im Codebeispiel 22 ist dargestellt, wie eine Datei mit Leserechten geöffnet wird, der Inhalt mittels _read()_ ausgelesen und als String gespeichert wird und dieser String aufgearbeitet wird, dass alle Elemente, die durch ein Semikolon getrennt sind, ein Element in einer Liste werden. +
 
-.Code 21 - Auslesen der vorhandenen Datei
+.Code 22 - Auslesen der vorhandenen Datei
 [source, python]
 ----
 def insert (file):
@@ -323,7 +356,7 @@ In den folgenden Absätzen werden kurz selbstdefinierte Funktionen gezeigt und d
 
 Für die Realisierung der Variante 2 wurde die Python-Bibliothek _pandas_ genutzt, welche einfache und flexible Möglichkeiten der Datenanalyse und -manipulation bietet. +
 
-.Code 22 - Installieren der pandas-Bibliothek für Python
+.Code 23 - Installieren der pandas-Bibliothek für Python
 [source, sh]
 ----
 pip install pandas
@@ -332,9 +365,9 @@ pip install pandas
 ==== Eigene Funktionen
 
 Zur Umsetzung der Implementierungen wurden zwei selbstdefinierte Funktionen genutzt. +
-Zum einen eine Funktion, um Datumswerte, welche in der Struktur als _VARCHAR_ gespeichert sind, in Sekunden für die Zeitdifferenzberechnung umzuwandeln. (siehe Code 23)
+Zum einen eine Funktion, um Datumswerte, welche in der Struktur als _VARCHAR_ gespeichert sind, in Sekunden für die Zeitdifferenzberechnung umzuwandeln. (siehe Code 24)
 
-.Code 23 - Umwandeln eines Datumsstrings in Sekunden
+.Code 24 - Umwandeln eines Datumsstrings in Sekunden
 [source, python]
 ----
 import datetime, time
@@ -345,9 +378,9 @@ def convert_from_datestring( TimeString ):
   return Second
 ----
 
-Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 24)
+Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 25)
 
-.Code 24 - Umwandeln eines Sekundenwerts in einen einfach lesbaren String
+.Code 25 - Umwandeln eines Sekundenwerts in einen einfach lesbaren String
 [source, python]
 ----
 def convert_from_s( seconds ): 
@@ -361,7 +394,7 @@ def convert_from_s( seconds ):
 ==== Analyse 1 - Taktung pro Artikel
 ===== Variante 1 - kleine Abfragen
 
-.Code 25 - Pseudocode Analyse 1.1
+.Code 26 - Pseudocode Analyse 1.1
 [source, Pseudocode]
 ----
 Abfrage aller Teilarten;
@@ -400,7 +433,7 @@ FOR EACH Teilart der Teilarten {
 
 ===== Variante 2 - mittlere Abfragen
 
-.Code 26 - Pseudocode Analyse 1.2
+.Code 27 - Pseudocode Analyse 1.2
 [source, Pseudocode]
 ----
 Abfrage aller Teilarten;
@@ -430,7 +463,7 @@ FOR EACH Teilart der Teilarten {
 
 ==== Analyse 2 - Auftrennung
 
-.Code 27 - Pseudocode Analyse 2
+.Code 28 - Pseudocode Analyse 2
 [source, Pseudocode]
 ----
 Abfrage aller Teilarten;
@@ -469,7 +502,7 @@ FOR EACH Teilart der Teilarten {
 ==== Analyse 4
 ===== Variante 1 - kleine Abfragen
 
-.Code 28 - Pseudocode Analyse 4.1
+.Code 29 - Pseudocode Analyse 4.1
 [source, Pseudocode]
 ----
 Abfrage aller LadungsträgerIn;
@@ -496,7 +529,7 @@ FOR EACH Ladungsträger der LadungsträgerIn {
 
 ===== Variante 2 - mittlere Abfragen
 
-.Code 29 - Pseudocode Analyse 4.2
+.Code 30 - Pseudocode Analyse 4.2
 [source, Pseudocode]
 ----
 Abfrage aller LadungsträgerIn;
@@ -514,7 +547,7 @@ FOR EACH Ladungsträger der LadungsträgerIn {
 ==== Analyse 5
 ===== Variante 1 - kleine Abfragen
 
-.Code 30 - Pseudocode Analyse 5.1
+.Code 31 - Pseudocode Analyse 5.1
 [source, Pseudocode]
 ----
 Abfrage aller Teilarten;
@@ -544,7 +577,7 @@ FOR EACH Teilart der Teilarten {
 
 ===== Variante 2 - mittlere Abfragen
 
-.Code 31 - Pseudocode Analyse 5.2
+.Code 32 - Pseudocode Analyse 5.2
 [source, Pseudocode]
 ----
 Abfrage aller Teilarten;
@@ -566,7 +599,7 @@ FOR EACH Teilart der Teilarten {
 
 ==== Analyse 6
 
-.Code 32 - Pseudocode Analyse 6
+.Code 33 - Pseudocode Analyse 6
 [source, Pseudocode]
 ----
 Abfrage aller Linien;
