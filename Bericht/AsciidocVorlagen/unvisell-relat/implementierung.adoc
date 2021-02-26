@@ -62,7 +62,7 @@ An dieser Stelle ist es wichtig zu erwähnen, dass Microsoft mit seinem SQL-Dial
 [source, sql]
 ----
 CREATE INDEX INDEX_TBL_Input2 ON Input (TEIL) INCLUDE (FA);
-CREATE INDEX INDEX_TBL_MA ON Merkmalsausprägung (MerkmalID) INCLUDE (Ausprägung) WHERE MerkmalID = 21;
+CREATE INDEX INDEX_TBL_MA ON Merkmalsauspraegung (MerkmalID) INCLUDE (Auspraegung) WHERE MerkmalID = 21;
 ----
 
 Über die INCLUDE-Klausel ist es möglich Werte zu speichern und schnell abzufragen, welche nicht im Indexschlüssel stehen. +
@@ -92,11 +92,11 @@ Im folgenden Absatz und Codebeispiel 9 ist das einfache Abfragen von Daten für 
 .Code 9 - einfache Datenabfrage für ein Merkmal
 [source, sql]
 ----
-SELECT MA.Ausprägung FROM Input   
+SELECT MA.Auspraegung FROM Input   
   -- JOIN 1 
-  JOIN Objekt2Merkmalsausprägung AS O2MA ON (O2MA.ObjektID = Input.ID AND O2MA.DiskriminatorID = 1)
+  JOIN Objekt2Merkmalsauspraegung AS O2MA ON (O2MA.ObjektID = Input.ID AND O2MA.DiskriminatorID = 1)
   -- JOIN 2
-  JOIN Merkmalsausprägung AS MA ON MA.ID = O2MA.MerkmalsausprägungID
+  JOIN Merkmalsauspraegung AS MA ON MA.ID = O2MA.MerkmalsauspraegungID
   -- JOIN 3
   JOIN Objekt2Merkmal AS O2M ON (O2M.ObjektID = Input.ID AND O2M.DiskriminatorID = 1)
   -- JOIN 4
