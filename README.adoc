@@ -1,0 +1,9 @@
+= Alles in einer Hand: Multi-Source Data-Management (MSDM)
+
+* Projektseminar im Studiengang Wirtschaftsinformatik Wintersemester 2020/2021 an der HTW Dresden 
+* Ziel ist es "spezielle Daten" der Produktion aus mehreren Quellen in ERP-Systemen zu speichern
+* Im Rahmen des Projektseminars wurden vier Varianten für ein Multi-Source Data-Management entwickelt und verglichen
+** Variante 1: proprietäre Lösung
+** Variante 2: universelle relationale Struktur
+** Variante 3: dokumentenorientierte Datenbank
+** Variante 4: Schlüssel-Werte-Datenbank
