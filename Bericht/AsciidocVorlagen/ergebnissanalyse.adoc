@@ -9,15 +9,15 @@ ifdef::main-file[]
 endif::main-file[]
 
 == Übersicht
-Um die Lösungen zu evaluieren wurden verschiedene Kritierien genutzt, diese sind in der Tabelle zu finden. Dabei wurden
+Um die Lösungen zu evaluieren, wurden verschiedene Kritierien genutzt, diese sind in der Tabelle zu finden. Dabei wurden
 die Abstufungen sehr positiv (++) bis sehr negativ (--) genutzt. Es wurde keine absolute Skale verwendet, sondern
 jeglich die Lösungen untereinander zu vergleichen.
-Natürlich ist dieser Vergleich subjektiv, allein schon von der Vergleichskriterien Auswahl.
+Natürlich ist dieser Vergleich subjektiv, allein schon von der Vergleichskriterienauswahl.
 
-Das erste Kriterium vergleicht den programmier Aufwand der einzelnen Lösungen. Dabei wird die  Komplexität und Größe der Abfragen als wie der Verwaltungsaufwand der Datenbank berücksichtigt.
-Das nächste Kriterium handelt von dem Aufwand  das Datenmodell zu erstellen und der Verständlichkeit davon.
-Ein weiteres Kriterium für den Vergleich war der Entwicklungsaufwand für das hinzufügen eines neuen Attributes, also wenn eine neue Werte Art auch gespeichert werden muss.
-Die Schreib Performance befasst mit der benötigten Zeit um neue Datensätze in die Datenbank zu bringen, die dazugehörigen Grafiken sind unter Einleseperformance zu finden. Die Lese Performance beschäftigt sich im besonderen mit der Dauer der Analysen, die Diagramme sind unter der Analyseperformance zu finden. Für das nächste Kriterium wurde der von der Datenbank genutzte Speicher gemessen, damit auch der benötigte Speicherbedarf für Indices. Im letzten kriterium wurde das vorhandensein von Entwicklerdokumentation im Zusammenhang mit einer aktiven Nutzergemeinschaft verglichen.
+Das erste Kriterium vergleicht den Programmieraufwand der einzelnen Lösungen. Dabei wird die Komplexität und Größe der Abfragen sowie der Verwaltungsaufwand der Datenbank berücksichtigt.
+Das nächste Kriterium handelt von dem Aufwand das Datenmodell zu erstellen und dessen Verständlichkeit.
+Ein weiteres Kriterium für den Vergleich war der Entwicklungsaufwand für das Hinzufügen eines neuen Attributes, also wenn eine neue Werteart auch gespeichert werden muss.
+Die Schreib-Performance umfasst die benötigte Zeit, um neue Datensätze in die Datenbank zu bringen, die dazugehörigen Grafiken sind unter Einleseperformance zu finden. Die Lese-Performance beschäftigt sich im Besonderen mit der Dauer der Analysen, die Diagramme sind unter der Analyseperformance zu finden. Für das nächste Kriterium wurde der von der Datenbank genutzte Speicher gemessen, damit auch der benötigte Speicherbedarf für Indices. Im letzten Kriterium wurde das Vorhandensein von Entwicklerdokumentation im Zusammenhang mit einer aktiven Nutzergemeinschaft verglichen.
 
 [cols=5* , title=Lösungsvergleich]
 |===
@@ -47,13 +47,13 @@ aufwand
 |++
 |++
 
-|Schreib Performance
+|Schreib-Performance
 |-
 |- -
 |+
 |++
 
-| Lese Performance
+| Lese-Performance
 |++
 |- -
 |+
@@ -97,16 +97,16 @@ image::analysendauer2.png[title= Analysedauer in den NOSQL Datenbanken]
 
 == Vor- und Nachteile der einzelnen Lösungen
 === Proprietäre Datenstruktur
-Der wohl klassischste Lösungansatz besticht im besonderen mit einer hohen Abfrageperformance, diese können auch mit einfach bedienbaren Werkzeugen wie Excel erstellt werden. Die Speicherperformance könnte im besonderen bei komplexeren mit Datenmodellen mit verschiedenen Foreign-Key-Constraints problematisch werden, da sich diese Lösung hier nur Platz drei belegt. Auch kann der Entwicklungsaufwand verbunden mit Änderungen im Sensorbestand ein Auschlusskriterium für manche Anwendungsfälle sein.
+Der wohl klassischste Lösungsansatz besticht im Besonderen mit einer hohen Abfrageperformance, diese können auch mit einfach bedienbaren Werkzeugen wie Excel erstellt werden. Die Speicherperformance könnte im Besonderen bei komplexeren Datenmodellen mit verschiedenen Foreign-Key-Constraints problematisch werden, da diese Lösung in der Schreibperformance nur Platz drei belegt. Auch kann der Entwicklungsaufwand verbunden mit Änderungen im Sensorbestand ein Ausschlusskriterium für manche Anwendungsfälle sein.
 
 
 === Universelle relationale Struktur
 
-Das größter Problem mit der vorangegangen Lösung wird mit dem universellen Ansatz behoben, denn mit Änderungen im  Messtechnik Bestand hat diese Modell keine Problem. Dabei bleibt aber der Vorteil bestehen, dass SQL basierte Lösungen auf ein potentes Umfeld aus Datenbankservern und Dokumentationen zurückgreifen können. Die flexibilität hat dabei aber leider den Preis eines sehr komplexen Datenmodells, was auch zu der mit Abstand schlechtesten Lese- und Schreibperformance führt.
+Das größte Problem mit der vorangegangenen Lösung wird mit dem universellen Ansatz behoben, denn mit Änderungen im  Messtechnikbestand hat dieses Modell kein Problem. Dabei bleibt aber der Vorteil bestehen, dass SQL basierte Lösungen auf ein potentes Umfeld aus Datenbankservern und Dokumentationen zurückgreifen können. Die Flexibilität hat dabei aber leider den Preis eines sehr komplexen Datenmodells, was auch zu der mit Abstand schlechtesten Lese- und Schreibperformance führt.
 
 === Schlüssel-Werte-Datenbank
 
-Diese Performance Probleme hat der dritte Lösungsansatz nicht, besonders bei Einzelabfragen hat diese Lösung ihre Stärke. Um aber Datenzusammenhänge darzustellen ist einiges an Aufwand nötig, der für Entwickler aus dem SQL Umfeld zunächst irritierend wirken kann. Weiterhin sind Operationen wie Joins und Gruppierungen nicht ohne weitere implementierung möglich, was Abfragen komplizierter macht.
+Diese Performanzprobleme hat der dritte Lösungsansatz nicht, besonders bei Einzelabfragen hat diese Lösung ihre Stärke. Um aber Datenzusammenhänge darzustellen, ist einiges an Aufwand nötig, der für Entwickler aus dem SQL Umfeld zunächst irritierend wirken kann. Weiterhin sind Operationen wie Joins und Gruppierungen nicht ohne weitere Implementierung möglich, was Abfragen komplizierter macht.
 
 === Dokumentenorientierte Datenbanklösung
-Dieser Abfrage Komplexität wird bei bei der Dokumentenorientierten Datenbanklösung, durch ein SQL ähnliches Abfrageraster entgegengewirkt. Da dieses Raster erst bei der Abfrage über die Datenbank gelegt wird, hat die Datenbank auch keine Performance Probleme und eignet sich somit auch für den Einsatz in einem Fast Layer. Damit hat diese Lösung eine sehr ausgeglichene Leistung über all unsere Kritieren, deshalb hat sie auch das größte Lösungspotential der besprochenen Lösungen.
+Diese Abfragekomplexität wird bei der dokumentenorientierten Datenbanklösung, durch ein SQL ähnliches Abfrageraster entgegengewirkt. Da dieses Raster erst bei der Abfrage über die Datenbank gelegt wird, hat die Datenbank auch keine Performanzprobleme und eignet sich somit auch für den Einsatz in einem Fast Layer. Damit hat diese Lösung eine sehr ausgeglichene Leistung über all unsere Kritieren, deshalb hat sie auch das größte Lösungspotential der besprochenen Lösungen.

@@ -41,7 +41,7 @@ Der Rohdatensatz wird analog zu den Input-Datensätzen als Hash abgespeichert. I
 
 .Einlesealgorithmus Output-Datensatz
 [#img-readOut]
-image::pap-out.png[readOut]
+image::pap-out.png[readOut, width = 450]
 
 == Implementierung der Analysen
 

@@ -1,0 +1,19 @@
+extends: default
+base:
+  font:
+    color: #333333
+    family: Times-Roman
+    size: 12
+footer:
+  recto:
+    center:
+      content: '{section-or-chapter-title}'
+    right:
+      content: '{page-number}'
+  verso:
+    center:
+      content: '{section-or-chapter-title}'
+    right:
+      content: '{page-number}'
+    left:
+      content: ~

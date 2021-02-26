@@ -5,18 +5,17 @@
 
 
 In der Produktion fallen viele sogenannte Qualitätsdaten an, diese sind logisch stark mit Produktionsdaten in
-ERP-Systemen verknüpft. Sie sind logistisch, kostenrechnerisch oder buchhalterisch relevant. Neben der hohen Datenmenge,
-erzeugen die vielen Sensoren auch einen sehr heterogenen Datenbestand.
-Durch Veränderungsprozesse im Unternehmen kommt noch eine gewisse dynamik  hinzu, diese entsteht durch Änderungen im
-Messinstrumenten Bestand.
-Alle diese Daten müssen persistiert werden, auch wenn nur ein Teil davon zunächst relevant erscheint wäre es fatal, wenn
-Informationen die später nützlich sein könnten einfach verloren gehen würden.
+ERP-Systemen verknüpft. Sie sind logistisch, kostenrechnerisch oder buchhalterisch relevant. Neben der hohen Datenmenge erzeugen die vielen Sensoren auch einen sehr heterogenen Datenbestand.
+Durch Veränderungsprozesse im Unternehmen kommt noch eine gewisse Dynamik  hinzu, diese entsteht durch Änderungen im
+Messinstrumentenbestand.
+Alle diese Daten müssen persistiert werden, auch wenn nur ein Teil davon zunächst relevant erscheint, wäre es fatal, wenn
+Informationen, die später nützlich sein könnten, einfach verloren gehen würden.
 Somit benötigt es einen flexiblen, verlässlichen und performanten Datenspeicher.
 
-Da es viele Anbieter auf dem Datenbankmarkt gibt war es Ziel dieses Projektes vier verschiedene Lösungsansätze an einem
-Praxisbeispiel zu evaluieren. Dabei sollte eine proprietäre Datenstruktur, eine universell relational Struktur,
+Da es viele Anbieter auf dem Datenbankmarkt gibt, war es Ziel dieses Projektes vier verschiedene Lösungsansätze an einem
+Praxisbeispiel zu evaluieren. Dabei sollte eine proprietäre Datenstruktur, eine universell relationale Struktur,
 eine Schlüssel-Werte-Datenbank und eine dokumentenorientierte Datenbank zum Einsatz kommen. In allen Lösungen sollten
-Daten konsistent gespeichert werden. Weiterhin sollten verschiedene Analysen möglich sein und auch auch das
+Daten konsistent gespeichert werden. Weiterhin sollten verschiedene Analysen möglich sein und auch das
 Darstellen der Analyseergebnisse.
 
 

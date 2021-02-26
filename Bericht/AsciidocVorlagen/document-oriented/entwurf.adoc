@@ -25,7 +25,7 @@ schreibt, um so eine gewisse Konsistenz zu gewährleisten, ohne die Komplexität
 Auch in Dokumentenorientierten Datenbanken besteht die Möglichkeit Relationen zwischen "Dokumenten"
 herzustellen. Es gibt dabei 3 Varianten, welche man verfolgen kann.
 
-==== One-To-One Embedded
+=== One-To-One Embedded
 .Beispiel eines "Dokuments" mit einem "Embedded Document"
 image::Schema-Beispiel.PNG[]
 
@@ -35,7 +35,7 @@ Diese Methode eignet sich vorallem wenn ein Dokument immer nur in Relation zu ei
 also bei 1-1 Beziehungen. Es besteht dadurch der Vorteil das keine Joins durchgeführt werden müssen
 da alle Daten an einer Stelle liegen.
 
-==== One-To-Many Embedded
+=== One-To-Many Embedded
 
 .Beispiel eines Dokuments mit einem Array aus "Embedded Documents"
 image::Schema_One-to_many.PNG[]
@@ -46,7 +46,7 @@ Es handelt sich hierbei auch um das für meine Anwendung geeigneste Schema. Da e
 eindeutig einem Eingangsdatensatz zugeordnet werden kann. Einzelne Elemente des Arrays lassen sich bei Abfragen sogar
 über den Index ansteuern.
 
-==== Many-To-Many Reference
+=== Many-To-Many Reference
 
 Dieses Schema möchte ich hierbei nur am Rande erwähnen. Es handelt sich hierbei um eine Methode welche sehr
 der Foreign Key Methode in relationalen Datenbanken entspricht. Hierbei muss es in beiden "Dokumenten"

@@ -12,8 +12,8 @@ endif::main-file[]
 
 == Datenbankvorstellung
 
-Die proprietäre Datenstruktur basiert auf einem relationalem Datenmodell, welches als Standard in der Datenbankentwicklung genutzt wird. Zu Grunde liegt diesem vier Elemente: Tabellen, Attribute, Beziehungen und die Grundlage der relationalen Algebra. Diese ist auch die Grundlage für die Datenbanksprache SQL. +
-Das Relationale Datenbankenmodell besteht aus einer Ansammlung von Tabellen, die durch Beziehungen mit einander verknüpft sind. In jeder Tabelle werden die Datensätze als Tupel (Zeilen) gespeichert. Jedes Tupel besteht aus mehreren Attributen, welche als Spalten in einer Tabelle bekannt sind.    
+Die proprietäre Datenstruktur basiert auf einem relationalem Datenmodell, welches als Standard in der Datenbankentwicklung genutzt wird. Zugrunde liegt diesem vier Elemente: Tabellen, Attribute, Beziehungen und die Grundlage der relationalen Algebra. Diese ist auch die Grundlage für die Datenbanksprache SQL. +
+Das Relationale Datenbankenmodell besteht aus einer Ansammlung von Tabellen, die durch Beziehungen miteinander verknüpft sind. In jeder Tabelle werden die Datensätze als Tupel (Zeilen) gespeichert. Jedes Tupel besteht aus mehreren Attributen, welche als Spalten in einer Tabelle bekannt sind.
 
 .Code 1 - Beispiel für die Erstellung einer Tabelle
 [source, sql]
@@ -36,4 +36,4 @@ ADD COLUMN `alter` int,
 DEFAULT NULL;
 ----
 
-Der Vorteil der proprietären Datenstruktur besteht in einer spezifischen Entwicklung eines Datenmodelles, welche einen geringen Entwicklungsaufwand bedarf. Dies belegt der Codebeispiel 1, währenddessen erkennt man im Codebeispiel 2, dass eine Weiterentwicklung der Datenstruktur viele Systemtest mit sich zieht und damit viel Zeil kostet.
+Der Vorteil der proprietären Datenstruktur besteht in einer spezifischen Entwicklung eines Datenmodells, welche einen geringen Entwicklungsaufwand bedarf. Dies belegt der Codebeispiel 1, währenddessen erkennt man im Codebeispiel 2, dass eine Weiterentwicklung der Datenstruktur viele Systemtest mit sich zieht und damit viel Zeil kostet.

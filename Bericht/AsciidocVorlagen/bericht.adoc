@@ -13,11 +13,12 @@
 :figure-caption: Abbildung
 :table-caption: Tabelle
 :listing-caption: Listing
-:nofooter:
 :main-file: true
 :imagesdir: bilder
+:pdf-theme: theme.yml
 
-= Multisource Datamangement
+
+= Alles in einer Hand: Multi-Source Data-Management
 Clemens Kujus, Paul Kristian Picht, Lukas Siegert, Cornelius Liepelt, Julius Fäustel
 
 include::einleitung.adoc[leveloffset=+1]

@@ -4,33 +4,33 @@
 :imagesdir: bilder
 
 
-Um die Lösungen des Projektes zu evaluieren war zunächst ein Blick auf die in der Indsustrie eingesetzten Technologien
-notwendig. Dafür werden im folgenden Lösungsansätze aus dem Praxiseinsatz disktutiert.
+Um die Lösungen des Projektes zu evaluieren war zunächst ein Blick auf die in der Industrie eingesetzten Technologien
+notwendig. Dafür werden im folgenden Lösungsansätze aus dem Praxiseinsatz diskutiert.
 
 == Iconics Hyper Historian
-Iconics bietet Automatisierungssoftware Lösungen welche Echtzeitinformationen für jede Anwendung, visualisieren, historisieren, analysieren und mobilisieren.
+Iconics bietet Automatisierungssoftware Lösungen welche Echtzeitinformationen für jede Anwendung visualisieren, historisieren, analysieren und mobilisieren.
 Dabei spielt der Hyper Historian eine Schlüsselrolle in der Archivierung und Analyse historischer Daten.
 Dazu wurde von Iconics eine Datenbanklösung selbst entwickelt, diese basiert auf Zeitreihen und hat deshalb den Vorteil
-der Datenkompression. Nach außen wird ein SQL Interface bereitgestellt,
+der Datenkompression. Nach außen wird ein SQL Interface bereitgestellt.
 
 == Amazon
 Amazon hat mit der Amazon DynamoDB ebenfalls eine eigene NoSQL-Datenbank im Portfolio. Dabei werden Ansätze
-der Schlüssel-Wert- und der Dokumentendatenbank kombiniert. Daneben existiert auch noch Amazon Timestream, dies ist
-ein Zeitreihen-Datenbankservice. Hier lässt sich schon erkennen, dass in der Datenbankwelt keine passende Lösung
+der Schlüssel-Werte und der Dokumentendatenbank kombiniert. Daneben existiert auch noch Amazon Timestream, dies ist
+ein Zeitreihen-Datenbankservice. Hier lässt sich schon erkennen, dass es in der Datenbankwelt keine passende Lösung
 für alle Probleme gibt, sondern unterschiedliche Anforderungen zu unterschiedlichen Systemen führen.
 
 
 == Kontron AIS GmbH
 Die Kontron AIS hat je nach Projekt verschiedene Datenbanklösungen im Einsatz, dabei werden oft verschiedene
-Ansätze kombiniert. So ist meist auf der Auswertungsseite ein relationaler Datenbank Server wie Beispielsweise
+Ansätze kombiniert. So ist meist auf der Auswertungsseite ein relationaler Datenbankserver wie beispielsweise
 von Oracle oder Microsoft.
-Da der Aufbau von den Relationen, aber beim Speichern Zeit benötigt wird mit einem sogenannten Fast Layer gearbeitet.
-Um das diesen zu implementieren werden verschiedene Lösungen genutzt. Zum einem das Big Data System Hadoop.
-Es ermöglicht eine hoch performante Speicherung in einem redundanten und parallelisiertem Dateisystem.
-Ebenfalls werden als Zwischenspeicher die auch im folgenden diskutierten Ansätze wie Schlüssel-Wert-Datenbank und
-Dokumentenorientierte Datenbank genutzt, dabei werden die nicht nur Datensammlung, sondern auch als
-Zwischenspeicher für Auswertungen genutzt. Auffallend dabei ist das die Lösungen von Projekt zu Projekt variieren und
-das oft auch nur eine Kombination eine adequate Problemlösung schafft.
+Da der Aufbau von den Relationen, aber beim Speichern Zeit benötigt, wird mit einem sogenannten Fast Layer gearbeitet.
+Um diesen zu implementieren werden verschiedene Lösungen genutzt. Zu einem das Big Data System Hadoop.
+Es ermöglicht eine hoch performante Speicherung in einem redundanten und parallelisierten Dateisystem.
+Ebenfalls werden als Zwischenspeicher die auch im Folgenden diskutierten Ansätze wie Schlüssel-Werte-Datenbank und
+dokumentenorientierte Datenbank genutzt, dabei werden diese nicht nur als Datensammlung, sondern auch als
+Zwischenspeicher für Auswertungen genutzt. Auffallend dabei ist, dass die Lösungen von Projekt zu Projekt variieren und
+das oft auch nur eine Kombination eine adäquate Problemlösung schafft.
 
 
 == Rückschlüsse auf das Projekt
