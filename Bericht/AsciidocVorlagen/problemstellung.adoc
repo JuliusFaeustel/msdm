@@ -5,7 +5,7 @@
 
 == Einführung in das Praxisbeispiel
 
-In dem konkreten zu implementierenden Beispiel ging es um fünf Maschinen beteiligt an einem Carbonteil-Fertigungs-Prozess. Dabei werden teure Carbonfasern mit einem günstigen Trägerstoff vernäht. Ziel dabei ist es eine bessere
+In dem konkreten zu implementierenden Beispiel ging es um fünf an einem Carbonteil-Fertigungs-Prozess beteiligte Maschinen. Dabei werden teure Carbonfasern mit einem günstigen Trägerstoff vernäht. Ziel dabei ist es eine bessere
 Handhabbarkeit bei geringeren Herstellungskosten bereitzustellen. Die Maschine erzeugt einen Eingangsdatensatz mit 27
 Werten und einen Ausgangsdatensatz mit 18 Werten. Dabei werden neben der Seriennummer, die spezifisch für ein Werkstück
 (Teil) ist, der Fertigungsauftrag, die Teilart, die Linie und die Ladungsträgernummer gespeichert. Zu einem Fertigungsauftrag gehören mehrere
@@ -13,7 +13,7 @@ Teile. Weiterhin wird auch die Nummer des Ladungsträgers abgespeichert, dieser 
 für mehrere Werkstücke verwendet werden. Die restlichen Werte geben Aufschluss über die Teilqualität und den
 Fertigungsablauf.
 
-Der Einlesealgorithmus stellt etwas vereinfacht dar, wie die Datensatzerstellung mit der Fertigung auf der Maschine
+Das Modell stellt etwas vereinfacht dar, wie die Datensatzerstellung mit der Fertigung auf der Maschine
 zusammenhängt. Sobald das Teil korrekt in die Maschine eingelegt wurde, wird der Eingangsdatensatz erstellt. Nach der
 eigentlichen Fertigungsarbeit auf der Maschine wird das Teil überprüft. Dabei entsteht der Ausgangsdatensatz. Falls
 die Prüfung nicht erfolgreich war, wird das Produkt erneut überprüft. Danach verlässt das Teil die Maschine, falls
@@ -25,20 +25,24 @@ image::einlesealgorhytmus.png[title="Einlesealgorithmus"]
 
 == Allgemeine Informationen zur Umsetzung
 Da die Eingangs- und Ausgangsdatensätze in einer pro Datensatz neu angelegten CSV gespeichert werden, war es eine
-Anforderung an das System auf diese Events zu reagieren. Dafür wurde ein Watchdog implementiert, da dies mit Python
+Anforderung an das System auf diese Events zu reagieren. Dafür wurde ein Watchdog implementiert und da dies mit Python
 erfolgte und sich alle Teammitglieder auf diese Programmiersprache geeinigt hatten, konnte dieser wiederverwendet werden.
 Dabei wurde die Bibliothek Wachtdog genutzt, diese erlaubt es mit wenigen Zeilen Veränderungen im Dateisystem festzustellen.
-Man übergibt dazu einfach das zu überwachende Verzeichnis und bei Änderungen wird das jeweilige Event geworfen.
-Darunter sieht man, wie die Behandlung des genutzten Created Event aussieht. Um herauszufinden welche Datensatzart erstellt wurde,
+Wie im Codebeispiel 1 zu erkennen ist, übergibt dazu einfach das zu überwachende Verzeichnis und bei Änderungen wird das jeweilige Event ausgelöst.
+Darunter sieht man, wie die Behandlung des genutzten Created Events aussieht. Um herauszufinden welche Datensatzart erstellt wurde,
 wird durch eine IF-Anweisung überprüft, ob es sich um einen Input Datensatz handelt und wenn ja, dann wird
 der "InputLoader" aufgerufen, falls das nicht der Fall ist der "OutputLoader". Dabei wird der richtig aufbereitete Dateipfad mit übergeben.
+
+.Code 1 - Wachtdog verkürzt
 
 [source, python]
 ----
  def on_any_event(event):
         if event.event_type == 'created':
-            if "input" in event.src_path.replace:
+            if "input" in event.src_path:
                 InputLoader.save(event.src_path.replace('\\','/'))
             else:
                 OutputLoader.save(event.src_path.replace('\\','/'))
 ----
+
+

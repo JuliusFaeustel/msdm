@@ -35,5 +35,5 @@ das oft auch nur eine Kombination eine adäquate Problemlösung schafft.
 
 == Rückschlüsse auf das Projekt
 
-Da die Datenlast mit vier Maschinen und damit 8 Datensätzen pro 5 Minuten recht gering ist, wäre ein Big Data System wie Hadoop eine zu übertriebene Lösung, da diese Systeme für mehrere tausend Datensätze pro Sekunde ausgelegt sind. Ein Zeitreihendatenbankservice wäre keine Alternative die Infrage kommt, da diese für das beständige Aufzeichnen von Datenpunkten optimiert sind. Mit dieser Voreingrenzung ist es wahrscheinlich, dass die im Projekt diskutierten Ansätze auch für ein reales Projekt infrage kommen.
+Da die Datenlast mit fünf Maschinen und damit 10 Datensätzen pro 5 Minuten recht gering ist, wäre ein Big Data Softwarestack wie Hadoop eine zu übertriebene Lösung, da diese Systeme für mehrere tausend Datensätze pro Sekunde ausgelegt sind. Ein Zeitreihendatenbankservice wäre keine Alternative die Infrage kommt, da diese für das beständige Aufzeichnen von Datenpunkten optimiert sind. Mit dieser Voreingrenzung ist es wahrscheinlich, dass die im Projekt diskutierten Ansätze auch für ein reales Projekt infrage kommen.
 

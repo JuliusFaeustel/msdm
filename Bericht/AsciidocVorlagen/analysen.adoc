@@ -5,8 +5,7 @@
 
 
 == Analyse 1
-Die erste Analyse beschäftigt sich mit der Taktung pro Artikel. Dabei wurde die Differenz zwischen Eingangs- und
-Ausgangsdatensatz einer Seriennummer gemessen. Danach wurde pro Fertigungsauftrag gruppiert und das Minimum, das Maximum und der Durchschnitt
+Die erste Analyse beschäftigt sich mit der Taktung pro Artikel. Dabei wurde die Differenz zwischen Eingangs- und dem letzten Ausgangsdatensatz einer Seriennummer gemessen. Danach wurde pro Fertigungsauftrag gruppiert und das Minimum, das Maximum und der Durchschnitt
 ermittelt. Die Ergebnisse wurden auf eine Stunde beschnitten, um nicht zu sehr von Ausreißern beeinflusst zu werden.
 Die Alternative wäre gewesen nur die Zeiten zu nutzen,
 die in der Fertigungszeit des Unternehmens liegen, da aber die Auswertungen nur als Grundlage zum Vergleich der
@@ -17,19 +16,19 @@ image::analyse1.png[title="Analyse 1"]
 Diese Analyse beschäftigt sich nur mit Ausschussartikeln, also Werkstücke die mehrmals in die Maschine eingelegt worden
 sind, also deren SNR n In-Datensätze besitzt. Dabei wurde zunächst die Differenz zwischen Ende des fehlerhaften Vorgangs
 und Beginn des neuen Vorgangs gemessen. Auch hier wurde wieder Minimum, Maximum und der Durchschnitt berechnet. Aber
-über die Gruppierung Teil. Weiterhin wurde der Anteil an fehlerhaften Bearbeitungen ermittelt.
+über die Gruppierung Teil. Weiterhin wurde der Anteil an fehlerhaften Bearbeitungen an der Gesamtmenge ermittelt.
 
 
-image::analyse2min.png[title="Minimun"]
+image::analyse2min.png[title="Minimum"]
 image::analyse2avg.png[title="Durschschnitt"]
 image::analyse2max.png[title="Maximum"]
 image::analyse2_failure.png[title="Fehlerrate"]
 == Analyse 3
-Die dritte Analyse nutzt die gleichen Daten wie Analyse 1. Nur mit veränderter Darstellungsform. Ziel war es hierbei
+Die dritte Analyse nutzt die gleichen Daten wie Analyse 1., nur mit veränderter Darstellungsform. Ziel war es hierbei
 Ausreißer zu finden, deshalb wird nun nicht mit Boxplots gearbeitet, sondern mit einem Streudiagramm. Damit ist es besser
 ersichtlich, wo entfernte Ausreißer zu finden sind.
 
-image::analyse3min.png[title="Minimun"]
+image::analyse3min.png[title="Minimum"]
 image::analyse3avg.png[title="Durschschnitt"]
 image::analyse3max.png[title="Maximum"]
 == Analyse 4
@@ -38,16 +37,15 @@ jeglich die Datensatznummer dar, denn in den Ladungsträgernummern gab es eine z
 
 image::analyse4.png[title="Analyse 4"]
 == Analyse 5
-Die fünfte Analyse ist analog zur ersten Analyse, nur das dieses Mal die Zwischenaggretion nicht pro Fertigungsauftrag
+Die fünfte Analyse ist analog zur ersten Analyse, nur das dieses Mal die Zwischenaggregation nicht pro Fertigungsauftrag
 , sondern pro Ladungsträger erfolgte. Danach wurden die Daten wieder nach Teil sortiert und jeweils ein Boxplot für
 Minimum, Maximum und den Durchschnitt gezeichnet.
 
-image::analyse5minavg.png[title="Minimun und Durschnitt"]
+image::analyse5minavg.png[title="Minimum und Durchschnitt"]
 image::analyse5max.png[title="Maximum"]
 
 == Analyse 6
-Die letzte Analyse zeigt die Umrüstzeiten zwischen den Teilen. An der Y-Achse stehen die Teile, von denen auf die Teile
-die an der X-Achse umgerüstet wurde. Je heller die Farbe ist, desto höher ist der Wert. Hier wurde Minimum, Maximum
+Die letzte Analyse zeigt die Umrüstzeiten zwischen den Teilen. An der Y-Achse stehen die Teile, von denen auf die Teile an der X-Achse umgerüstet wurde. Je heller die Farbe ist, desto höher ist der Wert. Hier wurde Minimum, Maximum
 und der Durchschnitt pro Umrüstvorgang bestimmt.
 
 [.text-center]

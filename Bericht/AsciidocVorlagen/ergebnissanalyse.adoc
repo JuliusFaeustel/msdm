@@ -9,14 +9,14 @@ ifdef::main-file[]
 endif::main-file[]
 
 == Übersicht
-Um die Lösungen zu evaluieren, wurden verschiedene Kritierien genutzt, diese sind in der Tabelle zu finden. Dabei wurden
+Um die Lösungen zu evaluieren, wurden verschiedene Kriterien genutzt, diese sind in der Tabelle zu finden. Dabei wurden
 die Abstufungen sehr positiv (++) bis sehr negativ (--) genutzt. Es wurde keine absolute Skale verwendet, sondern
-jeglich die Lösungen untereinander zu vergleichen.
-Natürlich ist dieser Vergleich subjektiv, allein schon von der Vergleichskriterienauswahl.
+jeglich die Lösungen untereinander verglichen.
+Natürlich ist dieser Vergleich subjektiv, allein schon von der Auswahl der Vergleichskriterien.
 
 Das erste Kriterium vergleicht den Programmieraufwand der einzelnen Lösungen. Dabei wird die Komplexität und Größe der Abfragen sowie der Verwaltungsaufwand der Datenbank berücksichtigt.
 Das nächste Kriterium handelt von dem Aufwand das Datenmodell zu erstellen und dessen Verständlichkeit.
-Ein weiteres Kriterium für den Vergleich war der Entwicklungsaufwand für das Hinzufügen eines neuen Attributes, also wenn eine neue Werteart auch gespeichert werden muss.
+Ein weiteres Kriterium für den Vergleich war der Entwicklungsaufwand für das Hinzufügen eines neuen Attributes, also wenn eine neue Werteart gespeichert werden muss.
 Die Schreib-Performance umfasst die benötigte Zeit, um neue Datensätze in die Datenbank zu bringen, die dazugehörigen Grafiken sind unter Einleseperformance zu finden. Die Lese-Performance beschäftigt sich im Besonderen mit der Dauer der Analysen, die Diagramme sind unter der Analyseperformance zu finden. Für das nächste Kriterium wurde der von der Datenbank genutzte Speicher gemessen, damit auch der benötigte Speicherbedarf für Indices. Im letzten Kriterium wurde das Vorhandensein von Entwicklerdokumentation im Zusammenhang mit einer aktiven Nutzergemeinschaft verglichen.
 
 [cols=5* , title=Lösungsvergleich]
@@ -83,7 +83,7 @@ aufwand
 == Performance
 
 === Einleseperformance
-Die Diagramme zeigen die Speicherdauer für einen Datensatz in Millisekunden. Dabei war die Einlesezeit für die Input Datensätze der Dokumentendatenbank nicht messbar, da diese kleiner als eine Millisekunde waren.
+Die Diagramme zeigen die Speicherdauer für einen Datensatz in Millisekunden. Dabei war die Einlesezeit für die Input Datensätze der Dokumentendatenbank nicht messbar, da diese kleiner als eine Millisekunde waren und Mongo DB kein Profiling in diesem bereich unterstützt.
 
 image::speicherdauer1.png[title= Einlesezeit Input]
 image::speicherdauer2.png[title= Einlesezeit Input]
