@@ -24,7 +24,7 @@ Alle Implementierungen wurden unter den folgenden Voraussetzungen vorgenommen:
 .XAMPP
 image::xampp.png[width=50%]
 
-Um das relationale Datenmodell einfach zu realisieren, wurde zusätzlich HeidiSQL installiert, einem freien Client für das Datenbanksystem MySQL. Es wird hierbei die Structured Query Language (SQL) genutzt. +
+Um das relationale Datenmodell einfach zu realisieren, wurde zusätzlich HeidiSQL installiert, ein freier Client für das Datenbanksystem MySQL. Es wird hierbei die Structured Query Language (SQL) genutzt. +
  
 .HeidiSQL
 image::heidisql.png[width=80%]
@@ -141,7 +141,7 @@ cursor.close()
 
 Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 18 virtualisiert. +
 
-Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über einen Insert-Statement in die Datenbank zu speichern.
+Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über ein Insert-Statement in die Datenbank zu speichern.
 
 .Code 13 - Daten auslesen
 [source, python]
@@ -156,7 +156,7 @@ image::einlesen.png[]
 
 Zunächst wird eine Textdatei eingelesen, in einen String verpackt und auf Vollständigkeit geprüft. Wenn die Vollständigkeit der Daten nicht gewährt ist, wird der Datensatz mit einem Fehlercode vermerkt und in der Input- bzw. Output- Tabelle gespeichert. Nachdem die Überprüfung positiv abgelaufen ist, vergleicht der Algorithmus nun ob die Seriennummer (SNR) in der Database-Tabelle vorhanden ist. +
 
-Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, das eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes der Startzeitpunkt. Wenn dieser kleiner ist als das bisherige Datum, wird es ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
+Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, dass eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes der Startzeitpunkt. Wenn dieser kleiner ist als das bisherige Datum, wird er ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
 
 
 == Analysen
@@ -165,11 +165,11 @@ Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Inpu
 
 Zunächst wurde über die Möglichkeiten der Implementierung der Analysen diskutiert. Dafür gab es im Allgemeinen drei Möglichkeiten. +
 
-Die erste Möglichkeit sah vor, alle Analysen in SQL zu schreiben und über HeidiSQL auszuführen. Die gewonnen Daten hätten man in MS Excel importieren können, um diese darin auszuwerten und grafisch dazustellen. Diese Möglichkeit wurde zu nächst in Betracht gezogen, eine zuverlässige Umsetzung wurde mit dieser Methode generiert. Allerdings war diese auch durch den Wechsel zwischen HeidiSQL und MS Excel zeitaufwendig. +
+Die erste Möglichkeit sah vor, alle Analysen in SQL zu schreiben und über HeidiSQL auszuführen. Die gewonnen Daten hätten man in MS Excel importieren können, um diese darin auszuwerten und grafisch darzustellen. Diese Möglichkeit wurde zunächst in Betracht gezogen, eine zuverlässige Umsetzung wurde mit dieser Methode generiert. Allerdings war diese auch durch den Wechsel zwischen HeidiSQL und MS Excel zeitaufwendig. +
 Um dieses Problem zu lösen, wurde Möglichkeit zwei eingeführt. Mit Devart, einem freiverfügbaren Data Integration Tool, konnte eine Abfrage direkt in Excel ausgeführt werden. Mit der Methode konnte eine Zeitersparnis festgestellt werden, die durch das Wegfallen von HeidiSQL zustande gekommen ist. Das Problem hierbei war die Datenintegration mit den anderen Datenstrukturen. +
 Möglichkeit drei ist die Abfrage der Daten mit Python, wie es in der Anwendung beschrieben ist. Die erfolgreiche Analyse wurde in einer CSV-Datei gespeichert. Mit dieser konnte die Analyse erfolgreich durchgeführt und mit den anderen Datenstrukturen verglichen werden. +
 
-Im Allgemeinen hat die Vorarbeit mit Möglichkeit eins und zwei die Entwicklung der finalen Lösung beschleunigt. Um dies zu verdeutlichen befinden sich im Nachfolgendem die Analyseabfragen mit Pseudocode.  
+Im Allgemeinen hat die Vorarbeit mit Möglichkeit eins und zwei die Entwicklung der finalen Lösung beschleunigt. Um dies zu verdeutlichen befinden sich im Nachfolgenden die Analyseabfragen mit Pseudocode.  
 
 
 === Analyse 1 

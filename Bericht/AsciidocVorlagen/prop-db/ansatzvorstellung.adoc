@@ -12,7 +12,7 @@ endif::main-file[]
 
 == Datenbankvorstellung
 
-Die proprietäre Datenstruktur basiert auf einem relationalem Datenmodell, welches als Standard in der Datenbankentwicklung genutzt wird. Zugrunde liegt diesem vier Elemente: Tabellen, Attribute, Beziehungen und die Grundlage der relationalen Algebra. Diese ist auch die Grundlage für die Datenbanksprache SQL. +
+Die proprietäre Datenstruktur basiert auf einem relationalen Datenmodell, welches als Standard in der Datenbankentwicklung genutzt wird. Zugrunde liegen diesem vier Elemente: Tabellen, Attribute, Beziehungen und die Grundlage der relationalen Algebra. Diese ist auch die Grundlage für die Datenbanksprache SQL. +
 Das relationale Datenbankenmodell besteht aus einer Ansammlung von Tabellen, die durch Beziehungen miteinander verknüpft sind. In jeder Tabelle werden die Datensätze als Tupel (Zeilen) gespeichert. Jedes Tupel besteht aus mehreren Attributen, welche als Spalten in einer Tabelle bekannt sind.
 
 .Code 1 - Beispiel für die Erstellung einer Tabelle

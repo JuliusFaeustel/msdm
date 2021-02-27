@@ -11,7 +11,7 @@ endif::main-file[]
 
 == Konzeptioneller Entwurf
 Der konzeptionelle Datenbankentwurf umfasst die Datenstruktur, die Semantik sowie die Beziehungen und Integritätsbedingung in einem Datenbankmodell. Er spiegelt die Ergebnisse der Anforderungsanalyse unseres Auftraggebers wider. + 
-Um dies abstrakt darzustellen, wurde ein Entity-Relationship-Models (ERM) modelliert. (Abbildung 14)
+Um dies abstrakt darzustellen, wurde ein Entity-Relationship-Model (ERM) modelliert. (Abbildung 14)
 
 .Entity-Relationship-Model
 image::Konzeptioneller_entwurf.png[]
@@ -30,5 +30,5 @@ image::Logischer_entwurf.png[]
 
 
 Das relationale Datenmodell, in Abbildung 15, basiert auf der Grundlage des ER-Modells, in Abbildung 14. Es spiegelt die logische Datenstruktur, Datentabellen, Ansichten und Indizes wider. +
-Die Input- sowie Output-Tabelle enthält in jedem Tupel, eine ID als Primary Key, baseID als Foreign Key und andere Input-/Output Informationen. Jedes Attribut (jede Information) befindet sich in einer eigenen Spalte, wo bei jedem Tupel eine eindeutige ID zugeordnet werden kann. Die Database-Tabelle enthält in jedem Tupel eine ID als Primary Key, eine SNR (Seriennummer), welches das Teil eindeutig identifiziert, sowie andere Attribute. Spezielle Informationen zum Input- bzw. Output-Datensatz werden nicht in der Database-Tabelle gespeichert, sondern direkt in der Input-/ Output-Tabelle. +
-Diese Tabellen sind mit dem Attribut BaseID miteinander verknüpft. Aufgrund diesem kann eine Beziehung zwischen den Tabellen hergestellt werden. Durch eine Abfrage der Seriennummer (SNR) in der Database-Tabelle, erhält man die passende BaseID. Durch diese kann man die Input- und Output-Informationen aus den anderen Tabellen abrufen.
+Die Input- sowie Output-Tabelle enthält in jedem Tupel eine ID als Primary Key, baseID als Foreign Key und andere Input-/Output Informationen. Jedes Attribut (jede Information) befindet sich in einer eigenen Spalte, wobei jedem Tupel eine eindeutige ID zugeordnet werden kann. Die Database-Tabelle enthält in jedem Tupel eine ID als Primary Key, eine SNR (Seriennummer), welches das Teil eindeutig identifiziert, sowie andere Attribute. Spezielle Informationen zum Input- bzw. Output-Datensatz werden nicht in der Database-Tabelle gespeichert, sondern direkt in der Input-/ Output-Tabelle. +
+Diese Tabellen sind mit dem Attribut BaseID miteinander verknüpft. Aufgrund diesem kann eine Beziehung zwischen den Tabellen hergestellt werden. Durch eine Abfrage der Seriennummer (SNR) in der Database-Tabelle erhält man die passende BaseID. Durch diese kann man die Input- und Output-Informationen aus den anderen Tabellen abrufen.
