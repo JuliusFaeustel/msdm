@@ -71,7 +71,7 @@ SELECT * FROM `Database` WHERE `baseID` = `2`
 
 === Messung der Ausführungszeit
 
-Um einen Vergleich der Abfragezeit zu gewährleisten ist es nötig die Zeit zu messen welche die Datenbank braucht, um eine Abfrage durchzuführen. Dies ist über den folgenden Befehl zu realisieren.
+Um einen Vergleich der Abfragezeit zu gewährleisten, ist es nötig die Zeit zu messen welche die Datenbank braucht, um eine Abfrage durchzuführen. Dies ist über den folgenden Befehl zu realisieren.
 
 .Code 7 - Abfragezeit messen
 [source, sql]
@@ -84,7 +84,7 @@ SET STATISTICS TIME ON
 
 Die Implementierung der Anwendungen wurde mit der Programmiersprache Python vorgenommen. Als Entwicklungsumgebung, innerhalb des Projektes, wurde Notepad ++ genutzt.  Für die Implementierung wurde die Python-Version 3.7.3 genutzt. +
 Die Ausführung des Python-Programmes wurde über die Kommandozentrale (CMD), von Windows 10, vorgenommen. +
-Dies wird in im Codebeispiel 7 verdeutlicht. 
+Dies wird in im Codebeispiel 8 verdeutlicht. 
 
 .Code 8 - Ausführung des Python-Programmes über CMD
 [source, sh]
@@ -95,7 +95,7 @@ Dies wird in im Codebeispiel 7 verdeutlicht.
 === Kommunikation zwischen Anwendung und Datenbank
 
 Durch die Python-Bibliothek mysql-connector-python wurde eine Verbindung zwischen Anwendung und MySQL-Datenbankserver hergestellt. +
-Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 8 beschrieben.
+Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 9 beschrieben.
 
 .Code 9 - Installation Python-Bibliothek über CMD
 [source, sh]
@@ -115,8 +115,8 @@ connection = mysql.connector.connect(host = "127.0.0.1", user = "root", password
 
 Nach dem Aufbau der Verbindung zur Datenbank, wird ein Cursor gesetzt. Diesem wird per Cursor-Funktion execute eine SELECT-Abfrage übergeben. Zusätzlich dazu bietet der Cursor Varianten an, um die Ergebnismenge bereitzustellen. Zum Beispiel:
 
-* _fetchall()_, welcher die gesamte Ergebnismenge wieder gibt
-* _fetchone()_, welcher nur die erste Zeile der Ergebnismenge wieder gibt
+* _fetchall()_, welcher die gesamte Ergebnismenge wiedergibt
+* _fetchone()_, welcher nur die erste Zeile der Ergebnismenge wiedergibt
 
 .Code 11 - Erstellung eines Cursor's sowie einer SELECT-Abfrage
 [source, python]
@@ -139,7 +139,7 @@ cursor.close()
 
 == Datenloader
 
-Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 14 virtualisiert. +
+Die Voraussetzung für den Datenloader ist eine Textdatei, welche alle Informationen für den Input bzw. Output enthält. Das Vorgehen für die Input- und Output-Sätze ist im Allgemeinen gleich. Der Unterschied liegt in der Überprüfung, des zeitigen Starttermins (Begintime) und des spätesten Endtermins (Endtime). Dies wird in Abbildung 18 virtualisiert. +
 
 Die Textdateien werden über den Watchdog, welcher bereits erläutert wurde, zur Verfügung gestellt. Das Einlesen der Dateien wird über den folgenden Pythoncode dargestellt. In diesem wird das Dokument geöffnet und in einen String verpackt. Dies ermöglicht es die erhalten Informationen über einen Insert-Statement in die Datenbank zu speichern.
 
@@ -156,7 +156,7 @@ image::einlesen.png[]
 
 Zunächst wird eine Textdatei eingelesen, in einen String verpackt und auf Vollständigkeit geprüft. Wenn die Vollständigkeit der Daten nicht gewährt ist, wird der Datensatz mit einem Fehlercode vermerkt und in der Input- bzw. Output- Tabelle gespeichert. Nachdem die Überprüfung positiv abgelaufen ist, vergleicht der Algorithmus nun ob die Seriennummer (SNR) in der Database-Tabelle vorhanden ist. +
 
-Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, das eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes das Startzeitpunkt. Wenn diese kleiner ist als das bisherige Datum, wird es ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
+Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, das eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes der Startzeitpunkt. Wenn dieser kleiner ist als das bisherige Datum, wird es ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
 
 
 == Analysen
@@ -181,7 +181,7 @@ SELECT teil, fa, COUNT(baseid) AS COUNT,
   MIN(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime)) AS MIN, 
   MAX(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime)) AS MAX,  
   AVG(UNIX_TIMESTAMP(endtime)-UNIX_TIMESTAMP(begintime))AS avg 
-  FROM basedata 
+  FROM `database` 
   WHERE endtime is not null  
   GROUP BY FA 
   ORDER BY teil, fa
@@ -197,7 +197,7 @@ SELECT `TEIL`,
   min(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS MinFertigungszeit, 
   max(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS MaxFertigungszeit, 
   avg(unix_timestamp(endtime) - unix_timestamp(Begintime)) AS AVGFertigungszeit 
-  FROM `basedata` 
+  FROM `database` 
   WHERE endtime IS NOT NULL  
   GROUP BY `TEIL`
 ----
@@ -262,7 +262,7 @@ else:
 
 === Messung der Ausführungszeit
 
-Um die Messung der Ausführungszeit der Analysen in Python zu realisieren, wurde die Zeit vor und nach der Ausführung gemessen. Die Differenz zwischen Start und Ende ergibt die Ausführungszeit und wird in Sekunden zurück gegeben. 
+Um die Messung der Ausführungszeit der Analysen in Python zu realisieren, wurde die Zeit vor und nach der Ausführung gemessen. Die Differenz zwischen Start und Ende ergibt die Ausführungszeit und wird in Sekunden zurückgegeben. 
 
 .Code 19 - Ausführungszeit messen
 [source, sql]
@@ -287,6 +287,6 @@ image::prozesszeiten.png[]
 
 === Lessons Learned
 
-Schlussendlich erhält man mit der proprietären Datenstruktur eine schnelle und zuverlässige Auswertung der eingelesenen Daten. Jedoch erkennt man bei dieser Struktur, dass eine Weiterentwicklung mit mehr Zeitaufwand nur möglich ist. +
+Schlussendlich erhält man mit der proprietären Datenstruktur eine schnelle und zuverlässige Auswertung der eingelesenen Daten. Jedoch erkennt man bei dieser Struktur, dass eine Weiterentwicklung nur mit mehr Zeitaufwand möglich ist. +
 
 Für eine individuelle und schnelle Lösung ist dieses Modell gut geeignet.
