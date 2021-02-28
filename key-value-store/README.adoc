@@ -1,0 +1,9 @@
+= Schlüssel-Werte-Datenbank
+
+Im Folgenden sind die Inhalte der sich im Verzeichnis befindlichen Ordner erklärt:
+* analysis: Python-Skripte, welche die jeweiligen Analysen betreiben
+* results: Ergebnisse der Analysen aus "analysis" als csv-Dateien
+* structure 
+** read_data: Python-Skripte, welche jeweils die Daten (Input/Output) einlesen. Die Daten werden aus Textdateien ("allin.txt"/"allout.txt") eingelesen, insbesondere also nicht durch einen Watchdog übergeben. Diese Versionen sind demnach zum testen geeignet.
+** with_watchdog: Python-Skripte, welche jeweils die Daten (Input/Output) einlesen. Diese Skripte werden vom Watchdog mit dem Pfad der Daten als Parameter aufgerufen.
+** duration: Die Python-Skripte messen die Zeiten ihrer Namensgeber ("inTime.py" die Einlesedauer der Input-Daten, "outTime.py" die Einlesedauer der Output-Daten, "InOutTime.py" die Einlesedauer von Input und Output im Wechsel). Die Textdateien speichern die Zeiten der jeweiligen Ausführung in Mikrosekunden.

@@ -29,16 +29,23 @@ def writeOut(num,row):
         r.hset("out"+":"+outCounter,columns[colInd],dataset)
         colInd = colInd+1
 
+def writeOutDefect(row,outCounter):
+    colInd = 0
+    for dataset in row:
+        r.hset("defect"+":"+"raw"+":"+"out"+":"+outCounter,columns[colInd],dataset)
+        colInd = colInd+1
+
 #Textdatei mit allen Out-DS lesen     
-with open('../../allout.txt', 'rt', encoding='utf-16') as csvfile:     
+with open('allout.txt', 'rt', encoding='utf-16') as csvfile:     
     spamreader = csv.reader(csvfile, delimiter=';')     
     i=1        
-    for row in spamreader:     
-        writeOut(i,row)
-        recDate = maxDiff
+    for row in spamreader:
         
         #Zugehörigen Input-SNR-Key finden und aus Liste entfernen
         if r.exists(row[0]):
+
+            writeOut(i,row)
+            recDate = maxDiff
 
             #Output dem Input mit geringstem Zeitabstand zuordnen
             for inputdat in r.lrange(row[0],0,-1):
@@ -52,18 +59,46 @@ with open('../../allout.txt', 'rt', encoding='utf-16') as csvfile:
                     conInput = inputdat
 
             inCounter = conInput.partition(':')[2]
-            #listSNR = r.lpop(row[0])
-            #inCounter = listSNR.partition(':')[2]
+
+            dateDatetime = datetime.strptime(row[17], '%Y-%m-%dT%H:%M:%S.%f0')
+            dateStamp = dateDatetime.timestamp()
+            inDateTime = datetime.strptime(r.hget(conInput,"Begin"), '%Y-%m-%dT%H:%M:%S.%f0')
+            inStamp = inDateTime.timestamp()
+
+            inSNR = r.hget(conInput,"SNR")
             
             #Input-Daten finden und Out-DS-Key in Verknuepfung schreiben
-            getInData = r.hgetall(conInput)
-            r.rpush(getInData.get("SNR")+":"+inCounter,"out"+":"+outCounter)
+            inList = r.lrange(inCounter,0,-1)
+            if len(inList) > 1:
+                con = str(inStamp)+":"+str(inCounter)+":"+str(inList[1])+":"+str(inSNR)
+                if float(dateStamp) > float(inList[1]):
+                    newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp)+":"+str(inSNR))
+                    r.rename(con, newKey)
+                    con = newKey
+                    r.rpop(inCounter)
+                    r.rpush(inCounter,dateStamp)
+            else:
+                con = (str(inStamp)+":"+str(inCounter)+":"+str(inStamp)+":"+str(inSNR))
+                newKey = (str(inStamp)+":"+str(inCounter)+":"+str(dateStamp)+":"+str(inSNR))
+                r.rename(con,newKey)
+                r.rpush(inCounter,dateStamp)
+                con = newKey
+                
+            inList = r.lrange(inCounter,0,-1)
+            
+            r.rpush(con,"out"+":"+outCounter)
 
-        #outCounter setzen
-        outCounter = str(int(outCounter)+1)
-        r.incr("outCounter")
+            r.lset("con",int(inCounter)-1,con)
 
+            #outCounter setzen
+            outCounter = str(int(outCounter)+1)
+            r.incr("outCounter")
+
+        else:
+            writeOutDefect(row,outCounter)
+            r.sadd("defect"+":"+"list"+":"+"out","defect"+":"+"raw"+":"+"out"+":"+outCounter)
+        
         #Begrenzung der Datensatzanzahl zum testen
-        i=i+1
-        if(i==100):
-            break
+        #i=i+1
+        #if(i==10000):
+            #break

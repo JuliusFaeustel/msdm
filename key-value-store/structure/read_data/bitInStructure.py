@@ -27,8 +27,15 @@ def writeIn(num,row):
         r.hset("in"+":"+inCounter,columns[colInd],dataset)
         colInd = colInd+1
 
+#Defekte DS (also ohne SNR) schreiben
+def writeInDefect(row,inCounter):
+    colInd = 0
+    for dataset in row:
+        r.hset("defect"+":"+"raw"+":"+"in"+":"+inCounter,columns[colInd],dataset)
+        colInd = colInd+1        
+
 #Textdatei mit allen In-DS lesen     
-with open('../../allin.txt', 'rt', encoding='utf-16') as csvfile:
+with open('allin.txt', 'rt', encoding='utf-16') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';')
     i = 1
     for row in spamreader:
@@ -38,7 +45,6 @@ with open('../../allin.txt', 'rt', encoding='utf-16') as csvfile:
             #Hilfsliste für jede SNR mit offenem (nicht zugeordetem) Output
             #Attribute sind die Input-Keys
             #Nur Inputs mit SNR werden beachtet
-            #if not row[4]=='':
             r.rpush(row[4],"in"+":"+inCounter)
 
             beginDatetime = datetime.strptime(row[0], '%Y-%m-%dT%H:%M:%S.%f0')
@@ -62,7 +68,11 @@ with open('../../allin.txt', 'rt', encoding='utf-16') as csvfile:
             inCounter = str(int(inCounter)+1)
             r.incr("inCounter")
 
-            #Begrenzung der Datensatzanzahl zum testen
-            #i=i+1
-            #if(i==100):
-                #break
+        else:
+            writeInDefect(row,inCounter)
+            r.sadd("defect"+":"+"list"+":"+"in","defect"+":"+"raw"+":"+"in"+":"+inCounter)
+        
+        #Begrenzung der Datensatzanzahl zum testen
+        #i=i+1
+        #if(i==10000):
+            #break
