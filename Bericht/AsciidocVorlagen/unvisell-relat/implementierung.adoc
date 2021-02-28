@@ -378,7 +378,7 @@ def convert_from_datestring( TimeString ):
   return Second
 ----
 
-Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfachen, menschlich lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 25)
+Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfachen, menschenlesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 25)
 
 .Code 25 - Umwandeln eines Sekundenwerts in einen einfach lesbaren String
 [source, python]
