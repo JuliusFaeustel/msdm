@@ -29,7 +29,7 @@ solid IT gmbh DB-Engines Ranking,
 URL: https://db-engines.com/en/ranking/key-value+store
 [Letzter Besuch: 26 Feb. 2021]
 |
-MondogoDB Dokumentation,
+MongoDB Dokumentation,
 URL: https://docs.mongodb.com/manual/
 [Letzter Besuch 26 Feb. 2021]
 |
