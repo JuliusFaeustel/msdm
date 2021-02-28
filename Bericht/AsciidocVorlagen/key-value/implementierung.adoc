@@ -83,12 +83,12 @@ myLua = r.register_script(lua)
 Nun erfolgt die eigentliche Analyse. Dabei wird immer mit den Bitmaps der Eigenschaften gearbeitet, da diese angeben welche Verknüpfungen diese Eigenschaft besitzen. Zur Veranschaulichung dient folgendes Beispiel:
 
 * Gesucht: Alle Verknüpfungen mit den Eigenschaften "TEIL:B" und "FA:005830"
-* Bitmap "TEIL:B" ->    [0101010]
-* Bitmap "FA:005830" -> [1100110]
+* Bitmap "TEIL:B":    [0101010]
+* Bitmap "FA:005830": [1100110]
 
 Die 1-Bits einer Bitmap bedeuten, dass die Verknüpfung mit der Nummer "Index des 1-Bit" diese Eigenschaft besitzt (Erster Index einer Bitmap ist Index Nr. 1). In dem Beispiel besitzen also die Verknüpfungen 2,4 und 6 die Eigenschaft "TEIL:B" und Verknüpfungen 1,2,5,6 die Eigenschaft "FA:005830". Um nun diejenigen Verknüpfungen zu finden, welche beide Eigenschaften besitzen, müssen nur beide Bitmaps bitweise AND verknüpft werden. Das Ergebnis dieser Operation ist wieder eine Bitmap, welche unter dem Schlüssel "opCon" gespeichert wird.
 
-* Bitmap "opCon" -> [0100010]
+* Bitmap "opCon": [0100010]
 
 Es besitzen also Verknüpfung Nummer 2 und 6 beide Eigenschaften. Das eingebundene Lua-Skript gibt nun alle 1-Positionen von "opCon" als Liste zurück, in dem Fall also "(2,6)". Diese Liste kann nun auf die Liste aller Verknüpfungen angewendet werden, wodurch nur Verknüpfungen mit diesen bestimmten Eigenschaften betrachtet werden. Im Folgenden noch das Codebeispiel.
 
