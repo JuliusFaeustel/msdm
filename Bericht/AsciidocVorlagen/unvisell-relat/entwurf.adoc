@@ -12,14 +12,14 @@ endif::main-file[]
 == Konzeptioneller Entwurf
 
 Der konzeptionelle Entwurf basiert auf der Anforderungsanalyse und beschreibt den abzubildenden Weltausschnitt (T. Kudraß, 2015, S.46). "Die Beschreibung erfolgt unabhängig von der Realisierung in einem konkreten Datenbankmanagementsystem (DBMS) und unabhängig von konkreten Anwendungen, um eine stabile Basis für die weiteren Entwurfsphasen zu besitzen." (T. Kudraß, 2015, S.46) +
-Eine abstrakte Modellierung wurde mittels eines Entity-Relationship-Models (ERM) umgesetzt. (siehe Abbildung 1) 
+Eine abstrakte Modellierung wurde mittels eines Entity-Relationship-Models (ERM) umgesetzt. (siehe Abbildung 20) 
 
 .Entity-Relationship-Model
 image::ERM.JPG[]
 
-In Abbildung 1 kann man drei grundlegende Modellelemente eines ERM erkennen. +
+In Abbildung 20 kann man drei grundlegende Modellelemente eines ERM erkennen. +
 Als blaue Rechtecke sind Entitäten (auch Entity) dargestellt, welche im Allgemeinen ein abgrenzbares Objekt der Realität darstellen. Im Fallbeispiel wären dies Input, Output, Fertigungsauftrag, Linie und Teil. Diese Entitäten besitzen normalerweise Attribute bzw. spezielle Eigenschaften, welche die Entitäten charakterisieren, identifizieren und klassifizieren. Um jedoch eine universelle relationale Struktur zu entwickeln, ist es notwendig die Eigenschaften, welche in keinem Verhältnis zu einer anderen Entität stehen, als eigene Entität zu betrachten. Da Attribute im Gegensatz zu Entitäten Wertausprägungen haben, ist es erforderlich, die Ausprägungen der Entität Merkmal in der Entität Merkmalsausprägung darzustellen. +
-"Zwischen Entities werden Beziehungen oder Relationships definiert. Eine Beziehung ist die logische Verknüpfung von zwei oder mehreren Entities." (T. Kudraß, 2015, S.51) Diese Beziehung sind in Abbildung 1 als Rauten dargestellt. Die schwarzen Verbindungen zwischen Entitäten und Beziehungen beschreiben die Komplexitätsgrade. +
+"Zwischen Entities werden Beziehungen oder Relationships definiert. Eine Beziehung ist die logische Verknüpfung von zwei oder mehreren Entities." (T. Kudraß, 2015, S.51) Diese Beziehungen sind in Abbildung 20 als Rauten dargestellt. Die schwarzen Verbindungen zwischen Entitäten und Beziehungen beschreiben die Komplexitätsgrade. +
 Im Fallbeispiel besitzen nur die Entitäten Input und Output spezielle Eigenschaften. Deshalb haben nur diese Entitäten eine Beziehung (gelb markiert) zu Merkmal und Merkmalsausprägung, aber es kann auch jede andere Entität diese Beziehungen besitzen. +
 
 == Logischer Entwurf
@@ -29,12 +29,12 @@ Ziel des logischen Entwurfs ist es, das konzeptionelle Datenmodell in ein relati
 .Relationenmodell
 image::Relationen.JPG[]
 
-Die Abbildung 2 zeigt, dass abgeleitete Relationenmodell. Die Beziehungen, welche im konzeptionellen Entwurf noch bestanden, wurden gemäß den Ableitungsregeln aufgelöst. Wichtig für die universelle relationale Struktur sind insbesondere die gelb markierten Verbindungsrelationen, die auf Grund einer mc:mc Verbindung im konzeptionellen Entwurf entstanden. Diese Verbindungsrelationen definieren die Merkmale eines Tupels und dessen Ausprägungen und bestehen aus einer eindeutigen ID und zwei Fremdschlüsseln. Da jedoch mit jeder Relation, die spezielle Merkmale hat, zwei neue Verbindungsrelationen entstehen, steigt die Komplexität schnell an. Um die Komplexität zu kontrollieren, kann die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmal und die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmalsausprägung genutzt werden, um diese zu vereinen. +
-In Abbildung 2 wären das Output2Merkmal und Input2Merkmal bezüglich der Relation Merkmal und Output2Merkmalsausprägung und Input2Merkmalsauprägung bezüglich der Relation Merkmalsausprägung, welche zusammengefasst werden können. Beim Zusammenfassen entsteht jedoch das Problem, dass die neu entstandene Relation sich in einem Attribut auf zwei Relationen, in unserem Fall beispielhaft auf Input und Output, bezieht, wodurch ein Tupel beiden Relationen zugeordnet werden kann. +
+Die Abbildung 21 zeigt das abgeleitete Relationenmodell. Die Beziehungen, welche im konzeptionellen Entwurf noch bestanden, wurden gemäß den Ableitungsregeln aufgelöst. Wichtig für die universelle relationale Struktur sind insbesondere die gelb markierten Verbindungsrelationen, die auf Grund einer mc:mc Verbindung im konzeptionellen Entwurf entstanden. Diese Verbindungsrelationen definieren die Merkmale eines Tupels und dessen Ausprägungen und bestehen aus einer eindeutigen ID und zwei Fremdschlüsseln. Da jedoch mit jeder Relation, die spezielle Merkmale hat, zwei neue Verbindungsrelationen entstehen, steigt die Komplexität schnell an. Um die Komplexität zu kontrollieren, kann die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmal und die Ähnlichkeit der Verbindungsrelationen zur Relation Merkmalsausprägung genutzt werden, um diese zu vereinen. +
+In Abbildung 21 wären das Output2Merkmal und Input2Merkmal bezüglich der Relation Merkmal und Output2Merkmalsausprägung und Input2Merkmalsauprägung bezüglich der Relation Merkmalsausprägung, welche zusammengefasst werden können. Beim Zusammenfassen entsteht jedoch das Problem, dass die neu entstandene Relation sich in einem Attribut auf zwei Relationen, in unserem Fall beispielhaft auf Input und Output, bezieht, wodurch ein Tupel beiden Relationen zugeordnet werden kann. +
 Um dieses Problem zu lösen und dem Ansatz der geringeren Komplexität zu folgen, ist es notwendig die referentielle Integrität aufzulösen. +
 Daraufhin ergibt sich das Problem, dass ein Tupel der Verbindungsrelation nun nicht mehr eindeutig einer Relation, auf die es sich bezieht, zugeordnet werden kann. Zur eindeutigen Zuordnung wird deshalb ein Diskriminator verwendet. +
 Ein Diskriminator ist ein Attribut einer Relation, das festlegt, welcher Relation ein Tupel der Verbindungsrelation angehört. Dieses Attribut ist ein Fremdschlüssel, welcher sich in der Diskriminatortabelle definiert. Diese Tabelle bzw. Relation enthält alle definierten Objekttypen der Domäne. +
-Das angepasste Relationenmodell für die universelle relationale Relationenmodell ist in Abbildung 3 dargestellt.
+Das angepasste Relationenmodell für die universelle relationale Struktur ist in Abbildung 22 dargestellt.
 
 .universelle relationale Struktur im Relationenmodell
 image::Relationen2.JPG[]
