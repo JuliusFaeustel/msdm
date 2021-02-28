@@ -1,6 +1,7 @@
 = Schlüssel-Werte-Datenbank
 
 Im Folgenden sind die Inhalte der sich im Verzeichnis befindlichen Ordner erklärt:
+
 * analysis: Python-Skripte, welche die jeweiligen Analysen betreiben
 * results: Ergebnisse der Analysen aus "analysis" als csv-Dateien
 * structure 
