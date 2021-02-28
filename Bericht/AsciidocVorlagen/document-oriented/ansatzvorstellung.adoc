@@ -8,12 +8,6 @@ ifdef::main-file[]
 :imagesdir: document-oriented/bilder
 endif::main-file[]
 
-== Quellen
-
-https://de.wikipedia.org/wiki/MongoDB
-https://docs.mongodb.com/manual/
-https://annegretsarchitecture.blog/2018/06/01/einfuhrung-in-dokumenten-orientierte-datenbanken/
-
 == Datenbankvorstellung
 === Dokumentenorientierte Datenbank
 

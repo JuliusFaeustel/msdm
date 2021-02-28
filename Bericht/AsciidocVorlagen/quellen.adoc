@@ -18,7 +18,7 @@ URL: https://aws.amazon.com/de/iot-analytics/?c=i&sec=srv [Letzter Besuch: 8 Feb
 Kudraß, Thomas (2015): Taschenbuch Datenbanken, München, Deutschland: Carl Hanser Verlag.
 |
 Key-Value-Datenbanken,
-URL: http://wi-wiki.de/doku.php?id=bigdata:keyvaluedb 
+URL: http://wi-wiki.de/doku.php?id=bigdata:keyvaluedb
 [Letzter Besuch: 26 Feb. 2021]
 |
 1&1 IONOS SE (06 Okt. 2020) Key-Value-Store: Wie funktionieren Schlüssel-Werte-Datenbanken?,
@@ -28,6 +28,18 @@ URL: https://www.ionos.de/digitalguide/hosting/hosting-technik/key-value-store/
 solid IT gmbh DB-Engines Ranking,
 URL: https://db-engines.com/en/ranking/key-value+store
 [Letzter Besuch: 26 Feb. 2021]
+|
+MondogoDB Dokumentation,
+URL: https://docs.mongodb.com/manual/
+[Letzter Besuch 26 Feb. 2021]
+|
+Einführung in Dokumenten-Orientierte Datenbanken,
+URL: https://annegretsarchitecture.blog/2018/06/01/einfuhrung-in-dokumenten-orientierte-datenbanken/
+[Letzter Besuch 2 Feb. 2021]
+|
+Top 12 NoSQL Document Databases,
+URL: https://www.predictiveanalyticstoday.com/top-nosql-document-databases/
+[Letzter Besuch 26 Feb. 2021]
 |
 Datenbanken verstehen: Relationales Datenbankmodell,
 URL: https://www.datenbanken-verstehen.de/datenbank-grundlagen/datenbankmodell/relationales-datenbankmodell/ [Letzter Besuch: 21 Feb. 2021]
