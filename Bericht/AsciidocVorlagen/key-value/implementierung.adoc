@@ -29,9 +29,9 @@ Es gibt 2 verschiedene Datenloader, einen für Input- und einen für Output-Date
 
 === Input-Datensatz
 
-Zuerst wird der Rohdatensatz als Hash mit entsprechenden Feld-Werte-Paaren abgespeichert. Besitzt er keine Seriennummer, so wird er als defekter Datensatz abgelegt. Anschließend wird der Schlüssel dieses Hash an die Liste der zugehörigen SNR angehängt, um den Datensatz für den Output verknüpfbar zu machen. Danach wird die Verknüpfung für diesen In-Datensatz als Liste angelegt, wobei als Zeitstempel 2-mal das Datum in Sekunden genommen wird und der Wert der Schlüssel des Rohdatensatzes ist. Diese Verknüpfung wird an die Liste aller Verknüpfungen angehangen. Nun wird jede vorgegebene Eigenschaft durchgegangen. Falls die Eigenschaft noch nicht oder noch nicht in dieser Ausprägung vorhanden ist, wird sie angelegt. Das 1-Bit wird in den entsprechenden Datensätzen an der entsprechenden Position angelegt. Der Zeitstempel des Rohdatensatz wird in die Zeitverknüpfung als erstes Element der Liste eingetragen und der Zähler (inCounter) inkrementiert.
+Zuerst wird der Rohdatensatz als Hash mit entsprechenden Feld-Werte-Paaren abgespeichert. Besitzt er keine Seriennummer, so wird er als defekter Datensatz abgelegt. Anschließend wird der Schlüssel dieses Hash an die Liste der zugehörigen SNR angehängt, um den Datensatz für den Output verknüpfbar zu machen. Danach wird die Verknüpfung für diesen In-Datensatz als Liste angelegt, wobei als Zeitstempel 2-mal das Datum in Sekunden genommen wird und der Wert der Schlüssel des Rohdatensatzes ist. Diese Verknüpfung wird an die Liste aller Verknüpfungen angehangen. Nun wird jede vorgegebene Eigenschaft durchgegangen. Falls die Eigenschaft nicht oder noch nicht in dieser Ausprägung vorhanden ist, wird sie angelegt. Das 1-Bit wird in den entsprechenden Datensätzen an der entsprechenden Position angelegt. Der Zeitstempel des Rohdatensatz wird in die Zeitverknüpfung als erstes Element der Liste eingetragen und der Zähler (inCounter) inkrementiert.
 
-.Einlesealgorithmus Input-Datensatz
+.Einlesealgorithmus Input-Datensatz (Programmablaufplan)
 [#img-readIn]
 image::pap-in.png[readIn]
 
@@ -39,9 +39,9 @@ image::pap-in.png[readIn]
 
 Der Rohdatensatz wird analog zu den Input-Datensätzen als Hash abgespeichert. Im nächsten Schritt werden alle Input-Datensätze aus der Liste der Seriennummer des Out-Datensatzes durchgegangen und die Zeitdifferenzen des Input und Output berechnet. Der Output-Datensatz wird dem Input mit der kleinsten positiven Zeitdifferenz zugeordnet. Im Anschluss wird die Zeitverknüpfung dieses Input-Datensatzes als Liste geladen. Gibt es in dieser Liste nur 1 Element, so wurde dem Input noch kein Output zugeordnet und der Zeitstempel des Output-Datensatzes wird angehangen. Ist der Zeitstempel des Outputs größer als der des bisherig größten Outputs in der Zeitverknüpfung, so wird dieser Zeitstempel mit dem des neuen ersetzt. Entsprechend wird der Schlüssel der Verknüpfung mit diesem neuen Zeitstempel versehen. Anschließend wird der Schlüssel des Output-Rohdatensatzes als Element in die Verknüpfung aufgenommen und der Schlüssel der Verknüpfung in der Liste aller Verknüpfungen entsprechend mit dem aktuellen Schlüssel ersetzt.
 
-.Einlesealgorithmus Output-Datensatz
+.Einlesealgorithmus Output-Datensatz (Programmablaufplan)
 [#img-readOut]
-image::pap-out.png[readOut, width = 450]
+image::pap-out.png[readOut]
 
 == Implementierung der Analysen
 
@@ -132,7 +132,7 @@ FOR EACH Teil in alleTeile {
     FOR EACH FA in alleFA {
         Verknüpfungen ermitteln, welche dieses Teil und diesen FA haben
 
-        IF Verknüpfung(en) exisieren {
+        IF Verknüpfung(en) existieren {
             FOR EACH Verknüpfung {
                 IF Verknüpfung besitzt Ouput {
                     Zeitdifferenz Input/Output berechnen
@@ -264,7 +264,7 @@ stop = process_time_ns()
 print(str((stop-start)/10**9))
 ----
 
-Die Ausführungszeiten der Redis Operationen wurden mit der built-in Funktionalität SLOWLOG gemessen. Dieses System ermöglicht es, die Ausführungszeiten von Operationen zu messen welche eine bestimmte Dauer überschreiten. Um alle Operationen zu messen wurde die Schranke auf 0 Mikrosekunden gesetzt ("slowlog-log-slower-than 0"). Da sich in der Praxis allerdings gezeigt hat, dass dieser Log für eine große Anzahl an Operationen nicht zuverlässig funktioniert (ab mehreren tausend Einträgen wurden alle Einträge gelöscht), wurden die Operationszeiten für jeden Durchlauf (z.B. ein Input-Datensatz wird vollständig eingelesen) gemessen und der SLOWLOG im Anschluss mittels "SLOWLOG RESET" bereinigt. Im Folgenden ist ein Beispiel für die Messung der Operationszeit beim einlesen eines Input-Datensatzes aufgeführt. Dabei ist anzumerken, dass "SLOWLOG RESET" und "SLOWLOG LEN" (Anzahl Einträge im Log) selbst gemessen werden und damit das Ergebnis verfälschen würden, weshalb diese in der if-Anweisung ausgeklammert werden.
+Die Ausführungszeiten der Redis Operationen wurden mit der built-in Funktionalität SLOWLOG gemessen. Dieses System ermöglicht es, die Ausführungszeiten von Operationen zu messen welche eine bestimmte Dauer überschreiten. Um alle Operationen zu messen, wurde die Schranke auf 0 Mikrosekunden gesetzt ("slowlog-log-slower-than 0"). Da sich in der Praxis allerdings gezeigt hat, dass dieser Log für eine große Anzahl an Operationen nicht zuverlässig funktioniert (ab mehreren tausend Einträgen wurden alle Einträge gelöscht), wurden die Operationszeiten für jeden Durchlauf (z.B. ein Input-Datensatz wird vollständig eingelesen) gemessen und der SLOWLOG im Anschluss mittels "SLOWLOG RESET" bereinigt. Im Folgenden ist ein Beispiel für die Messung der Operationszeit beim Einlesen eines Input-Datensatzes aufgeführt. Dabei ist anzumerken, dass "SLOWLOG RESET" und "SLOWLOG LEN" (Anzahl Einträge im Log) selbst gemessen werden und damit das Ergebnis verfälschen würden, weshalb diese in der if-Anweisung ausgeklammert werden.
 
 .Messung der Prozesszeit von Redis
 [source, python]

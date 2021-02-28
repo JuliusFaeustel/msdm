@@ -16,4 +16,16 @@ URL: https://datasolut.com/apache-hadoop-einfuehrung/#Unterschied-zwischen-Hadoo
 URL: https://aws.amazon.com/de/iot-analytics/?c=i&sec=srv [Letzter Besuch: 8 Feb. 2021].
 |
 Kudraß, Thomas (2015): Taschenbuch Datenbanken, München, Deutschland: Carl Hanser Verlag.
+|
+Key-Value-Datenbanken,
+URL: http://wi-wiki.de/doku.php?id=bigdata:keyvaluedb 
+[Letzter Besuch: 26 Feb. 2021]
+|
+1&1 IONOS SE (06 Okt. 2020) Key-Value-Store: Wie funktionieren Schlüssel-Werte-Datenbanken?,
+URL: https://www.ionos.de/digitalguide/hosting/hosting-technik/key-value-store/
+[Letzter Besuch: 26 Feb. 2021]
+|
+solid IT gmbh DB-Engines Ranking,
+URL: https://db-engines.com/en/ranking/key-value+store
+[Letzter Besuch: 26 Feb. 2021]
 |===

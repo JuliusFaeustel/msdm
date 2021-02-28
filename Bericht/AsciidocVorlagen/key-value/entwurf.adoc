@@ -15,7 +15,7 @@ Das erste Datenmodell war ein einfaches Modell, welches sich die Vorteile einer 
 
 == Finales Datenmodell
 
-Das neue Datenmodell wurde aufgrund der schlechten Performance der Implementierung des ersten Entwurfs initiiert. Die Anforderungen an das neue Modell waren zum einen die Reduzierung der Anzahl der Abfragen an die Datenbank insgesamt und zum anderen schneller die richtigen Datensätze zu laden und auszuwerten, also insbesondere Datensätze mit gleichen Eigenschaften (z.B. Maschine 2 und Teil B) performant zu finden und auszuwerten. Die Reduzierung der Abfragen wurde dadurch gelöst, in die Schlüssel der Verknüpfungen direkt zugehörige, für die Analysen notwendige Informationen, also Anfangs-/Enddatum und Seriennummer, zu speichern. So muss nicht mehr noch eine ebene tiefer in die Rohdaten gegangen werden. Das performante Auffinden der richtigen Datensätze wird durch Bitmaps realisiert. Dadurch können Übereinstimmungen direkt serverseitig festgestellt werden und es ist nicht mehr nötig Listen mit einer bis zu sechsstelligen Anzahl an Elementen zu übertragen und selbst auszuwerten. Daneben wurde noch die Wahl der Datentypen angepasst um eine höhere Performance zu erreichen.
+Das neue Datenmodell wurde aufgrund der schlechten Performance der Implementierung des ersten Entwurfs initiiert. Die Anforderungen an das neue Modell waren zum einen die Reduzierung der Anzahl der Abfragen an die Datenbank insgesamt und zum anderen schneller die richtigen Datensätze zu laden und auszuwerten, also insbesondere Datensätze mit gleichen Eigenschaften (z.B. Maschine 2 und Teil B) performant zu finden und auszuwerten. Die Reduzierung der Abfragen wurde dadurch gelöst, in die Schlüssel der Verknüpfungen direkt zugehörige, für die Analysen notwendige Informationen, also Anfangs-/Enddatum und Seriennummer, zu speichern. So muss nicht mehr noch eine Ebene tiefer in die Rohdaten gegangen werden. Das performante Auffinden der richtigen Datensätze wird durch Bitmaps realisiert. Dadurch können Übereinstimmungen direkt serverseitig festgestellt werden und es ist nicht mehr nötig Listen mit einer bis zu sechsstelligen Anzahl an Elementen zu übertragen und selbst auszuwerten. Daneben wurde noch die Wahl der Datentypen angepasst um eine höhere Performance zu erreichen.
 
 Der Kern des Datenmodells ist in folgender Abbildung dargestellt. Im Zentrum stehen die Verknüpfungen, welche für die Analysen wichtige Informationen enthalten. Sie verweisen auf die Rohdatensätze, die diesen Informationen zugrunde liegen. Die Eigenschaften geben mit den Bitmaps an, in welchen Verknüpfungen sie vorkommen.
 
@@ -57,7 +57,7 @@ image::kv-zaehler.PNG[zaehler]
 [#img-snr]
 image::kv-snr.PNG[snr]
 
-** Erklärung: Ein Output-Datensatz gehört zu einem Input-Datensatz. Als zugehörige Input-Datensätze kommen nur solche mit entsprechender Seriennummer in Frage. Um den richtigen Input-Datensatz zu finden, muss nur die Liste mit entsprechender Seriennummer durchgegangen werden.
+** Erklärung: Ein Output-Datensatz gehört zu genau einem Input-Datensatz. Als zugehörige Input-Datensätze kommen nur solche mit entsprechender Seriennummer in Frage. Um den richtigen Input-Datensatz zu finden, muss nur die Liste mit entsprechender Seriennummer durchgegangen werden.
 * Zeitverknüpfung
 ** Abbildung des Zeitstempels des Input-Datensatzes und des höchsten Zeitstempels der mit dem Input verknüpften Out-Datensätze
 ** Datentyp Liste -> Minimal 1, maximal 2 Elemente
@@ -79,7 +79,7 @@ image::kv-zeitverknuepfung.PNG[zeitverknuepfung]
 [#img-verknuepfung]
 image::kv-verknuepfung.PNG[verknuepfung]
 
-** Erklärung: Verknüpfungen sind das zentrale Element des Modells. Dabei ist vor allem der Schlüssel mit den Informationen von Zeitstempel (der vom Input und des spätesten Output) und Seriennummer wichtig. Auf die Elemente der Listen wird in den geforderten Analysen nicht zugegriffen.
+** Erklärung: Verknüpfungen sind das zentrale Element des Modells. Dabei ist vor allem der Schlüssel mit den Informationen zu Zeitstempel (der vom Input und des spätesten Output) und Seriennummer wichtig. Auf die Elemente der Listen wird in den geforderten Analysen nicht zugegriffen.
 * Verknüpfungsliste
 ** Abbildung aller Verknüpfungen
 ** Datentyp Liste -> Elemente sind Schlüssel der Verknüpfungen
