@@ -55,7 +55,7 @@ CREATE INDEX INDEX_TBL_Input3 ON Input (FA, SNR);
 CREATE INDEX INDEX_TBL_Input4 ON Input (LINIE);
 ----
 
-Die Auswahl der Attribute, welche in einen Index aufgenommen werden, steht in starkem Zusammenhang, mit den abgefragten Spalten in den Analysen. Beispielsweise bezieht sich Analyse 1 auf die Teilart, weshalb _INDEX_TBL_Input2_ angelegt wurde. +
+Die Auswahl der Attribute, welche in einen Index aufgenommen werden, steht in starkem Zusammenhang mit den abgefragten Spalten in den Analysen. Beispielsweise bezieht sich Analyse 1 auf die Teilart, weshalb _INDEX_TBL_Input2_ angelegt wurde. +
 An dieser Stelle ist es wichtig zu erwähnen, dass Microsoft mit seinem SQL-Dialekt dem Nutzer mehr Möglichkeiten gibt einen Index zielgenauer zu definieren.
 
 .Code 6 - Anlegen von Indizes mittels Microsoft SQL-Dialekt
@@ -106,10 +106,10 @@ SELECT MA.Auspraegung FROM Input
 ----
 
 Ziel dieser Abfrage ist es, alle Inputzeiten für ein bestimmtes Werkstück zu erhalten. +
-Über die WHERE-Klausel wird eingegrenzt, dass das Abfrageergebnis das Merkmal "DateIn", also den Input-Zeitstempel, für alle Datensätze, die die Seriennummer 3790034478914 haben. darstellt. +
+Über die WHERE-Klausel wird eingegrenzt, dass das Abfrageergebnis das Merkmal "DateIn", also den Input-Zeitstempel, für alle Datensätze, die die Seriennummer 3790034478914 haben, darstellt. +
 Um das korrekte Ergebnis zu erhalten, ist es notwendig die Verbindungsrelationen mit den weiteren Relationen über JOINS zu verbinden. +
 
-Ausgehend von der Tabelle Input wird mittels dem JOIN 3 die Tabelle Objekt2Merkmal verbunden und im JOIN 4 durch den Ausdruck _M.ID = O2M.MerkmalID_ die Tabelle Merkmal herangezogen. Wichtig im dritten JOIN ist der Ausdruck _O2M.DiskriminatorID = 1_, denn dadurch bezieht sich die erste Ergebnismenge nur auf den Objekttypen 1, in diesem Fall Input-Objekten und alle Tupel mit anderen Objekttypen werden nicht beachtet. +
+Ausgehend von der Tabelle Input wird mittels dem JOIN 3 die Tabelle Objekt2Merkmal verbunden und im JOIN 4 durch den Ausdruck _M.ID = O2M.MerkmalID_ die Tabelle Merkmal herangezogen. Wichtig im dritten JOIN ist der Ausdruck _O2M.DiskriminatorID = 1_, denn dadurch bezieht sich die erste Ergebnismenge nur auf den Objekttypen 1, in diesem Fall Input-Objekte und alle Tupel mit anderen Objekttypen werden nicht beachtet. +
 Die erste Ergebnismenge (Menge 1) würde nun die Tupel des Objekttyps Input-Datensatz mit der Seriennummer 3790034478914 enthalten, für die das Merkmal "DateIn" definiert ist. +
 
 Durch den zweiten Ausdruck im JOIN 4 (_M.ID = MA.MerkmalID_) sind die Tabellen Merkmal und Merkmalsausprägung verbunden und es werden nur die Merkmalsausprägungen angezeigt, die für das angegebene Merkmal ("DateIn") definiert sind. Durch die Verbindung von Merkmalsausprägung zur Verbindungsrelation Objekt2Merkmalsausprägung im JOIN 2, enthält die Ergebnismenge (Menge 2) nur die Tupel, die eine dieser Ausprägungen enthalten. +
@@ -294,7 +294,7 @@ duration = stop - start
 Die Datenloader, über die Datensätze in die Struktur geladen werden, unterscheiden sich auf Grund der unterschiedlichen SQL-Dialekte. Jedoch ist das allgemeine Vorgehen, welches hier erläutert wird, gleich. Ein kleiner Unterschied liegt nur in der Verknüpfung des Outputs mit dem Input, was später erläutert wird. +
 Voraussetzung, bevor Datensätze eingelesen werden können, ist wie bereits erwähnt, dass Merkmale und Objekttypen bereits in der Struktur definiert wurden. +
 
-Aus dem bereits erläuterten Watchdog, erhält die Anwendung den Pfad des Textdokuments, welches ausgelesen werden muss. Im Codebeispiel 22 ist dargestellt, wie eine Datei mit Leserechten geöffnet wird, der Inhalt mittels _read()_ ausgelesen und als String gespeichert wird und dieser String aufgearbeitet wird, dass alle Elemente, die durch ein Semikolon getrennt sind, ein Element in einer Liste werden. +
+Aus dem bereits erläuterten Watchdog, erhält die Anwendung den Pfad des Textdokuments, aus welchem die Merkmale ausgelesen werden müssen. Im Codebeispiel 22 ist dargestellt, wie eine Datei mit Leserechten geöffnet wird, der Inhalt mittels _read()_ ausgelesen und als String gespeichert wird und dieser String aufgearbeitet wird, dass alle Elemente, die durch ein Semikolon getrennt sind, ein Element in einer Liste werden. +
 
 .Code 22 - Auslesen der vorhandenen Datei
 [source, python]
@@ -305,16 +305,16 @@ def insert (file):
   data = values.split(';')
 ----
 
-Die Verfahren zum Einlesen der Input- und Output-Datensätze sind sehr ähnlich. Deshalb wurden die Verfahren zusammen in den Bildern 6 und 7 dargestellt.
+Die Verfahren zum Einlesen der Input- und Output-Datensätze sind sehr ähnlich. Deshalb wurden die Verfahren zusammen in den Bildern 25 und 26 dargestellt.
 
 
-.ereignisgesteuerte Prozesskette zur Darstellung des Einlesens von Werten anderer Objekttypen
+.Ereignisgesteuerte Prozesskette zur Darstellung des Einlesens von Werten anderer Objekttypen
 image::EPK1.jpg[width=350, align = center]
 
-.ereignisgesteuerte Prozesskette zur Darstellung des Einlesens spezieller Merkmale sind
+.Ereignisgesteuerte Prozesskette zur Darstellung des Einlesens spezieller Merkmale
 image::EPK2.jpg[width=600, align = center]
 
-Nachdem ein Output-Datensatz in der Tabelle Output angelegt worden ist (Bild 7, Ereignis 2), muss dieser noch, sofern möglich, mit einem Input-Datensatz verknüpft werden. Dies passiert über die Zeitstempel der Datensätze. Sofern es für die Seriennummer nur einen Input-Datensatz gibt, erfolgt eine direkte Verknüpfung, außer die Zeitdifferenz zwischen Output und Input ist negativ. Sollten jedoch mehrere Input-Datensätze zu einer Seriennummer vorhanden sein, muss die Zeitdifferenz zwischen Output und jedem passenden Input berechnet werden. Dabei wird der Output mit dem Input verknüpft zu dem die kleinste nicht negative Differenz besteht. +
+Nachdem ein Output-Datensatz in der Tabelle Output angelegt worden ist (Bild 26, Ereignis 2), muss dieser noch, sofern möglich, mit einem Input-Datensatz verknüpft werden. Dies passiert über die Zeitstempel der Datensätze. Sofern es für die Seriennummer nur einen Input-Datensatz gibt, erfolgt eine direkte Verknüpfung, außer die Zeitdifferenz zwischen Output und Input ist negativ. Sollten jedoch mehrere Input-Datensätze zu einer Seriennummer vorhanden sein, muss die Zeitdifferenz zwischen Output und jedem passenden Input berechnet werden. Dabei wird der Output mit dem Input verknüpft zu dem die kleinste nicht negative Differenz besteht. +
 
 
 === Analysen
@@ -378,7 +378,7 @@ def convert_from_datestring( TimeString ):
   return Second
 ----
 
-Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfach menschlichen lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 25)
+Zum anderen wurde eine Funktion zur Umwandlung der Zeitdifferenzen in Sekunden verwendet, um diesen Wert in einen einfachen, menschlich lesbaren String bestehend aus Tagen, Stunden, Minuten und Sekunden umzurechnen. (siehe Code 25)
 
 .Code 25 - Umwandeln eines Sekundenwerts in einen einfach lesbaren String
 [source, python]
@@ -628,12 +628,12 @@ FOR EACH Linie in Linien {
 
 ==== Auswertung
 
-Nach Messung aller Ausführungszeiten ergab sich eine deutliche Senkung der Datenbankausführungszeiten durch die Umstellung der Analysevorgehen. (siehe Bild 8)
+Nach Messung aller Ausführungszeiten ergab sich eine deutliche Senkung der Datenbankausführungszeiten durch die Umstellung der Analysevorgehen. (siehe Bild 27)
 
 .Vergleich der Analysevorgehen bezüglich der Datenbankausführungszeit
 image::Analysevorgehen.JPG[]
 
-Jedoch zeigte sich auch in der Ausführungszeit der Skripte ein deutliche Zeitverbesserung. (siehe Bild 9)
+Jedoch zeigte sich auch in der Ausführungszeit der Skripte eine deutliche Zeitverbesserung. (siehe Bild 28)
 
 .Vergleich der Analysevorgehen bezüglich der Skriptausführungszeit
 image::Analysevorgehen2.JPG[]
