@@ -28,4 +28,7 @@ URL: https://www.ionos.de/digitalguide/hosting/hosting-technik/key-value-store/
 solid IT gmbh DB-Engines Ranking,
 URL: https://db-engines.com/en/ranking/key-value+store
 [Letzter Besuch: 26 Feb. 2021]
+|
+Datenbanken verstehen: Relationales Datenbankmodell,
+URL: https://www.datenbanken-verstehen.de/datenbank-grundlagen/datenbankmodell/relationales-datenbankmodell/ [Letzter Besuch: 21 Feb. 2021]
 |===
