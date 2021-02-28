@@ -105,7 +105,7 @@ Dies kann man über die Kommandozentrale installieren, wie im Codebeispiel 9 bes
 
 Die installierte Bibliothek wird nun in die Anwendung eingebunden, um eine Verbindung zur Datenbank herstellen zu können. Dazu müssen folgende Parameter gesetzt werden um einen Zugriff zu erhalten: host, database, user und password.
 
-.Code 10 - Herstellung der Verbindung zwischen Anwender und Datenbank
+.Code 10 - Herstellung der Verbindung zwischen Anwendung und Datenbank
 [source, python]
 ----
 import mysql.connector
@@ -156,7 +156,7 @@ image::einlesen.png[]
 
 Zunächst wird eine Textdatei eingelesen, in einen String verpackt und auf Vollständigkeit geprüft. Wenn die Vollständigkeit der Daten nicht gewährt ist, wird der Datensatz mit einem Fehlercode vermerkt und in der Input- bzw. Output- Tabelle gespeichert. Nachdem die Überprüfung positiv abgelaufen ist, vergleicht der Algorithmus nun ob die Seriennummer (SNR) in der Database-Tabelle vorhanden ist. +
 
-Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, dass eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes der Startzeitpunkt. Wenn dieser kleiner ist als das bisherige Datum, wird er ersetzt. Der restliche Datensatz wird ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
+Nachdem keine SNR gefunden wurde, wird der Datensatz in der Database- sowie Input- oder Output- Tabelle gespeichert, die baseID stellt dabei die Verknüpfung der Tabellen her. Der andere Fall wäre, dass eine SNR in der Database-Tabelle schon vorhanden ist. In dem Zusammenhang wird der Zeitstempel überprüft, im Fall des Inputdatensatzes der Startzeitpunkt. Wenn dieser kleiner ist als das bisherige Datum, wird er ersetzt. Die restlichen Datensätze werden ebenso in der Input- bzw. Output- Tabelle gespeichert und miteinander verknüpft.
 
 
 == Analysen
